@@ -1,6 +1,6 @@
 defaults:
   run:
-    working-directory: ./project
+    working-directory: ./deg
 
 name: ESLint & Prettier CI
 on:
