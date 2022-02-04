@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import AboutView from './views/AboutView.vue'
 import ContactView from './views/ContactView.vue'
 import HomeView from './views/HomeView.vue'
+import LoginView from './views/LoginView.vue'
 
 export default createRouter({
   history: createWebHashHistory(),
@@ -18,6 +19,10 @@ export default createRouter({
     {
       component: HomeView,
       path: '/'
+    },
+    {
+      component: LoginView,
+      path: '/login'
     }
   ]
 })
