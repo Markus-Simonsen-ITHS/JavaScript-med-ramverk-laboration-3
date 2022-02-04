@@ -1,5 +1,6 @@
 <script>
-  export default {}
+  import CreateExpense from '../components/CreateExpense.vue'
+  export default { components: { CreateExpense } }
 </script>
 
 <template>
@@ -32,8 +33,7 @@
       <p>2000 kr</p>
     </li>
     <li class="expense-category">
-      <button>Add</button>
-      <p>Lägg till</p>
+      <CreateExpense />
     </li>
   </ul>
 </template>
