@@ -17,6 +17,8 @@
         }
         addDoc(collection(db, 'utgift'), docData)
         console.log(docData)
+        this.expenseTitle = ''
+        this.expenseAmount = ''
       }
     }
   }

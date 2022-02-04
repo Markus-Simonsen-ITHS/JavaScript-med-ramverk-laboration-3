@@ -1,6 +1,7 @@
 <script>
   import CreateExpense from '../components/CreateExpense.vue'
-  export default { components: { CreateExpense } }
+  import CreateIncome from '../components/CreateIncome.vue'
+  export default { components: { CreateExpense, CreateIncome } }
 </script>
 
 <template>
@@ -13,6 +14,8 @@
   <div>
     <p>Intäkter</p>
     <p>+5000</p>
+    <CreateIncome />
+    <!-- flytta och placera komponenten vart den hör hemma när sidan är organiserad -->
   </div>
   <div>
     <p>Utgifter</p>
