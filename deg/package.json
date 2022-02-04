@@ -14,8 +14,8 @@
   "name": "my-project",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
-    "preview": "vite preview"
+    "dev": "vite --host",
+    "preview": "vite preview --host"
   },
   "version": "0.0.0"
 }
