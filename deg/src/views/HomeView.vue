@@ -1,5 +1,15 @@
 <script>
-  export default {}
+  export default {
+    computed: {
+      // Calculates percentage of the budget, used in progress-bar as width
+      calculateExpenseProgress() {
+        const budget = 4000
+        const spent = 1000
+        const progress = (100 * spent) / budget
+        return progress + '%'
+      }
+    }
+  }
 </script>
 
 <template>
@@ -7,18 +17,18 @@
     <p class="account-overview-name">Matkonto</p>
     <p class="account-amount-spent">2500 kr</p>
     <div class="account-progress-container">
-      <div class="account-progress-bar" />
+      <div class="account-progress-bar" :style="{width: calculateExpenseProgress}" />
     </div>
     <p class="account-budget">Budget: 4000 kr</p>
   </div>
   <div class="status-container">
     <div class="status-card">
       <p>Intäkter</p>
-      <p class="status-bold-text">+5000</p>
+      <p class="bold-text">+5000</p>
     </div>
     <div class="status-card">
       <p>Utgifter</p>
-      <p class="status-bold-text">-1500</p>
+      <p class="bold-text">-1500</p>
     </div>
   </div>
   <div class="overview-container">
@@ -32,8 +42,8 @@
         <!-- Placeholder img -->
         <img src="../../assets/fox.jpeg" alt="Fox" />
       </div>
-      <p class="expense-category-">Mat</p>
-      <p>500 kr</p>
+      <p class="bold-text">Mat</p>
+      <p class="bold-text">500 kr</p>
       <p class="smaller-text">Budget</p>
       <p class="smaller-text">2000 kr</p>
     </li>
@@ -88,7 +98,7 @@
     box-shadow: 1px 5px 5px 0px #676767;
   }
 
-  .status-bold-text {
+  .bold-text {
     font-weight: bold;
   }
 
