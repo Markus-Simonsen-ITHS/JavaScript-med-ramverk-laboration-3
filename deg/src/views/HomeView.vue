@@ -17,7 +17,10 @@
     <p class="account-overview-name">Matkonto</p>
     <p class="account-amount-spent">2500 kr</p>
     <div class="account-progress-container">
-      <div class="account-progress-bar" :style="{width: calculateExpenseProgress}" />
+      <div
+        class="account-progress-bar"
+        :style="{ width: calculateExpenseProgress }"
+      />
     </div>
     <p class="account-budget">Budget: 4000 kr</p>
   </div>
