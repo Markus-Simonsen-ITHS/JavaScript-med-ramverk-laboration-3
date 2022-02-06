@@ -45,9 +45,9 @@
         <!-- Placeholder img -->
         <img src="../../assets/fox.jpeg" alt="Fox" />
       </div>
-      <p class="bold-text">Mat</p>
+      <p class="bold-text align-start">Mat</p>
       <p class="bold-text">500 kr</p>
-      <p class="smaller-text">Budget</p>
+      <p class="smaller-text align-start">Budget</p>
       <p class="smaller-text">2000 kr</p>
     </li>
     <li class="add-category-container">
@@ -155,6 +155,9 @@
   }
   .expense-category p {
     margin: 10px;
+  }
+  .align-start {
+    justify-self: flex-start;
   }
   .smaller-text {
     font-size: 1rem;
