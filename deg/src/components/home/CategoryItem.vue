@@ -1,3 +1,14 @@
+<script>
+  export default {
+    props: {
+      category: {
+        required: true,
+        type: Object
+      }
+    }
+  }
+</script>
+
 <template>
   <li class="expense-category">
     <div class="category-img-container">
@@ -10,17 +21,6 @@
     <p class="smaller-text">{{ category.budget }}</p>
   </li>
 </template>
-
-<script>
-  export default {
-    props: {
-      category: {
-        required: true,
-        type: Object
-      }
-    }
-  }
-</script>
 
 <style scoped>
   .expense-category {
