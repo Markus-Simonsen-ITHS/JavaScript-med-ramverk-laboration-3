@@ -18,9 +18,7 @@
           name:'Utgifter',
           amount:5000
         }
-        ]
-      }
-    },
+   ]}},
     computed: {
       // Calculates percentage of the budget, used in progress-bar a§s width
       calculateExpenseProgress() {
