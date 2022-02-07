@@ -22,7 +22,7 @@
       }
     },
     computed: {
-      // Calculates percentage of the budget, used in progress-bar as width
+      // Calculates percentage of the budget, used in progress-bar a§s width
       calculateExpenseProgress() {
         const budget = 4000
         const spent = 2000
