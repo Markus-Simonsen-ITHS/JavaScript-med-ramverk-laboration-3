@@ -6,7 +6,8 @@
     data() {
       return {
         incomeTitle: null,
-        incomeAmount: null
+        incomeAmount: null,
+        checkbox: false
       }
     },
     methods: {
@@ -16,10 +17,14 @@
           title: this.incomeTitle,
           amount: Number(this.incomeAmount)
         }
-        addDoc(collection(db, 'inkomst'), docData)
-        console.log(docData)
+        if (this.checkbox === true) {
+          addDoc(collection(db, 'återkommandeInkomst'), docData)
+        } else {
+          addDoc(collection(db, 'inkomst'), docData)
+        }
         this.incomeTitle = ''
         this.incomeAmount = ''
+        this.checkbox = 'false'
       }
     }
   }
@@ -28,7 +33,12 @@
   <input v-model="incomeTitle" placeholder="ange titel på inkomsten" />
   <input v-model="incomeAmount" placeholder="ange inkomst" />
   <label for="reocurringIncome">återkommande inkomst?</label>
-  <input name="reocurringIncome" type="checkbox" value="reocurringIncome" />
+  <input
+    name="reocurringIncome"
+    type="checkbox"
+    value="reocurringIncome"
+    v-model="checkbox"
+  />
   <input
     type="button"
     value="submit"
