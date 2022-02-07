@@ -1,6 +1,7 @@
 <script>
   import CreateIncome from '../components/CreateIncome.vue'
   import CreateExpense from '../components/CreateExpense.vue'
+
   export default {
     data() {
       return {
@@ -38,8 +39,13 @@
 
 <template>
   <p class="add-paragraph">Lägg Till</p>
-  <input type="text" :style="{ width: inputWidth }" v-model="inputAmount" />
-  <span>kr</span>
+  <input
+    id="amount-input"
+    type="text"
+    :style="{ width: inputWidth }"
+    v-model="inputAmount"
+  />
+  <label for="amount-input">kr</label>
   <div>
     <button
       @click="setDisplayAddExpense"
@@ -54,6 +60,7 @@
       Intäkt
     </button>
   </div>
+
   <CreateExpense v-if="displayAddExpense" />
   <CreateIncome v-if="!displayAddExpense" />
 </template>
@@ -66,7 +73,7 @@
   }
 
   input,
-  span {
+  label {
     border: none;
     font-size: 48px;
     font-weight: normal;
