@@ -1,5 +1,6 @@
 <script>
   import CategoryItem from '../components/home/CategoryItem.vue'
+  import StatusItem from '../components/home/StatusItem.vue'
 
   export default {
     data() {
@@ -8,7 +9,16 @@
           name: 'Mat',
           amountSpent: 2500,
           budget: 4000
-        }]
+        }],
+        statuses: [{
+          name:'Intäkter',
+          amount:1000,
+        },
+        {
+          name:'Utgifter',
+          amount:5000
+        }
+        ]
       }
     },
     computed: {
@@ -21,7 +31,8 @@
       }
     },
     components: {
-      CategoryItem
+      CategoryItem,
+      StatusItem
     }
   }
 </script>
@@ -38,7 +49,15 @@
     </div>
     <p class="account-budget">Budget: 4000 kr</p>
   </div>
+
   <div class="status-container">
+    <StatusItem
+  v-for="status in statuses"
+  :key="status.name"
+  :status="status"
+  />
+  </div>
+  <!-- <div class="status-container">
     <div class="status-card">
       <p>Intäkter</p>
       <p class="bold-text">+5000</p>
@@ -47,7 +66,7 @@
       <p>Utgifter</p>
       <p class="bold-text">-1500</p>
     </div>
-  </div>
+  </div> -->
   <div class="overview-container">
     <h1>Översikt</h1>
     <router-link to="/history">Historik</router-link>
