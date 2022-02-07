@@ -9,7 +9,6 @@
 </script>
 
 <template>
-  <nav />
   <main>
     <NavBar />
     <RouterView />

@@ -32,6 +32,20 @@
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
+    <ul v-if="!collapsed">
+      <li>
+        <RouterLink to="/">Hem</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/">Historik</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/">Sparande</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/Landing">Logga ut</RouterLink>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -58,6 +72,21 @@
     display: inline-block;
     cursor: pointer;
     width: 70px;
+  }
+  li {
+    padding: 25px;
+    font-size: 20px;
+  }
+  li a {
+    padding: 10px;
+  }
+  li a:visited {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+  }
+  li a:link {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
   }
 
   .bar1,
