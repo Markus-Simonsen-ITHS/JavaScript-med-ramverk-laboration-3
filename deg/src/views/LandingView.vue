@@ -1,5 +1,11 @@
 <script>
-  export default {}
+  import LoginForm from '../components/LoginForm.vue'
+
+  export default {
+    components: {
+      LoginForm
+    }
+  }
 </script>
 
 <template>
@@ -17,15 +23,7 @@
   <h1>Råd och guidning</h1>
   <p>Få tips och råd om hur du ska spara och hantera din ekonomi</p>
 
-  <div id="loginInBox">
-    <form>
-      <p>Email</p>
-      <input type="text" v-model="loginUsername" placeholder="Username" />
-      <p>Lösenord</p>
-      <input type="password" v-model="loginPassword" placeholder="Password" />
-      <button type="submit" @click.prevent="login">Login</button>
-    </form>
-  </div>
+  <LoginForm />
 </template>
 
 <style scoped>
@@ -39,11 +37,5 @@
 
   p {
     font-size: 1.5rem;
-  }
-  #loginInBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #e7e7e7;
   }
 </style>
