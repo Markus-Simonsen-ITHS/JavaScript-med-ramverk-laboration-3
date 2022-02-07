@@ -1,13 +1,36 @@
 <script>
+  import CategoryItem from '../components/home/CategoryItem.vue'
+  import StatusItem from '../components/home/StatusItem.vue'
+
   export default {
+    data() {
+      return {
+        categories: [{
+          name: 'Mat',
+          amountSpent: 2500,
+          budget: 4000
+        }],
+        statuses: [{
+          name:'Intäkter',
+          amount:1000,
+        },
+        {
+          name:'Utgifter',
+          amount:5000
+        }
+   ]}},
     computed: {
-      // Calculates percentage of the budget, used in progress-bar as width
+      // Calculates percentage of the budget, used in progress-bar a§s width
       calculateExpenseProgress() {
         const budget = 4000
-        const spent = 1000
+        const spent = 2000
         const progress = (100 * spent) / budget
         return progress + '%'
       }
+    },
+    components: {
+      CategoryItem,
+      StatusItem
     }
   }
 </script>
@@ -24,7 +47,15 @@
     </div>
     <p class="account-budget">Budget: 4000 kr</p>
   </div>
+
   <div class="status-container">
+    <StatusItem
+  v-for="status in statuses"
+  :key="status.name"
+  :status="status"
+  />
+  </div>
+  <!-- <div class="status-container">
     <div class="status-card">
       <p>Intäkter</p>
       <p class="bold-text">+5000</p>
@@ -33,23 +64,27 @@
       <p>Utgifter</p>
       <p class="bold-text">-1500</p>
     </div>
-  </div>
+  </div> -->
   <div class="overview-container">
     <h1>Översikt</h1>
     <router-link to="/history">Historik</router-link>
   </div>
   <ul class="category-list">
+    <CategoryItem
+      v-for="category in categories"
+      :key="category.id"
+      :category="category"
+    />
     <!-- Create a component for thi li -->
-    <li class="expense-category">
+    <!-- <li class="expense-category">
       <div class="category-img-container">
-        <!-- Placeholder img -->
         <img src="../../assets/fox.jpeg" alt="Fox" />
       </div>
       <p class="bold-text align-start">Mat</p>
       <p class="bold-text">500 kr</p>
       <p class="smaller-text align-start">Budget</p>
       <p class="smaller-text">2000 kr</p>
-    </li>
+    </li> -->
     <li class="add-category-container">
       <div class="add-category-button" />
       <p>Lägg till</p>
@@ -134,33 +169,6 @@
     padding: 10px;
     display: grid;
     gap: 20px;
-  }
-  .expense-category {
-    border-radius: 5px;
-    list-style-type: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    background-color: #e7e7e7;
-    align-content: center;
-    justify-items: center;
-  }
-  .category-img-container {
-    grid-row: span 2;
-    padding: 10px;
-  }
-  img {
-    border-radius: 5px;
-    width: 100%;
-    height: 100%;
-  }
-  .expense-category p {
-    margin: 10px;
-  }
-  .align-start {
-    justify-self: flex-start;
-  }
-  .smaller-text {
-    font-size: 1rem;
   }
 
   .add-category-container {
