@@ -1,20 +1,36 @@
 <script>
-  import { collapsed, toggleNavbar, navbarWidth } from './state'
+  //import { collapsed, toggleNavbar, navbarWidth, navbarHeight } from './state'
 
   export default {
-    props: {},
-    setup() {
-      return { collapsed, toggleNavbar, navbarWidth }
+    data() {
+      return {
+        collapsed: true
+      }
     }
   }
 </script>
 
 <template>
-  <div class="navbar" :style="{ width: navbarWidth }">
-    <div class="container" @click="toggleNavbar()">
-      <div class="bar1" />
-      <div class="bar2" />
-      <div class="bar3" />
+  <div
+    class="navbar"
+    :style="{
+      width: collapsed ? '35px' : '180px',
+      height: collapsed ? '35px' : '450px'
+    }"
+  >
+    <div class="container" @click="collapsed = !collapsed">
+      <div
+        class="bar1"
+        :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
+      />
+      <div
+        class="bar2"
+        :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
+      />
+      <div
+        class="bar3"
+        :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
+      />
     </div>
   </div>
 </template>
@@ -22,7 +38,8 @@
 <style scoped>
   .navbar {
     color: white;
-    background-color: greenyellow;
+    background-color: #e7e7e7;
+    box-shadow: 1px 5px 5px 0px #676767;
 
     float: right;
     position: fixed;
@@ -40,6 +57,7 @@
   .container {
     display: inline-block;
     cursor: pointer;
+    width: 70px;
   }
 
   .bar1,
@@ -48,7 +66,6 @@
     width: 35px;
     height: 5px;
     background-color: #333;
-    margin: 6px 0;
-    transition: 0.4s;
+    transition: 0.3s ease;
   }
 </style>
