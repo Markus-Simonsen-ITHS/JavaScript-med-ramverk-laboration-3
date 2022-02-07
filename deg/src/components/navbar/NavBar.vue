@@ -1,9 +1,8 @@
 <script>
-  //import { collapsed, toggleNavbar, navbarWidth, navbarHeight } from './state'
-
   export default {
     data() {
       return {
+        // A boolean for the hamburger-menu.
         collapsed: true
       }
     }
@@ -11,6 +10,7 @@
 </script>
 
 <template>
+  <!-- The nav, used v-bind on style to open and close the menu. -->
   <div
     class="navbar"
     :style="{
@@ -18,7 +18,9 @@
       height: collapsed ? '35px' : '450px'
     }"
   >
+    <!-- The icon for the menu, if clicked toggles true/false for "collapsed". -->
     <div class="container" @click="collapsed = !collapsed">
+      <!-- Styling to get opening and closing effect on the icon. -->
       <div
         class="bar1"
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
@@ -32,6 +34,7 @@
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
+    <!-- Renders the list of links, depending on "collapsed". -->
     <ul v-if="!collapsed">
       <li>
         <RouterLink to="/">Hem</RouterLink>
@@ -50,6 +53,8 @@
 </template>
 
 <style scoped>
+  /* CSS for the entire navbar, making it so that is stays on the top right corner
+of the screen. */
   .navbar {
     color: white;
     background-color: #e7e7e7;
@@ -68,11 +73,13 @@
     display: flex;
     flex-direction: column;
   }
+  /* CSS for the container for the icon. */
   .container {
     display: inline-block;
     cursor: pointer;
     width: 70px;
   }
+  /* Styles for the links. */
   li {
     padding: 25px;
     font-size: 20px;
@@ -88,7 +95,7 @@
     text-decoration: none;
     color: rgb(0, 0, 0);
   }
-
+  /* The "Hamburger icon". */
   .bar1,
   .bar2,
   .bar3 {
