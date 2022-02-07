@@ -1,23 +1,22 @@
 <script>
-export default{
-  props: {
-status: {
-  required: true,
-  type: Object
-}
-}
-}
+  export default {
+    props: {
+      status: {
+        required: true,
+        type: Object
+      }
+    }
+  }
 </script>
 
 <template>
-    <div class="status-card">
-      <p>{{status.name}}</p>
-      <p class="bold-text">{{status.amount}}</p>
+  <div class="status-card">
+    <p>{{ status.name }}</p>
+    <p class="bold-text">{{ status.amount }}</p>
   </div>
 </template>
 
 <style>
-
   .status-container {
     padding: 10px;
     display: grid;
@@ -39,5 +38,4 @@ status: {
   .status-card p {
     margin: 5px;
   }
-
 </style>

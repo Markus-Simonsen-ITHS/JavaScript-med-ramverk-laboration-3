@@ -5,20 +5,25 @@
   export default {
     data() {
       return {
-        categories: [{
-          name: 'Mat',
-          amountSpent: 2500,
-          budget: 4000
-        }],
-        statuses: [{
-          name:'Intäkter',
-          amount:1000,
-        },
-        {
-          name:'Utgifter',
-          amount:5000
-        }
-   ]}},
+        categories: [
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          }
+        ],
+        statuses: [
+          {
+            name: 'Intäkter',
+            amount: 1000
+          },
+          {
+            name: 'Utgifter',
+            amount: 5000
+          }
+        ]
+      }
+    },
     computed: {
       // Calculates percentage of the budget, used in progress-bar a§s width
       calculateExpenseProgress() {
@@ -50,21 +55,11 @@
 
   <div class="status-container">
     <StatusItem
-  v-for="status in statuses"
-  :key="status.name"
-  :status="status"
-  />
+      v-for="status in statuses"
+      :key="status.name"
+      :status="status"
+    />
   </div>
-  <!-- <div class="status-container">
-    <div class="status-card">
-      <p>Intäkter</p>
-      <p class="bold-text">+5000</p>
-    </div>
-    <div class="status-card">
-      <p>Utgifter</p>
-      <p class="bold-text">-1500</p>
-    </div>
-  </div> -->
   <div class="overview-container">
     <h1>Översikt</h1>
     <router-link to="/history">Historik</router-link>
@@ -75,16 +70,6 @@
       :key="category.id"
       :category="category"
     />
-    <!-- Create a component for thi li -->
-    <!-- <li class="expense-category">
-      <div class="category-img-container">
-        <img src="../../assets/fox.jpeg" alt="Fox" />
-      </div>
-      <p class="bold-text align-start">Mat</p>
-      <p class="bold-text">500 kr</p>
-      <p class="smaller-text align-start">Budget</p>
-      <p class="smaller-text">2000 kr</p>
-    </li> -->
     <li class="add-category-container">
       <div class="add-category-button" />
       <p>Lägg till</p>
