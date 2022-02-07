@@ -3,10 +3,12 @@
     data() {
       return {
         // A boolean for the hamburger-menu.
-        collapsed: true
+        collapsed: true,
+        screen: screen.width
       }
     }
   }
+  console.log(screen.width)
 </script>
 
 <template>
@@ -35,7 +37,7 @@
       />
     </div>
     <!-- Renders the list of links, depending on "collapsed". -->
-    <ul v-if="!collapsed">
+    <ul v-if="screen > 980">
       <li>
         <RouterLink to="/">Hem</RouterLink>
       </li>
@@ -54,7 +56,7 @@
 
 <style scoped>
   /* CSS for the entire navbar, making it so that is stays on the top right corner
-of the screen. */
+  of the screen. */
   .navbar {
     color: white;
     background-color: #e7e7e7;
@@ -81,8 +83,8 @@ of the screen. */
   }
   /* Styles for the links. */
   li {
-    padding: 25px;
-    font-size: 20px;
+    padding-bottom: 65px;
+    font-size: 25px;
   }
   li a {
     padding: 10px;
@@ -103,5 +105,32 @@ of the screen. */
     height: 5px;
     background-color: #333;
     transition: 0.3s ease;
+  }
+  @media (min-width: 980px) {
+    .container {
+      display: none;
+    }
+    .navbar {
+      background-color: rgba(255, 0, 0, 0);
+      color: rgba(51, 51, 51, 0);
+      box-shadow: 0px 0px 0px 0px #676767;
+      width: 100% !important;
+      float: none;
+      position: unset;
+      z-index: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0;
+
+      transition: none;
+
+      display: flex;
+      flex-direction: column;
+    }
+    ul {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 </style>
