@@ -12,8 +12,9 @@
     methods: {
       submitExpense() {
         const docData = {
+          email: this.$store.state.user.email,
           title: this.expenseTitle,
-          amount: this.expenseAmount
+          amount: Number(this.expenseAmount)
         }
         addDoc(collection(db, 'utgift'), docData)
         console.log(docData)
@@ -24,7 +25,14 @@
   }
 </script>
 <template>
-  <input v-model="expenseTitle" placeholder="ange titel" />
+  <input v-model="expenseTitle" placeholder="ange titel på utgiften" />
   <input v-model="expenseAmount" placeholder="ange utgift" />
-  <input type="button" value="submit" @click="submitExpense" />
+  <label for="reocurringExpense">återkommande utgift?</label>
+  <input name="reocurringExpense" type="checkbox" value="reocurringExpense" />
+  <input
+    type="button"
+    value="submit"
+    @click="submitExpense"
+    @keyup.enter="submitExpense"
+  />
 </template>
