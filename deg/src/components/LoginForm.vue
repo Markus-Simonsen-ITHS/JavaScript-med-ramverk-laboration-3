@@ -17,8 +17,8 @@
       },
       register() {
         const payload = {
-          email: this.registerUsername,
-          password: this.registerPassword
+          email: this.loginUsername,
+          password: this.loginPassword
         }
         this.$store.dispatch('registerUser', payload)
       }
