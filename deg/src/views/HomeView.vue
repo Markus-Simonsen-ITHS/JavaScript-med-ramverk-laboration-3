@@ -4,11 +4,13 @@
   export default {
     data() {
       return {
-        categories: [{
-          name: 'Mat',
-          amountSpent: 2500,
-          budget: 4000
-        }]
+        categories: [
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          }
+        ]
       }
     },
     computed: {
