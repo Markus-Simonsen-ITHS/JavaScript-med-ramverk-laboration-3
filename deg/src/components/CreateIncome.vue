@@ -12,8 +12,9 @@
     methods: {
       submitIncome() {
         const docData = {
+          email: this.$store.state.user.email,
           title: this.incomeTitle,
-          amount: this.incomeAmount
+          amount: Number(this.incomeAmount)
         }
         addDoc(collection(db, 'inkomst'), docData)
         console.log(docData)
@@ -24,7 +25,14 @@
   }
 </script>
 <template>
-  <input v-model="incomeTitle" placeholder="ange titel" />
+  <input v-model="incomeTitle" placeholder="ange titel på inkomsten" />
   <input v-model="incomeAmount" placeholder="ange inkomst" />
-  <input type="button" value="submit" @click="submitIncome" />
+  <label for="reocurringIncome">återkommande inkomst?</label>
+  <input name="reocurringIncome" type="checkbox" value="reocurringIncome" />
+  <input
+    type="button"
+    value="submit"
+    @click="submitIncome"
+    @keyup.enter="submitIncome"
+  />
 </template>
