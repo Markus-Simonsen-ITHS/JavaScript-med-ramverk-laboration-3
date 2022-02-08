@@ -1,8 +1,19 @@
 <script>
+  import db from '../firebase'
+
   export default {}
 </script>
 
 <template>
+  <div class="view-transaction">
+    <form class="transaction-form">
+      <div class="form-inner">
+        <h1>Inga utgifter har registrerats</h1>
+        <input type="submit" value="gå till skriv in utgift" />
+      </div>
+    </form>
+  </div>
+
   <div class="transactions">
     <h1>Historik</h1>
     <p>Denna månad</p>
@@ -56,6 +67,17 @@
 </template>
 
 <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .view-transaction {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
   .transactions {
     display: flex;
     justify-content: space-between;
