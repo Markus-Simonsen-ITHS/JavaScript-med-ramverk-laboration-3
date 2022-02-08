@@ -26,7 +26,6 @@ export default createRouter({
       path: '/add'
     },
     {
-
       component: TransactionsView,
       path: '/history'
     }
