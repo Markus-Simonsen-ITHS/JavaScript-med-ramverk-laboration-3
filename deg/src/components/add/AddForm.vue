@@ -1,38 +1,55 @@
 <script>
-  import { db } from '../firebase'
-  import { collection, addDoc } from 'firebase/firestore'
-
   export default {
+    emits: ['addExpense', 'addIncome'],
+    props: {
+      // Defines if component is adding expense or income
+      addType: {
+        required: true,
+        type: String
+      },
+      // The amount to be added to income or expense
+      amount: {
+        required: true,
+        type: Number
+      }
+    },
     data() {
       return {
-        incomeTitle: null,
-        incomeAmount: null,
+        category: '',
+        title: null,
+        date: null,
         checkbox: false
       }
     },
     methods: {
-      submitIncome() {
-        const docData = {
+      submit() {
+        // Should change email to id
+        const payload = {
           email: this.$store.state.user.email,
-          title: this.incomeTitle,
-          amount: Number(this.incomeAmount)
+          title: this.title,
+          amount: this.amount,
+          category: this.category,
+          date: this.date,
+          reocurringExpense: this.checkbox
         }
-        if (this.checkbox === true) {
-          addDoc(collection(db, 'återkommandeInkomst'), docData)
+        if (this.addType === 'expense') {
+          this.$emit('addExpense', payload)
         } else {
-          addDoc(collection(db, 'inkomst'), docData)
+          this.$emit('addIncome', payload)
         }
-        this.incomeTitle = ''
-        this.incomeAmount = ''
-        this.checkbox = 'false'
       }
     }
   }
 </script>
+
 <template>
   <form @submit.prevent="">
-    <input type="text" v-model="incomeTitle" placeholder="Anteckning" />
-    <input type="date" v-model="incomeAmount" placeholder="Date" />
+    <select v-model="category">
+      <option value="">Kategori</option>
+      <option value="mat">Mat</option>
+    </select>
+    <input type="text" v-model="title" placeholder="Anteckning" />
+    <input type="date" v-model="date" placeholder="Datum" />
     <div class="reocurringExpense-container">
       <label for="reocurringExpense" class="switch">
         <input
@@ -47,10 +64,10 @@
     </div>
     <div class="button-container">
       <input
-        type="button"
+        type="submit"
         value="Lägg till"
-        @click="submitIncome"
-        @keyup.enter="submitIncome"
+        @click="submit"
+        @keyup.enter="submit"
       />
       <input type="button" value="Avbryt" />
     </div>
@@ -64,6 +81,7 @@
     padding: 20px;
     background-color: #e7e7e7;
     border-radius: 8px;
+    align-self: center;
   }
   select {
     height: 40px;
@@ -158,7 +176,7 @@
     justify-items: center;
   }
 
-  input[type='button'] {
+  input[type='button'], input[type="submit"] {
     background-color: #292929;
     color: #fff;
     height: 40px;
