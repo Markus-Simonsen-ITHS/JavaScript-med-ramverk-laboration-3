@@ -10,11 +10,15 @@ import {
 const mutations = {
     setUser(state, user) {
       state.user = user
+    },
+    displayLogoutMessage(state) {
+      state.logoutMessage = 'block'
     }
   },
   state = {
     counter: 0,
-    user: {}
+    user: {},
+    logoutMessage: 'none'
   },
   actions = {
     signIn(state, payload) {
@@ -24,9 +28,9 @@ const mutations = {
         }
       )
     },
-    logOut() {
+    logOut(state) {
       signOut(auth).then(() => {
-        console.log('log out successful')
+        state.commit('displayLogoutMessage')
       })
     },
     fetchUser(state) {
