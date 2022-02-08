@@ -6,6 +6,11 @@
         collapsed: true,
         screen: screen.width
       }
+    },
+    methods: {
+      signOut() {
+        this.$store.dispatch('logOut')
+      }
     }
   }
   console.log(screen.width)
@@ -48,7 +53,7 @@
         <RouterLink to="/">Sparande</RouterLink>
       </li>
       <li>
-        <RouterLink to="/Landing">Logga ut</RouterLink>
+        <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
     </ul>
   </div>
