@@ -3,7 +3,8 @@ import { auth } from './firebase'
 
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signOut
 } from 'firebase/auth'
 
 const mutations = {
@@ -22,6 +23,11 @@ const mutations = {
           state.dispatch('fetchUser')
         }
       )
+    },
+    logOut() {
+      signOut(auth).then(() => {
+        console.log('log out successful')
+      })
     },
     fetchUser(state) {
       const user = auth.currentUser

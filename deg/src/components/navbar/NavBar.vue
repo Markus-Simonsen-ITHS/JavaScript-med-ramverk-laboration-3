@@ -5,6 +5,11 @@
         // A boolean for the hamburger-menu.
         collapsed: true
       }
+    },
+    methods: {
+      signOut() {
+        this.$store.dispatch('logOut')
+      }
     }
   }
 </script>
@@ -46,7 +51,7 @@
         <RouterLink to="/">Sparande</RouterLink>
       </li>
       <li>
-        <RouterLink to="/Landing">Logga ut</RouterLink>
+        <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
     </ul>
   </div>
