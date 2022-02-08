@@ -1,28 +1,49 @@
 <script>
   export default {
     emits: ['addExpense', 'addIncome'],
-    props: {
-      // Defines if component is adding expense or income
-      addType: {
-        required: true,
-        type: String
-      },
-      // The amount to be added to income or expense
-      amount: {
-        required: true,
-        type: Number
-      }
-    },
     data() {
       return {
+        displayAddExpense: true,
         category: '',
         title: null,
         date: null,
-        checkbox: false
+        checkbox: false,
+        inputError: false,
+        amount: '0',
+        addType: 'expense'
       }
     },
     methods: {
+      // Shows CreateExpense-component
+      setDisplayAddExpense() {
+        this.displayAddExpense = true
+        this.addType = 'expense'
+      },
+      // Shows CreateIncome-component
+      setDisplayAddIncome() {
+        this.displayAddExpense = false
+        this.addType = 'income'
+      },
+      // Redirects user to home-page
+      goToHome() {
+        this.$router.push('/')
+      },
+      // Checks if titleInput is emtpy, marks inputError as true, which displays a message and a red border on input
+      validateTitleInput() {
+        if (!this.title) {
+          this.inputError = true
+          return false
+        } else {
+          this.inputError = false
+          return true
+        }
+      },
       submit() {
+        // Validating input, do not move forward if false
+        if (!this.validateTitleInput()) {
+          return
+        }
+
         // Should change email to id
         const payload = {
           email: this.$store.state.user.email,
@@ -37,19 +58,77 @@
         } else {
           this.$emit('addIncome', payload)
         }
+
+        // Navigate to home
+        this.$router.push('/')
+      }
+    },
+    computed: {
+      // Calculates the desired width of the amount input based on number of characters. One number is around 27px wide
+      inputWidth() {
+        const chars = this.amount.toString().length
+        let number = 0
+        for (let i = 0; i < chars; i++) {
+          number += 27
+        }
+        return number + 'px'
+      }
+    },
+    watch: {
+      // Watches for every change and validates the input-field
+      title() {
+        this.validateTitleInput()
+      },
+      // Watches for changes in addType and resets error variable
+      addType() {
+        this.inputError = false
       }
     }
   }
 </script>
 
 <template>
-  <form @submit.prevent="">
+  <div class="input-container">
+    <input
+      class="amount-input"
+      id="amount-input"
+      type="text"
+      :style="{ width: inputWidth }"
+      v-model="amount"
+    />
+    <label class="amount-input" for="amount-input">kr</label>
+  </div>
+  <div class="buttons-container">
+    <button
+      @click="setDisplayAddExpense"
+      :class="{ active: displayAddExpense }"
+    >
+      Utgift
+    </button>
+    <button
+      @click="setDisplayAddIncome"
+      :class="{ active: !displayAddExpense }"
+    >
+      Intäkt
+    </button>
+  </div>
+  <form @submit.prevent="submit">
     <select v-model="category">
       <option value="">Kategori</option>
       <option value="mat">Mat</option>
     </select>
-    <input type="text" v-model="title" placeholder="Anteckning" />
-    <input type="date" v-model="date" placeholder="Datum" />
+    <input
+      class="form-input"
+      :class="{ 'input-error': inputError }"
+      id="add-title"
+      type="text"
+      v-model="title"
+      placeholder="Anteckning"
+    />
+    <label for="add-title" class="error-message" v-if="inputError"
+      >Du måste fylla i ett namn</label
+    >
+    <input class="form-input" type="date" v-model="date" placeholder="Datum" />
     <div class="reocurringExpense-container">
       <label for="reocurringExpense" class="switch">
         <input
@@ -69,12 +148,39 @@
         @click="submit"
         @keyup.enter="submit"
       />
-      <input type="button" value="Avbryt" />
+      <input type="button" value="Avbryt" @click="goToHome" />
     </div>
   </form>
 </template>
 
 <style scoped>
+  .input-container {
+    margin-bottom: 10px;
+  }
+
+  .amount-input {
+    border: none;
+    font-size: 48px;
+    font-weight: normal;
+  }
+
+  .buttons-container {
+    margin-bottom: 20px;
+  }
+
+  button {
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: none;
+    margin: 0 16px 0 0;
+  }
+
+  .active {
+    background-color: #292929;
+    color: #ffffff;
+  }
+
   form {
     display: flex;
     flex-direction: column;
@@ -83,6 +189,7 @@
     border-radius: 8px;
     align-self: center;
   }
+
   select {
     height: 40px;
     background-color: white;
@@ -91,8 +198,7 @@
     border: none;
     margin-bottom: 10px;
   }
-  input[type='text'],
-  input[type='date'] {
+  .form-input {
     height: 40px;
     border-radius: 10px;
     border: none;
@@ -118,8 +224,6 @@
     display: inline-block;
     width: 50px;
     height: 25px;
-    /* width: 60px; */
-    /* height: 34px; */
   }
 
   .switch input {
@@ -183,5 +287,15 @@
     height: 40px;
     border-radius: 100px;
     width: 100px;
+  }
+
+  /* Error-classes on the bottom to have priority over regular classes */
+  .input-error {
+    border: 1px solid red;
+  }
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+    align-self: center;
   }
 </style>
