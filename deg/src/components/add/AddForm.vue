@@ -176,7 +176,8 @@
     justify-items: center;
   }
 
-  input[type='button'], input[type="submit"] {
+  input[type='button'],
+  input[type='submit'] {
     background-color: #292929;
     color: #fff;
     height: 40px;
