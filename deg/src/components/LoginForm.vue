@@ -40,6 +40,12 @@
 <template>
   <div id="loginInBox">
     <form>
+      <div
+        class="logOutMessage"
+        :style="{ display: this.$store.state.logoutMessage }"
+      >
+        <p>Du har blivit utloggad</p>
+      </div>
       <p>Email</p>
       <input
         class="textInput"
@@ -114,5 +120,16 @@
 
   p {
     font-size: 1.5rem;
+  }
+  .logOutMessage p {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .logOutMessage {
+    width: 100%;
+    height: 40px;
+    background-color: #e7e7e7;
+    border-radius: 8px;
   }
 </style>
