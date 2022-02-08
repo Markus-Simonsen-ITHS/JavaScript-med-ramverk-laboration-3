@@ -47,7 +47,7 @@
         <RouterLink to="/">Hem</RouterLink>
       </li>
       <li>
-        <RouterLink to="/">Historik</RouterLink>
+        <RouterLink to="/history">Historik</RouterLink>
       </li>
       <li>
         <RouterLink to="/">Sparande</RouterLink>
@@ -86,6 +86,9 @@
     cursor: pointer;
     width: 70px;
   }
+  ul {
+    margin-top: 0px;
+  }
   /* Styles for the links. */
   li {
     list-style: none;
@@ -122,7 +125,7 @@
       color: rgba(51, 51, 51, 0);
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
-      height: 40px !important;
+      height: 80px !important;
       float: none;
       position: unset;
       z-index: 0;
