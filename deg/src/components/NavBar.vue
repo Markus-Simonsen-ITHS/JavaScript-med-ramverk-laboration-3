@@ -13,7 +13,6 @@
       }
     }
   }
-  console.log(screen.width)
 </script>
 
 <template>
@@ -41,8 +40,7 @@
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
-    <!-- Renders the list of links, depending on "collapsed". -->
-    <ul v-if="screen > 980">
+    <ul>
       <li>
         <RouterLink to="/">Hem</RouterLink>
       </li>
@@ -88,8 +86,10 @@
   }
   /* Styles for the links. */
   li {
+    list-style: none;
     padding-bottom: 65px;
     font-size: 25px;
+    padding-left: 3px;
   }
   li a {
     padding: 10px;
@@ -109,7 +109,7 @@
     width: 35px;
     height: 5px;
     background-color: #333;
-    transition: 0.3s ease;
+    transition: 0.1s ease;
   }
   @media (min-width: 980px) {
     .container {
@@ -120,6 +120,7 @@
       color: rgba(51, 51, 51, 0);
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
+      height: 40px !important;
       float: none;
       position: unset;
       z-index: 0;
@@ -136,6 +137,18 @@
     ul {
       display: flex;
       justify-content: flex-end;
+    }
+    li {
+      font-weight: lighter;
+    }
+    a.router-link-exact-active {
+      font-weight: bold;
+    }
+    li a:hover {
+      border-bottom-color: #333;
+      border-bottom: 3px;
+      transition: 0.2s ease;
+      text-shadow: 1px 2px 3px #666;
     }
   }
 </style>
