@@ -24,6 +24,11 @@
         ]
       }
     },
+    methods: {
+      goToAddPage() {
+        this.$router.push('/add')
+      }
+    },
     computed: {
       // Calculates percentage of the budget, used in progress-bar a§s width
       calculateExpenseProgress() {
@@ -71,7 +76,7 @@
       :category="category"
     />
     <li class="add-category-container">
-      <div class="add-category-button" />
+      <div class="add-category-button" @click="goToAddPage" />
       <p>Lägg till</p>
     </li>
   </ul>
