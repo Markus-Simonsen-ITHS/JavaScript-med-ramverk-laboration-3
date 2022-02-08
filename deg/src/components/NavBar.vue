@@ -40,6 +40,8 @@
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
+    ¨
+    <!-- The links -->
     <ul>
       <li>
         <RouterLink to="/">Hem</RouterLink>
