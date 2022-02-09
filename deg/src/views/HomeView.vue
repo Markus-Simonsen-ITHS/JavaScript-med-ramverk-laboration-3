@@ -106,14 +106,14 @@
       <p>Lägg till</p>
     </li>
   </ul>
-  <div
+  <!-- <div
     v-if="
       (100 * categories[1].amountSpent) / categories[1].budget === 50 ||
       (100 * categories[1].amountSpent) / categories[1].budget === 25
     "
   >
     WARNING
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
