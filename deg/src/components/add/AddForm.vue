@@ -109,7 +109,7 @@
       @click="setDisplayAddIncome"
       :class="{ active: !displayAddExpense }"
     >
-      Intäkt
+      Inkomst
     </button>
   </div>
   <form @submit.prevent="submit">
