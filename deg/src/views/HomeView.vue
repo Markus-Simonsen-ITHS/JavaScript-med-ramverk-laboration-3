@@ -5,13 +5,35 @@
   export default {
     data() {
       return {
+        // Temporary array until we fetch data from db
         categories: [
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          },
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          },
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          },
+          {
+            name: 'Mat',
+            amountSpent: 2500,
+            budget: 4000
+          },
           {
             name: 'Mat',
             amountSpent: 2500,
             budget: 4000
           }
         ],
+        // Temporary arrary until we fetch data from db
         statuses: [
           {
             name: 'Intäkter',
@@ -24,8 +46,13 @@
         ]
       }
     },
+    methods: {
+      goToAddPage() {
+        this.$router.push('/add')
+      }
+    },
     computed: {
-      // Calculates percentage of the budget, used in progress-bar a§s width
+      // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
         const budget = 4000
         const spent = 2000
@@ -42,15 +69,17 @@
 
 <template>
   <div class="account-overview-container">
-    <p class="account-overview-name">Matkonto</p>
-    <p class="account-amount-spent">2500 kr</p>
-    <div class="account-progress-container">
-      <div
-        class="account-progress-bar"
-        :style="{ width: calculateExpenseProgress }"
-      />
+    <div>
+      <p class="account-overview-name">Matkonto</p>
+      <p class="account-amount-spent">2500 kr</p>
+      <div class="account-progress-container">
+        <div
+          class="account-progress-bar"
+          :style="{ width: calculateExpenseProgress }"
+        />
+      </div>
+      <p class="account-budget">Budget: 4000 kr</p>
     </div>
-    <p class="account-budget">Budget: 4000 kr</p>
   </div>
 
   <div class="status-container">
@@ -73,8 +102,10 @@
       :key="category.id"
       :category="category"
     />
+  </ul>
+  <ul class="category-list">
     <li class="add-category-container">
-      <div class="add-category-button" />
+      <div class="add-category-button" @click="goToAddPage" />
       <p>Lägg till</p>
     </li>
   </ul>
@@ -117,21 +148,6 @@
     gap: 20px;
   }
 
-  .status-card {
-    background-color: #e7e7e7;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 1px 5px 5px 0px #676767;
-  }
-
-  .bold-text {
-    font-weight: bold;
-  }
-
-  .status-card p {
-    margin: 5px;
-  }
-
   .overview-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -167,6 +183,10 @@
     grid-template-columns: 0.5fr 1fr;
     padding: 10px 0;
   }
+  .add-category-container p {
+    align-self: center;
+  }
+  /* Add-button */
   .add-category-button {
     background-color: #c4c4c4;
     border-radius: 10px;
@@ -210,5 +230,26 @@
     gap: 15px;
     justify-content: right;
     align-items: center;
+  }
+  @media screen and (min-width: 700px) {
+    .account-overview-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .status-container {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    /* Hide history-link on desktop */
+    .overview-container a {
+      display: none;
+    }
+    .category-list {
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: 100px;
+    }
+    .add-category-container {
+      padding: 10px;
+      grid-template-columns: 0.2fr 1fr;
+    }
   }
 </style>

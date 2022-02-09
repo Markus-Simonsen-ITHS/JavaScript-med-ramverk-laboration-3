@@ -53,4 +53,14 @@
   .bold-text {
     font-weight: bold;
   }
+
+  @media screen and (min-width: 700px) {
+    .expense-category {
+      grid-template-columns: .5fr 1fr 1fr;
+    }
+    .category-img-container {
+      height: 100px;
+      justify-self: start;
+    }
+  }
 </style>
