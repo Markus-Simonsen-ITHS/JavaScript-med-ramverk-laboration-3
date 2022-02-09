@@ -12,17 +12,34 @@
   snapshot.forEach((doc) => {
     console.log(doc.id, '=>', doc.data())
   })
-  index.js
+
   export default {
     methods: {
-      gotToAddView() {
+      goToAddView() {
         this.$router.push('/add')
       }
+    }
+  }
+  ref.on('value', getData, errData)
+
+  function errData(error) {
+    console.log('Något gick snett')
+    console.log(error)
+  }
+
+  function getData(data) {
+    const utgift = data.val()
+    const keys = Object.keys(utgift)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const utgifter = utgift[key]
+      console.log(utgifter.utgifter, utgifter.total, key)
     }
   }
 </script>
 
 <template>
+  <!--Show if there aren't any registered transactions-->
   <div class="view-transaction">
     <form class="transaction-form">
       <div class="form-inner">
@@ -32,53 +49,53 @@
     </form>
   </div>
 
+  <!--Show if there are any registered transactions-->
   <div class="transactions">
     <h1>Historik</h1>
     <p>Denna månad</p>
-  </div>
-
-  <div class="transaction-container">
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+    <div class="transaction-container">
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
+        <div class="transaction-text">
+          <h4>INFO</h4>
+          <p>utgift i kr</p>
+        </div>
       </div>
-      <div class="transaction-text">
-        <h4>INFO</h4>
-        <p>utgift i kr</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
+        <div class="transaction-text">
+          <h4>INFO</h4>
+          <p>utgift i kr</p>
+        </div>
       </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
-      <div class="transaction-text">
-        <h4>INFO</h4>
-        <p>utgift i kr</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
-      </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
-      </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
     </div>
   </div>
@@ -95,11 +112,17 @@
     display: flex;
     justify-content: center;
     min-height: 100vh;
-  }
-  .transactions {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+  }
+
+  .transaction-form {
+    display: block;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .form-inner {
+    padding: 50px 15px;
   }
 
   .transaction-card {
