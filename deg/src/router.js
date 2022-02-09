@@ -5,6 +5,7 @@ import LoginView from './views/LoginView.vue'
 import LandingView from './views/LandingView.vue'
 import AddView from './views/AddView.vue'
 import TransactionsView from './views/TransactionsView.vue'
+import DebtView from './views/DebtView.vue'
 
 export default createRouter({
   history: createWebHashHistory(),
@@ -28,6 +29,10 @@ export default createRouter({
     {
       component: TransactionsView,
       path: '/history'
+    },
+    {
+      component: DebtView,
+      path: '/debt'
     }
   ]
 })
