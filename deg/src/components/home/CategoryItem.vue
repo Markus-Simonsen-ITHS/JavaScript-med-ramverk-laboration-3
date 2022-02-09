@@ -56,7 +56,7 @@
 
   @media screen and (min-width: 700px) {
     .expense-category {
-      grid-template-columns: .5fr 1fr 1fr;
+      grid-template-columns: 0.5fr 1fr 1fr;
     }
     .category-img-container {
       height: 100px;
