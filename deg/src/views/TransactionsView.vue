@@ -20,22 +20,6 @@
       }
     }
   }
-  ref.on('value', getData, errData)
-
-  function errData(error) {
-    console.log('Något gick snett')
-    console.log(error)
-  }
-
-  function getData(data) {
-    const utgift = data.val()
-    const keys = Object.keys(utgift)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const utgifter = utgift[key]
-      console.log(utgifter.utgifter, utgifter.total, key)
-    }
-  }
 </script>
 
 <template>
