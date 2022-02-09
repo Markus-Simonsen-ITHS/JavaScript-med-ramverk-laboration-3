@@ -8,9 +8,12 @@
         title: null,
         date: null,
         checkbox: false,
-        inputError: false,
         amount: '0',
-        addType: 'expense'
+        addType: 'expense',
+        errors: {
+          titleError: false,
+          amountError: false
+        }
       }
     },
     methods: {
@@ -28,21 +31,39 @@
       goToHome() {
         this.$router.push('/')
       },
-      // Checks if titleInput is emtpy, marks inputError as true, which displays a message and a red border on input
-      validateTitleInput() {
+      // Checks if titleInput is emtpy, marks titleError as true, which displays a message and a red border on input
+      isTitleValid() {
         if (!this.title) {
-          this.inputError = true
+          this.errors.titleError = true
           return false
         } else {
-          this.inputError = false
+          this.errors.titleError = false
+          return true
+        }
+      },
+      // Checks if amount is not emtpty and greater than 0 and if it contains any letters, displays error message if not
+      isAmountValid() {
+        if (!this.amount) {
+          this.errors.amountError = 'Du måste fylla i ett belopp'
+          return false
+        } else if (parseInt(this.amount) < 1) {
+          this.errors.amountError = 'Belopp måste vara mer än 0'
+          return false
+        } else if (/.*[a-zA-Z].*/.test(this.amount)) {
+          this.errors.amountError = 'Belopp kan inte innehålla bokstäver'
+          return false
+        } else {
+          this.errors.amountError = false
           return true
         }
       },
       submit() {
+        let errors = true
         // Validating input, do not move forward if false
-        if (!this.validateTitleInput()) {
-          return
-        }
+        if (!this.isTitleValid()) errors = true
+        if (!this.isAmountValid()) errors = true
+
+        if (errors) return
 
         // Should change email to id
         const payload = {
@@ -75,20 +96,24 @@
       }
     },
     watch: {
-      // Watches for every change and validates the input-field
+      // Watches for every change and validates the title input-field
       title() {
-        this.validateTitleInput()
+        this.isTitleValid()
+      },
+      // Watches for every change and validates the amount input-field
+      amount() {
+        this.isAmountValid()
       },
       // Watches for changes in addType and resets error variable
       addType() {
-        this.inputError = false
+        this.errors.titleError = false
       }
     }
   }
 </script>
 
 <template>
-  <div class="input-container">
+  <div class="input-container" :class="{'input-error': errors.amountError}">
     <input
       class="amount-input"
       id="amount-input"
@@ -98,6 +123,9 @@
     />
     <label class="amount-input" for="amount-input">kr</label>
   </div>
+  <label class="error-message" for="amount-input" v-if="errors.amountError">
+    {{ errors.amountError }}
+  </label>
   <div class="buttons-container">
     <button
       @click="setDisplayAddExpense"
@@ -119,13 +147,13 @@
     </select>
     <input
       class="form-input"
-      :class="{ 'input-error': inputError }"
+      :class="{ 'input-error': errors.titleError }"
       id="add-title"
       type="text"
       v-model="title"
       placeholder="Anteckning"
     />
-    <label for="add-title" class="error-message" v-if="inputError"
+    <label for="add-title" class="error-message" v-if="errors.titleError"
       >Du måste fylla i ett namn</label
     >
     <input class="form-input" type="date" v-model="date" placeholder="Datum" />
