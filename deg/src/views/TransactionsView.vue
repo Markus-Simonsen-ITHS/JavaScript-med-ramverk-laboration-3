@@ -1,7 +1,25 @@
 <script>
-  // import db from '../firebase'
+  import { app } from '../firebase'
+  import { db } from '../firebase'
 
-  export default {}
+  const utgiftRef = db.collection('utgift')
+  const snapshot = await utgiftRef.where('category', '==', 'mat').get()
+  if (snapshot.empty) {
+    console.log('No matching documents.')
+    return
+  }
+
+  snapshot.forEach((doc) => {
+    console.log(doc.id, '=>', doc.data())
+  })
+  index.js
+  export default {
+    methods: {
+      gotToAddView() {
+        this.$router.push('/add')
+      }
+    }
+  }
 </script>
 
 <template>
@@ -9,7 +27,7 @@
     <form class="transaction-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
-        <input type="submit" value="gå till skriv in utgift" />
+        <input type="button" value="Lägg till utgift" @click="goToAddView" />
       </div>
     </form>
   </div>
