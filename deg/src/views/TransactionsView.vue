@@ -9,10 +9,6 @@
     return
   }
 
-  snapshot.forEach((doc) => {
-    console.log(doc.id, '=>', doc.data())
-  })
-
   export default {
     methods: {
       goToAddView() {
