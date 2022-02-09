@@ -1,72 +1,82 @@
 <script>
-  import db from '../firebase'
+  import { db } from '../firebase'
 
-  export default {}
+  const utgiftRef = db.collection('utgift')
+
+  export default {
+    methods: {
+      goToAddView() {
+        this.$router.push('/add')
+      }
+    }
+  }
 </script>
 
 <template>
-  <div class="view-transaction">
+  <!--Show if there aren't any registered transactions-->
+  <div class="view-transaction" v-if="snapshot.empty">
     <form class="transaction-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
-        <input type="submit" value="gå till skriv in utgift" />
+        <input type="button" value="Lägg till utgift" @click="goToAddView" />
       </div>
     </form>
   </div>
 
-  <div class="transactions">
+  <!--Show if there are any registered transactions-->
+  <div class="transactions" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
-  </div>
-
-  <div class="transaction-container">
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+    <div v-for="utgift in db.collection.utgift" :key="utgift.key" />
+    <div class="transaction-container">
+      <div class="transaction-card">
+        <h2 class="title">Title {{ utgift.title }}</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
+        <div class="transaction-text">
+          <h4>INFO</h4>
+          <p>utgift i kr</p>
+        </div>
       </div>
-      <div class="transaction-text">
-        <h4>INFO</h4>
-        <p>utgift i kr</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
+        <div class="transaction-text">
+          <h4>INFO</h4>
+          <p>utgift i kr</p>
+        </div>
       </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
-      <div class="transaction-text">
-        <h4>INFO</h4>
-        <p>utgift i kr</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
-      </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
-      </div>
-    </div>
-    <div class="transaction-card">
-      <h2>TITEL</h2>
-      <div class="transaction-budget">
-        <h5>BUDGET</h5>
-        <p>belopp</p>
+      <div class="transaction-card">
+        <h2>TITEL</h2>
+        <div class="transaction-budget">
+          <h5>BUDGET</h5>
+          <p>belopp</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
   * {
     margin: 0;
     padding: 0;
@@ -77,11 +87,17 @@
     display: flex;
     justify-content: center;
     min-height: 100vh;
-  }
-  .transactions {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+  }
+
+  .transaction-form {
+    display: block;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .form-inner {
+    padding: 50px 15px;
   }
 
   .transaction-card {
