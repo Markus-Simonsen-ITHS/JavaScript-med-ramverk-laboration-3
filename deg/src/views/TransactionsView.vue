@@ -1,7 +1,9 @@
 <script>
   import { db } from '../firebase'
 
-  const utgiftRef = db.collection('utgift')
+  const getTransaction = () => {
+    const transactionRef = db.collections().ref('utgift')
+  }
 
   export default {
     methods: {
