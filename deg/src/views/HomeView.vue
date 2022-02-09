@@ -9,12 +9,12 @@
         categories: [
           {
             name: 'Mat',
-            amountSpent: 2500,
+            amountSpent: 2000,
             budget: 4000
           },
           {
             name: 'Mat',
-            amountSpent: 2500,
+            amountSpent: 1000,
             budget: 4000
           },
           {
@@ -54,8 +54,8 @@
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        const budget = 4000
-        const spent = 2000
+        const spent = this.categories[1].amountSpent
+        const budget = this.categories[1].budget
         const progress = (100 * spent) / budget
         return progress + '%'
       }
@@ -106,6 +106,14 @@
       <p>Lägg till</p>
     </li>
   </ul>
+  <div
+    v-if="
+      (100 * categories[1].amountSpent) / categories[1].budget === 50 ||
+      (100 * categories[1].amountSpent) / categories[1].budget === 25
+    "
+  >
+    WARNING
+  </div>
 </template>
 
 <style scoped>
