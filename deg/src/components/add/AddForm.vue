@@ -58,11 +58,13 @@
         }
       },
       submit() {
-        let errors = true
-        // Validating input, do not move forward if false
+        // If any errors are found, this is set to true
+        let errors = false
+        // Validating input
         if (!this.isTitleValid()) errors = true
         if (!this.isAmountValid()) errors = true
 
+        // If any error is found, return the function
         if (errors) return
 
         // Should change email to id
@@ -113,7 +115,7 @@
 </script>
 
 <template>
-  <div class="input-container" :class="{'input-error': errors.amountError}">
+  <div class="input-container" :class="{ 'input-error': errors.amountError }">
     <input
       class="amount-input"
       id="amount-input"
