@@ -1,13 +1,7 @@
 <script>
-  import { app } from '../firebase'
   import { db } from '../firebase'
 
   const utgiftRef = db.collection('utgift')
-  const snapshot = await utgiftRef.where('category', '==', 'mat').get()
-  if (snapshot.empty) {
-    console.log('No matching documents.')
-    return
-  }
 
   export default {
     methods: {
@@ -20,7 +14,7 @@
 
 <template>
   <!--Show if there aren't any registered transactions-->
-  <div class="view-transaction">
+  <div class="view-transaction" v-if="snapshot.empty">
     <form class="transaction-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
@@ -30,12 +24,13 @@
   </div>
 
   <!--Show if there are any registered transactions-->
-  <div class="transactions">
+  <div class="transactions" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
+    <div v-for="utgift in db.collection.utgift" :key="utgift.key" />
     <div class="transaction-container">
       <div class="transaction-card">
-        <h2>TITEL</h2>
+        <h2 class="title">Title {{ utgift.title }}</h2>
         <div class="transaction-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
