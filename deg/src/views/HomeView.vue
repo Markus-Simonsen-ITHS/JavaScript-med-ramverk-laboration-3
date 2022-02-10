@@ -76,16 +76,15 @@
   <div class="warning-container" v-if="this.toggle === true">
     <div
       class="warning-card"
-      @click="closeButton"
       v-if="
         this.calculateExpenseProgress === '50%' ||
         this.calculateExpenseProgress === '25%'
       "
     >
-      Varning, Lorem ipsum dolor sit amet!
-      <div id="mdiv">
-        <div class="mdiv">
-          <div class="md" />
+      <p>Varning, Lorem ipsum dolor sit amet!</p>
+      <div id="close-button" @click="closeButton">
+        <div class="close-button">
+          <div class="close-button-r" />
         </div>
       </div>
     </div>
@@ -143,28 +142,20 @@
 </template>
 
 <style scoped>
-  #mdiv {
-    width: 25px;
-    height: 25px;
-    background-color: red;
-    border: 1px solid black;
-  }
-
-  .mdiv {
+  .close-button {
     height: 25px;
     width: 2px;
     margin-left: 12px;
-    background-color: black;
+    background-color: white;
     transform: rotate(45deg);
-    /* Z-index: 1; */
+    margin:0 16px 0 0;
   }
 
-  .md {
+  .close-button-r {
     height: 25px;
     width: 2px;
-    background-color: black;
+    background-color: white;
     transform: rotate(90deg);
-    /* Z-index: 2; */
   }
 
   .warning-card {
@@ -173,8 +164,15 @@
     padding: 10px;
     border-radius: 10px;
     box-shadow: 1px 5px 5px 0px #676767;
-    width: 50%;
+    width: 70%;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
+  .warning-container p {
+  font-size: 16px;
+}
 
   .account-overview-container {
     padding: 10px;
@@ -296,6 +294,13 @@
     align-items: center;
   }
   @media screen and (min-width: 700px) {
+    .warning-card {
+      width: 50%;
+    }
+
+    .warning-container p {
+  font-size: 24px;
+}
     .account-overview-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
