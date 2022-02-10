@@ -10,6 +10,8 @@ createApp(App).use(router).use(store).mount('#app')
 auth.onAuthStateChanged(function (user) {
   if (user) {
     store.dispatch('fetchUser', user.uid)
+    store.dispatch('fetchAllIncomeForUser', user.uid)
+    store.dispatch('fetchAllExpensesForUser', user.uid)
   } else {
     // No user is signed in.
   }

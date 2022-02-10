@@ -10,7 +10,7 @@
       // Adds expense to db, triggered from AddForm-component
       addExpense(payload) {
         const docData = {
-          email: payload.email,
+          id: payload.id,
           title: payload.title,
           amount: payload.amount,
           category: payload.category,
@@ -25,7 +25,7 @@
       // Adds income to db, triggered from AddForm-component
       addIncome(payload) {
         const docData = {
-          email: payload.email,
+          id: payload.id,
           title: payload.title,
           amount: payload.amount,
           category: payload.category,
