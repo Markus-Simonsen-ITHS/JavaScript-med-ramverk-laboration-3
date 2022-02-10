@@ -3,8 +3,7 @@
     data() {
       return {
         // A boolean for the hamburger-menu.
-        collapsed: true,
-        screen: screen.width
+        collapsed: true
       }
     },
     methods: {
@@ -53,6 +52,9 @@
         <RouterLink to="/">Sparande</RouterLink>
       </li>
       <li>
+        <RouterLink to="/Debt">Skulder</RouterLink>
+      </li>
+      <li>
         <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
     </ul>
@@ -92,7 +94,7 @@
   /* Styles for the links. */
   li {
     list-style: none;
-    padding-bottom: 65px;
+    padding-bottom: 40px;
     font-size: 25px;
     padding-left: 3px;
   }
