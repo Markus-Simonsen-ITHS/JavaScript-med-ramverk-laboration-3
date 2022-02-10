@@ -5,11 +5,12 @@
   export default {
     data() {
       return {
+        toggle: true,
         // Temporary array until we fetch data from db
         categories: [
           {
             name: 'Mat',
-            amountSpent: 2000,
+            amountSpent: 1000,
             budget: 4000
           },
           {
@@ -49,13 +50,17 @@
     methods: {
       goToAddPage() {
         this.$router.push('/add')
+      },
+      closeButton() {
+        this.toggle = false
+        console.log('test')
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        const spent = this.categories[1].amountSpent
-        const budget = this.categories[1].budget
+        const spent = this.categories[0].amountSpent
+        const budget = this.categories[0].budget
         const progress = (100 * spent) / budget
         return progress + '%'
       }
@@ -68,6 +73,24 @@
 </script>
 
 <template>
+  <div class="warning-container" v-if="this.toggle === true">
+    <div
+      class="warning-card"
+      @click="closeButton"
+      v-if="
+        this.calculateExpenseProgress === '50%' ||
+        this.calculateExpenseProgress === '25%'
+      "
+    >
+      Varning, Lorem ipsum dolor sit amet!
+      <div id="mdiv">
+        <div class="mdiv">
+          <div class="md" />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="account-overview-container">
     <div>
       <p class="account-overview-name">Matkonto</p>
@@ -120,6 +143,39 @@
 </template>
 
 <style scoped>
+  #mdiv {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border: 1px solid black;
+  }
+
+  .mdiv {
+    height: 25px;
+    width: 2px;
+    margin-left: 12px;
+    background-color: black;
+    transform: rotate(45deg);
+    /* Z-index: 1; */
+  }
+
+  .md {
+    height: 25px;
+    width: 2px;
+    background-color: black;
+    transform: rotate(90deg);
+    /* Z-index: 2; */
+  }
+
+  .warning-card {
+    background-color: lightcoral;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 5px 5px 0px #676767;
+    width: 50%;
+  }
+
   .account-overview-container {
     padding: 10px;
   }
