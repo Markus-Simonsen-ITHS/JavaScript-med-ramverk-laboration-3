@@ -49,7 +49,7 @@
         <RouterLink to="/history">Historik</RouterLink>
       </li>
       <li>
-        <RouterLink to="/">Sparande</RouterLink>
+        <RouterLink to="/sparande">Sparande</RouterLink>
       </li>
       <li>
         <RouterLink to="/Debt">Skulder</RouterLink>
