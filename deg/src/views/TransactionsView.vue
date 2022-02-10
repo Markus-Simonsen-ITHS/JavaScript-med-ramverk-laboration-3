@@ -1,22 +1,37 @@
 <script>
   import { db } from '../firebase'
-
-  const getTransaction = () => {
-    const transactionRef = db.collections().ref('utgift')
-  }
+  import { collection, getDocs } from 'firebase/firestore'
 
   export default {
     methods: {
       goToAddView() {
         this.$router.push('/add')
+      },
+      async fetchexpense() {
+        const hejsan = collection(db, 'utgift')
+        const hej = await getDocs(hejsan)
+        const expensesAre = []
+        hej.forEach((expense) => {
+          expensesAre.push(expense.data())
+        })
+        this.expenses = expensesAre
       }
+    },
+    mounted() {
+      this.fetchexpense()
+    },
+    data() {
+      return { expenses: [] }
     }
   }
 </script>
 
 <template>
   <!--Show if there aren't any registered transactions-->
-  <div class="view-transaction" v-if="snapshot.empty">
+  <div
+    class="view-transaction"
+    v-if="this.expenses === '' || this.expenses === null"
+  >
     <form class="transaction-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
@@ -29,10 +44,9 @@
   <div class="transactions" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
-    <div v-for="utgift in db.collection.utgift" :key="utgift.key" />
     <div class="transaction-container">
       <div class="transaction-card">
-        <h2 class="title">Title {{ utgift.title }}</h2>
+        <h2 class="title">Title</h2>
         <div class="transaction-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>

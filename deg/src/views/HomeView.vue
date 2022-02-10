@@ -6,6 +6,10 @@
     methods: {
       goToAddPage() {
         this.$router.push('/add')
+      },
+      closeButton() {
+        this.toggle = false
+        console.log('test')
       }
     },
     computed: {
@@ -48,6 +52,23 @@
 </script>
 
 <template>
+  <div class="warning-container" v-if="this.toggle === true">
+    <div
+      class="warning-card"
+      v-if="
+        this.calculateExpenseProgress === '50%' ||
+        this.calculateExpenseProgress === '25%'
+      "
+    >
+      <p>Varning, Lorem ipsum dolor sit amet!</p>
+      <div id="close-button" @click="closeButton">
+        <div class="close-button">
+          <div class="close-button-r" />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="account-overview-container">
     <div>
       <p class="account-overview-name">Matkonto</p>
@@ -97,6 +118,38 @@
 </template>
 
 <style scoped>
+  .close-button {
+    height: 25px;
+    width: 2px;
+    margin-left: 12px;
+    background-color: white;
+    transform: rotate(45deg);
+    margin: 0 16px 0 0;
+  }
+
+  .close-button-r {
+    height: 25px;
+    width: 2px;
+    background-color: white;
+    transform: rotate(90deg);
+  }
+
+  .warning-card {
+    background-color: lightcoral;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 5px 5px 0px #676767;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .warning-container p {
+    font-size: 16px;
+  }
+
   .account-overview-container {
     padding: 10px;
   }
@@ -217,6 +270,13 @@
     align-items: center;
   }
   @media screen and (min-width: 700px) {
+    .warning-card {
+      width: 50%;
+    }
+
+    .warning-container p {
+      font-size: 24px;
+    }
     .account-overview-container {
       display: grid;
       grid-template-columns: 1fr 1fr;

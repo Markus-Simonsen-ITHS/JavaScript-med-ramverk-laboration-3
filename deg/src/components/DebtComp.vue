@@ -1,33 +1,47 @@
 <script>
-  import { collection, addDoc } from 'firebase/firestore'
+  import { collection, addDoc, getDocs } from 'firebase/firestore'
   import { db } from '../firebase'
 
   export default {
     data() {
       return {
-        title: 'test',
+        title: '',
+        amount: '',
         date: '',
-        amount: '15000',
-        payOffDebt: '1000',
         interest: '',
-        toggle: 'block'
+        payOffDebt: '',
+        toggle: 'block',
+        debts: []
       }
+    },
+    created() {
+      this.fetchDebtData().then(console.log(this.debts))
     },
     computed: {
       debtBar() {
         const max = this.amount
         const payOffDebt = this.payOffDebt
-        const progress = (100 * payOffDebt) / max
+        let progress = (100 * payOffDebt) / max
+        progress = 100 - progress
+        // progress bar tickar nu ner ju mer man betalar av
         return progress + '%'
       }
     },
     methods: {
+      async fetchDebtData() {
+        const querySnapshot = await getDocs(collection(db, 'skuld'))
+        querySnapshot.forEach((doc) => {
+          if (doc.data().email === this.$store.state.user.email) {
+            this.debts.push(doc.data())
+          }
+        })
+      },
       submitDebt() {
         const docData = {
           email: this.$store.state.user.email,
-          title: this.debt.title,
-          amount: this.debt.amount,
-          date: this.debt.date
+          title: this.title,
+          amount: this.amount,
+          date: this.date
         }
         addDoc(collection(db, 'skuld'), docData)
       },
@@ -40,6 +54,15 @@
           category: 'skuldavbetalning'
         }
         addDoc(collection(db, 'återkommandeUtgift'), docData)
+      },
+      clearFieldsDebt() {
+        this.title = ''
+        this.amount = ''
+        this.interest = ''
+        this.date = ''
+      },
+      clearFieldsPayOffDebt() {
+        this.payOffDebt = ''
       }
     }
   }
@@ -47,15 +70,15 @@
 
 <template>
   <h1>Avbetalning av skuld</h1>
-  <h2>Skulder:</h2>
-  <!--  :key="debts" v-for="debts in STORAGEDEBTS" -->
+
   <ul>
-    <li>
-      <p class="titleText" v-if="title">
-        {{ this.title }}: {{ this.amount }}
-        <!-- STORAGE title och amount -->
-      </p>
-      <div class="barContainer" :style="{ display: toggle }" v-if="amount">
+    <li><h2>Skulder:</h2></li>
+    <li v-if="this.debts[0] === undefined">
+      <p class="titleText">Du har inga skulder</p>
+    </li>
+    <li v-else :key="entry" v-for="entry in this.debts">
+      <p class="titleText">{{ entry.title }}: {{ entry.amount }}</p>
+      <div class="barContainer" :style="{ display: toggle }">
         <div class="debtBar" :style="{ width: debtBar }" />
       </div>
     </li>
@@ -75,18 +98,20 @@
           @click="submitDebt"
           @keyup.enter="submitDebt"
         />
-        <input type="button" value="Avbryt" />
+        <input type="button" value="Avbryt" @click="clearFieldsDebt" />
       </div>
     </form>
     <form @submit.prevent="">
       <p class="titleText">
         Vill du betala av lite på dina skulder varje månad?
       </p>
-      <select>
-        <option>Välj skuld...</option>
+      <select v-if="this.debts[0] === undefined">
+        <option>Du har inga skulder</option>
+      </select>
+      <select v-else>
+        <option value>Välj skuld...</option>
         <option :key="entry" :value="entry" v-for="entry in this.debts">
-          <!--  :key="debts" v-for="debts in STORAGEDEBTS" -->
-          {{ entry }}
+          {{ entry.title }}
         </option>
       </select>
       <input type="text" v-model="payOffDebt" placeholder="Mängd" />
@@ -98,7 +123,7 @@
           @click="submitPayOffDebt"
           @keyup.enter="submitPayOffDebt"
         />
-        <input type="button" value="Avbryt" />
+        <input type="button" value="Avbryt" @click="clearFieldsPayOffDebt" />
       </div>
     </form>
   </div>
@@ -108,6 +133,7 @@
   h1 {
     margin-bottom: 60px;
     font-size: 200%;
+    text-align: center;
   }
   .container {
     display: flex;
@@ -116,12 +142,29 @@
     margin-left: 10px;
   }
   ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     list-style: none;
     padding-left: 0;
   }
   li {
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #e7e7e7;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    width: 80%;
+  }
+  .barContainer {
+    margin-bottom: 30px;
+    background-color: #c4c4c4;
+    height: 15px;
+    border-radius: 10px;
+  }
+  .debtBar {
+    background-color: #212121;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
   }
   .titleText {
     font-weight: bold;
@@ -136,18 +179,6 @@
     width: 70%;
     margin-top: 50px;
     margin-bottom: 30px;
-  }
-  .barContainer {
-    margin-bottom: 30px;
-    background-color: #c4c4c4;
-    height: 15px;
-    border-radius: 10px;
-  }
-  .debtBar {
-    background-color: #212121;
-    border-radius: 10px;
-    height: 100%;
-    width: 100%;
   }
   .button-container {
     margin-top: 10px;

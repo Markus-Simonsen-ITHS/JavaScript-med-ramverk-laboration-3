@@ -1,8 +1,3 @@
-<!--
-  fixa så debtBar tickar ner istället för upp
-  fixa debtBar så den visar för varje skuld användare har
-   -->
-
 <script>
   import DebtComp from '../components/DebtComp.vue'
 
@@ -13,3 +8,11 @@
 <template>
   <DebtComp />
 </template>
+<!--
+  fixa Avbryt method
+  knyt payOffDebt med rätt debt
+  ta bort payOffDebt knapp från li (med bekräftelse pop up ruta)
+  ta bort debt funktionalitet knapp från li (med bekräftelse pop up ruta)
+  ränta funktionalitet
+  refresha listan när man har lagt till skuld
+   -->
