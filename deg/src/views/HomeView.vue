@@ -3,6 +3,11 @@
   import StatusItem from '../components/home/StatusItem.vue'
 
   export default {
+    data() {
+      return {
+        toggle: true
+      }
+    },
     methods: {
       goToAddPage() {
         this.$router.push('/add')
