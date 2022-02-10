@@ -48,7 +48,7 @@ const router = createRouter({
   ]
 })
 
-// Runs before each change in router. 
+// Runs before each change in router.
 // As parameters, takes information about next path (to), which path it is coming from (from)
 // and a function to trigger next path which can be overrided (next)
 router.beforeEach((to, from, next) => {
