@@ -24,12 +24,16 @@ const mutations = {
     },
     setExpensesCategories(state, categoriesArr) {
       state.expensesCategories = categoriesArr
+    },
+    setLoginError(state, error) {
+      state.loginError = error
     }
   },
   state = {
     counter: 0,
     user: {},
     logoutMessage: 'none',
+    loginError: '',
     income: [
       {
         name: '',
@@ -59,12 +63,15 @@ const mutations = {
   },
   actions = {
     signIn(state, payload) {
-      signInWithEmailAndPassword(auth, payload.email, payload.password).then(
-        () => {
+      signInWithEmailAndPassword(auth, payload.email, payload.password)
+        .then(() => {
           state.dispatch('fetchUser')
           router.push('/')
-        }
-      )
+          state.commit('setLoginError', '')
+        })
+        .catch((error) => {
+          state.commit('setLoginError', error)
+        })
     },
     logOut(state) {
       signOut(auth).then(() => {
@@ -78,6 +85,12 @@ const mutations = {
     },
     registerUser(state, payload) {
       createUserWithEmailAndPassword(auth, payload.email, payload.password)
+        .then(() => {
+          state.commit('setLoginError', '')
+        })
+        .catch((error) => {
+          state.commit('setLoginError', error)
+        })
     },
     async fetchAllIncomeForUser(state, userId) {
       // Creates a query where the id matches the passed userId
@@ -151,6 +164,9 @@ const mutations = {
     },
     getExpenseCategories(state) {
       return state.expensesCategories
+    },
+    getLoginError(state) {
+      return state.loginError
     }
   }
 export default createStore({ mutations, state, actions, getters, strict: true })

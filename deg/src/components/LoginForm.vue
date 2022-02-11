@@ -8,6 +8,12 @@
         registerPassword: ''
       }
     },
+    props: {
+      onlyRegister: {
+        type: Boolean,
+        default: false
+      }
+    },
     methods: {
       login() {
         this.$store.dispatch('signIn', {
@@ -32,7 +38,21 @@
       },
       userName() {
         return this.user ? this.user.email : ''
+      },
+      onlyRegisterBool() {
+        return this.onlyRegister === 'true'
+      },
+      loginError() {
+        console.log(this.$store.getters.getLoginError.toString().length)
+        return this.$store.getters.getLoginError
+      },
+      validPassword() {
+        const valid = /(?=.*[0-9a-zA-Z]).{6,}/.test(this.loginPassword)
+        return valid
       }
+    },
+    mounted() {
+      this.$store.commit('setLoginError', '')
     }
   }
 </script>
@@ -60,16 +80,41 @@
         v-model="loginPassword"
         placeholder="Password"
       />
+      <p v-if="loginError.toString().length > 0" id="error-message">
+        {{ loginError }}
+      </p>
       <br />
-      <button id="loginButton" type="submit" @click.prevent="login">
-        Logga in
-      </button>
-      <button id="registerButton" @click.prevent="register">Skapa konto</button>
+      <div v-if="onlyRegisterBool">
+        <button
+          id="loginButton"
+          type="submit"
+          @click.prevent="register"
+          :disabled="validPassword === false"
+        >
+          Skapa konto
+        </button>
+        <router-link id="registerButton" to="/login">Logga in</router-link>
+      </div>
+      <div v-else>
+        <button id="loginButton" type="submit" @click.prevent="login">
+          Logga in
+        </button>
+        <router-link id="registerButton" to="/landing">
+          Skapa konto
+        </router-link>
+      </div>
     </form>
   </div>
 </template>
 
 <style scoped>
+  #error-message {
+    background-color: lightcoral;
+    color: white;
+    border-radius: 10px;
+    padding: 8px 16px;
+  }
+
   #loginInBox {
     display: flex;
     justify-content: center;
@@ -116,6 +161,11 @@
     margin-right: 0;
     font-size: 15px;
     padding: 0;
+  }
+
+  #loginButton:disabled {
+    color: #a0a0a0 !important;
+    cursor: not-allowed;
   }
 
   p {
