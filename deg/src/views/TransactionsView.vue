@@ -1,8 +1,12 @@
 <script>
   import { db } from '../firebase'
   import { collection, getDocs } from 'firebase/firestore'
+  import NavBar from '../components/NavBar.vue'
 
   export default {
+    components: {
+      NavBar
+    },
     methods: {
       goToAddView() {
         this.$router.push('/add')
@@ -27,6 +31,7 @@
 </script>
 
 <template>
+  <NavBar />
   <!--Show if there aren't any registered transactions-->
   <div
     class="view-expenses"
