@@ -1,37 +1,43 @@
 <script>
-  import { collection, addDoc, getDocs } from 'firebase/firestore'
+  import {
+    collection,
+    doc,
+    addDoc,
+    setDoc,
+    getDocs,
+    updateDoc
+  } from 'firebase/firestore'
   import { db } from '../firebase'
 
   export default {
     data() {
       return {
         title: '',
-        amount: '',
+        selectValue: null,
+        selected: 'selected',
+        amount: 5,
         date: '',
         interest: '',
-        payOffDebt: '',
+        payOffDebt: 1,
         toggle: 'block',
         debts: []
       }
     },
     created() {
-      this.fetchDebtData().then(console.log(this.debts))
+      this.fetchDebtData()
     },
-    computed: {
-      debtBar() {
-        const max = this.amount
-        const payOffDebt = this.payOffDebt
-        let progress = (100 * payOffDebt) / max
+    methods: {
+      debtBar(max, pay) {
+        let progress = (100 * pay) / max
         progress = 100 - progress
         // progress bar tickar nu ner ju mer man betalar av
         return progress + '%'
-      }
-    },
-    methods: {
+      },
       async fetchDebtData() {
         const querySnapshot = await getDocs(collection(db, 'skuld'))
         querySnapshot.forEach((doc) => {
           if (doc.data().email === this.$store.state.user.email) {
+            //byt till ID
             this.debts.push(doc.data())
           }
         })
@@ -40,20 +46,26 @@
         const docData = {
           email: this.$store.state.user.email,
           title: this.title,
-          amount: this.amount,
+          amount: Number(this.amount),
           date: this.date
         }
-        addDoc(collection(db, 'skuld'), docData)
+        setDoc(doc(db, 'skuld', this.title), docData)
+        this.clearFieldsDebt()
       },
       submitPayOffDebt() {
         const docData = {
           email: this.$store.state.user.email,
-          title: this.title,
-          amount: this.amount,
-          date: this.date,
+          title: this.selectValue + ', avbetalning',
+          amount: Number(this.payOffDebt),
           category: 'skuldavbetalning'
         }
         addDoc(collection(db, 'återkommandeUtgift'), docData)
+        const docRef = doc(db, 'skuld', this.selectValue)
+        //lägger till payOffDebt i korresponderande backend databas objekt för användning i debtBar
+        updateDoc(docRef, {
+          payOffDebt: Number(this.payOffDebt)
+        })
+        this.clearFieldsPayOffDebt()
       },
       clearFieldsDebt() {
         this.title = ''
@@ -63,6 +75,9 @@
       },
       clearFieldsPayOffDebt() {
         this.payOffDebt = ''
+      },
+      onChange(option) {
+        this.selectValue = option.target.value
       }
     }
   }
@@ -77,9 +92,19 @@
       <p class="titleText">Du har inga skulder</p>
     </li>
     <li v-else :key="entry" v-for="entry in this.debts">
-      <p class="titleText">{{ entry.title }}: {{ entry.amount }}</p>
+      <p class="titleText">
+        <span class="title">
+          <u>{{ entry.title }}</u></span
+        ><br />
+        Initial skuld: {{ entry.amount }} <br />
+        Resterande skuld: {{ entry.amount - entry.payOffDebt }}
+      </p>
       <div class="barContainer" :style="{ display: toggle }">
-        <div class="debtBar" :style="{ width: debtBar }" />
+        <div
+          class="debtBar"
+          :style="{ width: debtBar(entry.amount, entry.payOffDebt) }"
+        />
+        <p>Avbetalning varje månad: {{ entry.payOffDebt }}</p>
       </div>
     </li>
   </ul>
@@ -103,14 +128,16 @@
     </form>
     <form @submit.prevent="">
       <p class="titleText">
-        Vill du betala av lite på dina skulder varje månad?
+        Vill du börja med avbetalning av en av dina skulder varje månad, eller
+        ändra på nuvarande avbetalning?
       </p>
       <select v-if="this.debts[0] === undefined">
         <option>Du har inga skulder</option>
       </select>
-      <select v-else>
-        <option value>Välj skuld...</option>
-        <option :key="entry" :value="entry" v-for="entry in this.debts">
+      <select v-else @change="onChange($event)">
+        <!-- v-on tar värdet som väljaren har valt -->
+        <option>Välj skuld...</option>
+        <option :key="entry" :value="entry.title" v-for="entry in this.debts">
           {{ entry.title }}
         </option>
       </select>
@@ -155,7 +182,7 @@
     width: 80%;
   }
   .barContainer {
-    margin-bottom: 30px;
+    margin-bottom: 70px;
     background-color: #c4c4c4;
     height: 15px;
     border-radius: 10px;
@@ -169,6 +196,10 @@
   .titleText {
     font-weight: bold;
     letter-spacing: 0.1rem;
+    line-height: 1.5;
+  }
+  .title {
+    font-size: 115%;
   }
   form {
     display: flex;
