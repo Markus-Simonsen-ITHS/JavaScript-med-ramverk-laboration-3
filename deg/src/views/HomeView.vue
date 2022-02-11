@@ -1,50 +1,12 @@
 <script>
   import CategoryItem from '../components/home/CategoryItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
+  import NavBar from '../components/NavBar.vue'
 
   export default {
     data() {
       return {
-        toggle: true,
-        // Temporary array until we fetch data from db
-        categories: [
-          {
-            name: 'Mat',
-            amountSpent: 1000,
-            budget: 4000
-          },
-          {
-            name: 'Mat',
-            amountSpent: 1000,
-            budget: 4000
-          },
-          {
-            name: 'Mat',
-            amountSpent: 2500,
-            budget: 4000
-          },
-          {
-            name: 'Mat',
-            amountSpent: 2500,
-            budget: 4000
-          },
-          {
-            name: 'Mat',
-            amountSpent: 2500,
-            budget: 4000
-          }
-        ],
-        // Temporary arrary until we fetch data from db
-        statuses: [
-          {
-            name: 'Intäkter',
-            amount: 1000
-          },
-          {
-            name: 'Utgifter',
-            amount: 5000
-          }
-        ]
+        toggle: true
       }
     },
     methods: {
@@ -59,33 +21,57 @@
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        const spent = this.categories[0].amountSpent
-        const budget = this.categories[0].budget
-        const progress = (100 * spent) / budget
-        return progress + '%'
+        if (this.categories.length > 0) {
+          const spent = this.categories[0].amountSpent
+          const budget = this.categories[0].budget
+          const progress = (100 * spent) / budget
+          return progress + '%'
+        } else {
+          return '0%'
+        }
+      },
+      // Gets all income from the store and calculates the total amount
+      totalIncome() {
+        let income = { name: 'Intäkter', amount: 0 }
+        this.$store.getters.getIncome.forEach((incomeObject) => {
+          income.amount += parseInt(incomeObject.amount)
+        })
+        return income
+      },
+      // Gets all expenses from the store and calculates the total amount
+      totalExpenses() {
+        let expenses = { name: 'Utgifter', amount: 0 }
+        this.$store.getters.getExpenses.forEach((expenseObject) => {
+          expenses.amount += parseInt(expenseObject.amount)
+        })
+        return expenses
+      },
+      categories() {
+        return this.$store.getters.getExpenseCategories
       }
     },
     components: {
       CategoryItem,
-      StatusItem
+      StatusItem,
+      NavBar
     }
   }
 </script>
 
 <template>
+  <NavBar />
   <div class="warning-container" v-if="this.toggle === true">
     <div
       class="warning-card"
-      @click="closeButton"
       v-if="
         this.calculateExpenseProgress === '50%' ||
         this.calculateExpenseProgress === '25%'
       "
     >
-      Varning, Lorem ipsum dolor sit amet!
-      <div id="mdiv">
-        <div class="mdiv">
-          <div class="md" />
+      <p>Varning, Lorem ipsum dolor sit amet!</p>
+      <div id="close-button" @click="closeButton">
+        <div class="close-button">
+          <div class="close-button-r" />
         </div>
       </div>
     </div>
@@ -106,11 +92,8 @@
   </div>
 
   <div class="status-container">
-    <StatusItem
-      v-for="status in statuses"
-      :key="status.name"
-      :status="status"
-    />
+    <StatusItem :key="totalIncome.name" :status="totalIncome" />
+    <StatusItem :key="totalExpenses.name" :status="totalExpenses" />
   </div>
   <div class="overview-container">
     <h1>Översikt</h1>
@@ -143,28 +126,20 @@
 </template>
 
 <style scoped>
-  #mdiv {
-    width: 25px;
-    height: 25px;
-    background-color: red;
-    border: 1px solid black;
-  }
-
-  .mdiv {
+  .close-button {
     height: 25px;
     width: 2px;
     margin-left: 12px;
-    background-color: black;
+    background-color: white;
     transform: rotate(45deg);
-    /* Z-index: 1; */
+    margin: 0 16px 0 0;
   }
 
-  .md {
+  .close-button-r {
     height: 25px;
     width: 2px;
-    background-color: black;
+    background-color: white;
     transform: rotate(90deg);
-    /* Z-index: 2; */
   }
 
   .warning-card {
@@ -173,7 +148,14 @@
     padding: 10px;
     border-radius: 10px;
     box-shadow: 1px 5px 5px 0px #676767;
-    width: 50%;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .warning-container p {
+    font-size: 16px;
   }
 
   .account-overview-container {
@@ -296,6 +278,13 @@
     align-items: center;
   }
   @media screen and (min-width: 700px) {
+    .warning-card {
+      width: 50%;
+    }
+
+    .warning-container p {
+      font-size: 24px;
+    }
     .account-overview-container {
       display: grid;
       grid-template-columns: 1fr 1fr;

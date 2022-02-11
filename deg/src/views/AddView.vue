@@ -5,12 +5,14 @@
 
   import AddForm from '../components/add/AddForm.vue'
 
+  import NavBar from '../components/NavBar.vue'
+
   export default {
     methods: {
       // Adds expense to db, triggered from AddForm-component
       addExpense(payload) {
         const docData = {
-          email: payload.email,
+          id: payload.id,
           title: payload.title,
           amount: payload.amount,
           category: payload.category,
@@ -25,7 +27,7 @@
       // Adds income to db, triggered from AddForm-component
       addIncome(payload) {
         const docData = {
-          email: payload.email,
+          id: payload.id,
           title: payload.title,
           amount: payload.amount,
           category: payload.category,
@@ -39,12 +41,14 @@
       }
     },
     components: {
-      AddForm
+      AddForm,
+      NavBar
     }
   }
 </script>
 
 <template>
+  <NavBar />
   <div class="addview-body">
     <p class="add-paragraph">Lägg Till</p>
     <AddForm @add-expense="addExpense" @add-income="addIncome" />
@@ -61,5 +65,11 @@
     font-size: 20px;
     font-weight: bold;
     padding: 0;
+  }
+
+  @media screen and (min-width: 700px) {
+    .add-paragraph {
+      align-self: center;
+    }
   }
 </style>

@@ -1,15 +1,25 @@
-<!--
-  fixa så debtBar tickar ner istället för upp
-  fixa debtBar så den visar för varje skuld användare har
-   -->
-
 <script>
   import DebtComp from '../components/DebtComp.vue'
+  import NavBar from '../components/NavBar.vue'
 
   export default {
-    components: { DebtComp }
+    components: { DebtComp, NavBar }
   }
 </script>
 <template>
+  <NavBar />
   <DebtComp />
 </template>
+<!--
+  fixa {{}}
+  ta bort payOffDebt eller debt funktionalitet
+  refresha listan när man har lagt till skuld
+  felhantering vid utfyllning av formulär
+  https://stackoverflow.com/questions/42992340/javascript-how-to-set-dot-after-three-digits
+  ränta funktionalitet
+  fixa Avbryt method (så att den resetar vald skuld i payoffdebt)
+  visa nedanstånde när arrayen är laddas
+     <li v-if="this.debts === []">
+      <p class="titleText">Laddar...</p>
+    </li>
+   -->
