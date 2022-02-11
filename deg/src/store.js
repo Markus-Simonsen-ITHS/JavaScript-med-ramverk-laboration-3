@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { auth, db } from './firebase'
+import router from './router'
 
 import {
   signInWithEmailAndPassword,
@@ -61,6 +62,7 @@ const mutations = {
       signInWithEmailAndPassword(auth, payload.email, payload.password).then(
         () => {
           state.dispatch('fetchUser')
+          router.push('/')
         }
       )
     },
