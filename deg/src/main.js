@@ -8,7 +8,7 @@ import store from './store'
 // Initialize app
 let app
 
-// When logging out or logging in (state change) create app if it is not already created  
+// When logging out or logging in (state change) create app if it is not already created
 auth.onAuthStateChanged(function (user) {
   if (!app) {
     app = createApp(App)
@@ -16,7 +16,7 @@ auth.onAuthStateChanged(function (user) {
     app.use(router)
     app.mount('#app')
   }
-  
+
   // If user exists, fetch data from db
   if (user) {
     store.dispatch('fetchUser', user.uid)
