@@ -29,10 +29,10 @@
 <template>
   <!--Show if there aren't any registered transactions-->
   <div
-    class="view-transaction"
+    class="view-expenses"
     v-if="this.expenses === '' || this.expenses === null"
   >
-    <form class="transaction-form">
+    <form class="expenses-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
         <input type="button" value="Lägg till utgift" @click="goToAddView" />
@@ -41,49 +41,49 @@
   </div>
 
   <!--Show if there are any registered transactions-->
-  <div class="transactions" v-else>
+  <div class="expenses" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
-    <div class="transaction-container">
-      <div class="transaction-card">
+    <div class="expenses-container">
+      <div class="expenses-card">
         <h2 class="title">Title</h2>
-        <div class="transaction-budget">
+        <div class="expenses-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
         </div>
-        <div class="transaction-text">
+        <div class="expenses-text">
           <h4>INFO</h4>
           <p>utgift i kr</p>
         </div>
       </div>
-      <div class="transaction-card">
+      <div class="expenses-card">
         <h2>TITEL</h2>
-        <div class="transaction-budget">
+        <div class="expenses-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
         </div>
-        <div class="transaction-text">
+        <div class="expenses-text">
           <h4>INFO</h4>
           <p>utgift i kr</p>
         </div>
       </div>
-      <div class="transaction-card">
+      <div class="expenses-card">
         <h2>TITEL</h2>
-        <div class="transaction-budget">
+        <div class="expenses-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
         </div>
       </div>
-      <div class="transaction-card">
+      <div class="expenses-card">
         <h2>TITEL</h2>
-        <div class="transaction-budget">
+        <div class="expenses-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
         </div>
       </div>
-      <div class="transaction-card">
+      <div class="expenses-card">
         <h2>TITEL</h2>
-        <div class="transaction-budget">
+        <div class="expenses-budget">
           <h5>BUDGET</h5>
           <p>belopp</p>
         </div>
@@ -99,14 +99,14 @@
     box-sizing: border-box;
   }
 
-  .view-transaction {
+  .view-expenses {
     display: flex;
     justify-content: center;
     min-height: 100vh;
     align-items: center;
   }
 
-  .transaction-form {
+  .expenses-form {
     display: block;
     width: 100%;
     padding: 15px;
@@ -116,7 +116,7 @@
     padding: 50px 15px;
   }
 
-  .transaction-card {
+  .expenses-card {
     display: flex;
     flex-direction: column;
     background-color: #e7e7e7;
@@ -131,13 +131,13 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
-  .transaction-text {
+  .expenses-text {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
   }
 
-  .transaction-budget {
+  .expenses-budget {
     display: flex;
     justify-content: space-between;
     align-items: baseline;

@@ -67,9 +67,8 @@
         // If any error is found, return the function
         if (errors) return
 
-        // Should change email to id
         const payload = {
-          email: this.$store.state.user.email,
+          id: this.$store.getters.getUser.id,
           title: this.title,
           amount: this.amount,
           category: this.category,

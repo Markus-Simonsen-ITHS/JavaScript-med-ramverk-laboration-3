@@ -7,12 +7,16 @@ import AddView from './views/AddView.vue'
 import TransactionsView from './views/TransactionsView.vue'
 import DebtView from './views/DebtView.vue'
 
-export default createRouter({
+import { auth } from './firebase'
+
+const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       component: HomeView,
-      path: '/'
+      path: '/',
+      // Defines if the user is required to be logged in to visit this path
+      meta: { requiresAuth: true }
     },
     {
       component: LoginView,
@@ -24,15 +28,39 @@ export default createRouter({
     },
     {
       component: AddView,
-      path: '/add'
+      path: '/add',
+      meta: { requiresAuth: true }
     },
     {
       component: TransactionsView,
-      path: '/history'
+      path: '/history',
+      meta: { requiresAuth: true }
     },
     {
       component: DebtView,
-      path: '/debt'
+      path: '/debt',
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/:notFound(.*)',
+      redirect: '/'
     }
   ]
 })
+
+// Runs before each change in router.
+// As parameters, takes information about next path (to), which path it is coming from (from)
+// and a function to trigger next path which can be overrided (next)
+router.beforeEach((to, from, next) => {
+  // Checks if the path to be visited requires authentication
+  const requiresAuth = to.matched.some((x) => x.meta.requiresAuth)
+
+  // If it requires authentication and no user is present, redirect to /landing else go to expected path
+  if (requiresAuth && !auth.currentUser) {
+    next('/landing')
+  } else {
+    next()
+  }
+})
+
+export default router
