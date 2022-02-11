@@ -327,4 +327,13 @@
     margin-bottom: 10px;
     align-self: center;
   }
+
+  @media screen and (min-width: 700px) {
+    .input-container {
+      align-self: center;
+    }
+    .buttons-container {
+      align-self: center;
+    }
+  }
 </style>

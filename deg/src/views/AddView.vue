@@ -62,4 +62,10 @@
     font-weight: bold;
     padding: 0;
   }
+
+  @media screen and (min-width: 700px) {
+    .add-paragraph {
+      align-self: center;
+    }
+  }
 </style>
