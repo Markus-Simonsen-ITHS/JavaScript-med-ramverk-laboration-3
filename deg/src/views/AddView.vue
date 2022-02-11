@@ -5,6 +5,8 @@
 
   import AddForm from '../components/add/AddForm.vue'
 
+  import NavBar from '../components/NavBar.vue'
+
   export default {
     methods: {
       // Adds expense to db, triggered from AddForm-component
@@ -39,12 +41,14 @@
       }
     },
     components: {
-      AddForm
+      AddForm,
+      NavBar
     }
   }
 </script>
 
 <template>
+  <NavBar />
   <div class="addview-body">
     <p class="add-paragraph">Lägg Till</p>
     <AddForm @add-expense="addExpense" @add-income="addIncome" />
