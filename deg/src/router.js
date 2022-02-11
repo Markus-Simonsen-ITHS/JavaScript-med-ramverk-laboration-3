@@ -52,10 +52,9 @@ const router = createRouter({
 // As parameters, takes information about next path (to), which path it is coming from (from)
 // and a function to trigger next path which can be overrided (next)
 router.beforeEach((to, from, next) => {
-
   // Checks if the path to be visited requires authentication
   const requiresAuth = to.matched.some((x) => x.meta.requiresAuth)
-  
+
   // If it requires authentication and no user is present, redirect to /landing else go to expected path
   if (requiresAuth && !auth.currentUser) {
     next('/landing')
