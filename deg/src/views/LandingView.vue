@@ -23,7 +23,7 @@
   <h1>Råd och guidning</h1>
   <p>Få tips och råd om hur du ska spara och hantera din ekonomi</p>
 
-  <LoginForm />
+  <LoginForm only-register="true" />
 </template>
 
 <style scoped>

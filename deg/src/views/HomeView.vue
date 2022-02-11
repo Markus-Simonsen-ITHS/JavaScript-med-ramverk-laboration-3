@@ -1,6 +1,7 @@
 <script>
   import CategoryItem from '../components/home/CategoryItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
+  import NavBar from '../components/NavBar.vue'
 
   export default {
     data() {
@@ -51,12 +52,14 @@
     },
     components: {
       CategoryItem,
-      StatusItem
+      StatusItem,
+      NavBar
     }
   }
 </script>
 
 <template>
+  <NavBar />
   <div class="warning-container" v-if="this.toggle === true">
     <div
       class="warning-card"

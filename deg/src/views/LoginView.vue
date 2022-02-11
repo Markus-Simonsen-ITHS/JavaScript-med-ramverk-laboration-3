@@ -6,5 +6,5 @@
 </script>
 
 <template>
-  <LoginForm />
+  <LoginForm only-register="false" />
 </template>
