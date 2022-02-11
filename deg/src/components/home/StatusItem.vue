@@ -12,7 +12,10 @@
 <template>
   <div class="status-card">
     <p>{{ status.name }}</p>
-    <p class="bold-text">{{ status.amount }}</p>
+    <p class="bold-text">
+      <span v-if="status.name === 'Utgifter'">-</span>
+      {{ status.amount }} kr
+    </p>
   </div>
 </template>
 

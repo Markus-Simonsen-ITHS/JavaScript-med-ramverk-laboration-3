@@ -15,10 +15,10 @@
       <!-- Placeholder img -->
       <img src="../../../assets/fox.jpeg" alt="Fox" />
     </div>
-    <p class="bold-text align-start">{{ category.name }}</p>
-    <p class="bold-text">{{ category.amountSpent }}</p>
+    <p class="bold-text align-start">{{ category.name ? category.name : 'Övrigt' }}</p>
+    <p class="bold-text">{{ category.amountSpent }} kr</p>
     <p class="smaller-text align-start">Budget</p>
-    <p class="smaller-text">{{ category.budget }}</p>
+    <p class="smaller-text">{{ category.budget }} kr</p>
   </li>
 </template>
 
