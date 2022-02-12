@@ -14,18 +14,22 @@
       async fetchexpense() {
         const hejsan = collection(db, 'utgift')
         const hej = await getDocs(hejsan)
+        console.log(hej)
         const expensesAre = []
         hej.forEach((expense) => {
           expensesAre.push(expense.data())
         })
         this.expenses = expensesAre
+        console.log(this.expenses[0].category)
       }
     },
     mounted() {
       this.fetchexpense()
     },
     data() {
-      return { expenses: [] }
+      return {
+        expenses: ['title', 'category', 'amount']
+      }
     }
   }
 </script>
@@ -51,46 +55,13 @@
     <p>Denna månad</p>
     <div class="expenses-container">
       <div class="expenses-card">
-        <h2 class="title">Title</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
+        <h2>titel</h2>
+        <ul>
+          <li v-for="expense in expenses" :key="expense.id">{{ expense }}</li>
+        </ul>
         <div class="expenses-text">
           <h4>INFO</h4>
           <p>utgift i kr</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-        <div class="expenses-text">
-          <h4>INFO</h4>
-          <p>utgift i kr</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
         </div>
       </div>
     </div>
