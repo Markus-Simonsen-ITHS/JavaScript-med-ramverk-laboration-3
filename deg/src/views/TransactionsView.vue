@@ -20,7 +20,6 @@
           expensesAre.push(expense.data())
         })
         this.expenses = expensesAre
-        console.log(this.expenses[0].category)
       }
     },
     mounted() {
@@ -28,7 +27,7 @@
     },
     data() {
       return {
-        expenses: ['title', 'category', 'amount']
+        expenses: []
       }
     }
   }
@@ -55,13 +54,16 @@
     <p>Denna månad</p>
     <div class="expenses-container">
       <div class="expenses-card">
-        <h2>titel</h2>
-        <ul>
-          <li v-for="expense in expenses" :key="expense.id">{{ expense }}</li>
-        </ul>
+        <h2 v-for="expense in expenses" :key="expense">
+          {{ expense.category }}
+        </h2>
         <div class="expenses-text">
-          <h4>INFO</h4>
-          <p>utgift i kr</p>
+          <h4 v-for="expense in expenses" :key="expense">
+            {{ expense.title }}
+          </h4>
+          <p v-for="expense in expenses" :key="expense">
+            {{ expense.amount }}
+          </p>
         </div>
       </div>
     </div>
@@ -105,17 +107,5 @@
     border-radius: 8px;
 
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  }
-
-  .expenses-text {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .expenses-budget {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
   }
 </style>
