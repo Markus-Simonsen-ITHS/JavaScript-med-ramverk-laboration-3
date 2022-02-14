@@ -39,20 +39,11 @@ const router = createRouter({
     },
     {
       component: DebtView,
-<<<<<<< HEAD
       path: '/debt'
     },
     {
       component: SparandeView,
       path: '/sparande'
-=======
-      path: '/debt',
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/:notFound(.*)',
-      redirect: '/'
->>>>>>> 41a454ae299537ccb93fc9526e5cc0f19b1d5727
     }
   ]
 })
