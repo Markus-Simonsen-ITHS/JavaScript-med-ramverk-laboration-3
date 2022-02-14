@@ -1,6 +1,6 @@
 <script>
   import { db } from '../firebase'
-  import { collection, getDocs } from 'firebase/firestore'
+  import { collection, getDocs, query, where } from 'firebase/firestore'
   import NavBar from '../components/NavBar.vue'
 
   export default {
@@ -12,20 +12,23 @@
         this.$router.push('/add')
       },
       async fetchexpense() {
-        const hejsan = collection(db, 'utgift')
-        const hej = await getDocs(hejsan)
-        const expensesAre = []
-        hej.forEach((expense) => {
-          expensesAre.push(expense.data())
+        const userId = this.$store.getters.getUser.id
+        const q = query(collection(db, 'utgift'), where('id', '==', userId))
+        const userExpenses = []
+        const allExpenses = await getDocs(q)
+        allExpenses.forEach((expense) => {
+          userExpenses.push(expense.data())
         })
-        this.expenses = expensesAre
+        this.expenses = userExpenses
       }
     },
     mounted() {
       this.fetchexpense()
     },
     data() {
-      return { expenses: [] }
+      return {
+        expenses: []
+      }
     }
   }
 </script>
@@ -51,46 +54,14 @@
     <p>Denna månad</p>
     <div class="expenses-container">
       <div class="expenses-card">
-        <h2 class="title">Title</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
+        <h2 v-for="expense in expenses" :key="expense">
+          {{ expense.category }}
+        </h2>
         <div class="expenses-text">
-          <h4>INFO</h4>
-          <p>utgift i kr</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-        <div class="expenses-text">
-          <h4>INFO</h4>
-          <p>utgift i kr</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
-        </div>
-      </div>
-      <div class="expenses-card">
-        <h2>TITEL</h2>
-        <div class="expenses-budget">
-          <h5>BUDGET</h5>
-          <p>belopp</p>
+          <h4 v-for="expense in expenses" :key="expense">
+            {{ expense.title }}
+          </h4>
+          <p v-for="expense in expenses" :key="expense">{{ expense.amount }}</p>
         </div>
       </div>
     </div>
@@ -134,17 +105,5 @@
     border-radius: 8px;
 
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  }
-
-  .expenses-text {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .expenses-budget {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
   }
 </style>

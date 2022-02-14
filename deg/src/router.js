@@ -43,7 +43,17 @@ const router = createRouter({
     },
     {
       component: SparandeView,
-      path: '/sparande'
+      path: '/sparande',
+      meta: { requiresAuth: true }
+    },
+    {
+      component: SparandeView,
+      path: '/sparande',
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/:notFound(.*)',
+      redirect: '/'
     }
   ]
 })
