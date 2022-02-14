@@ -2,10 +2,12 @@
   import { db } from '../firebase'
   import { collection, getDocs } from 'firebase/firestore'
   import NavBar from '../components/NavBar.vue'
+  import ChartComp from '../components/ChartComp.vue'
 
   export default {
     components: {
-      NavBar
+      NavBar,
+      ChartComp,
     },
     methods: {
       goToAddView() {
@@ -20,16 +22,20 @@
           expensesAre.push(expense.data())
         })
         this.expenses = expensesAre
-      }
+      },
+      goToChart() {
+        const viewChart = true
+        this.chart = viewChart
+      },
     },
     mounted() {
       this.fetchexpense()
     },
     data() {
       return {
-        expenses: []
+        expenses: [],
       }
-    }
+    },
   }
 </script>
 
@@ -52,7 +58,11 @@
   <div class="expenses" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
-    <div class="expenses-container">
+    <ul>
+      <li>Lista</li>
+      <button @click="goToChart()">Diagram</button>
+    </ul>
+    <div v-if="chart === false" class="expenses-container">
       <div class="expenses-card">
         <h2 v-for="expense in expenses" :key="expense">
           {{ expense.category }}
@@ -68,6 +78,8 @@
       </div>
     </div>
   </div>
+
+  <ChartComp v-if="chart === true" />
 </template>
 
 <style scoped>
