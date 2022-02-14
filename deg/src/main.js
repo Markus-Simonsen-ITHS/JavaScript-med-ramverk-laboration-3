@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
-
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
 import App from './App.vue'
 import { auth } from './firebase'
 import router from './router'
