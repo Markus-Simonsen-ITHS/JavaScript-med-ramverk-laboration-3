@@ -1,6 +1,6 @@
 <script>
   import { db } from '../firebase'
-  import { collection, getDocs } from 'firebase/firestore'
+  import { collection, getDocs, query, where } from 'firebase/firestore'
   import NavBar from '../components/NavBar.vue'
 
   export default {
@@ -12,14 +12,14 @@
         this.$router.push('/add')
       },
       async fetchexpense() {
-        const hejsan = collection(db, 'utgift')
-        const hej = await getDocs(hejsan)
-        console.log(hej)
-        const expensesAre = []
-        hej.forEach((expense) => {
-          expensesAre.push(expense.data())
+        const userId = this.$store.getters.getUser.id
+        const q = query(collection(db, 'utgift'), where('id', '==', userId))
+        const userExpenses = []
+        const allExpenses = await getDocs(q)
+        allExpenses.forEach((expense) => {
+          userExpenses.push(expense.data())
         })
-        this.expenses = expensesAre
+        this.expenses = userExpenses
       }
     },
     mounted() {
@@ -61,9 +61,7 @@
           <h4 v-for="expense in expenses" :key="expense">
             {{ expense.title }}
           </h4>
-          <p v-for="expense in expenses" :key="expense">
-            {{ expense.amount }}
-          </p>
+          <p v-for="expense in expenses" :key="expense">{{ expense.amount }}</p>
         </div>
       </div>
     </div>
