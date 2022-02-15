@@ -36,6 +36,10 @@
       // Defines the time period of which items are to be displayed
       setTimeFilter(timeFilter) {
         this.timeFilter = timeFilter
+      },
+      goToChart() {
+        const viewChart = true
+        this.chart = viewChart
       }
     },
     mounted() {
@@ -70,60 +74,47 @@
   </div>
 
   <!--Show if there are any registered transactions-->
-  <div class="expenses" v-if="view === 'list' && expenses.length > 0">
-    <div class="expenses-container">
-      <div class="expenses-card">
-        <h2 v-for="expense in expenses" :key="expense">
-          {{ expense.category }}
-        </h2>
-        <div class="expenses-text">
-          <h4 v-for="expense in expenses" :key="expense">
-            {{ expense.title }}
-          </h4>
-          <p v-for="expense in expenses" :key="expense">{{ expense.amount }}</p>
-        </div>
-      </div>
-    </div>
+  <div class="expenses" v-else>
+    <h1>Historik</h1>
+    <p>Denna månad</p>
+    <ul>
+      <li>Lista</li>
+      <button @click="goToChart()">Diagram</button>
+    </ul>
   </div>
   <ChartComp :data="expenses" />
+
+  <div class="expenses-card-container">
+    <div class="expenses-card">
+      <ol id="mat-expenses">
+        <li v-for="expense in expenses" :key="expense">
+          {{ expense.category }}
+          <h5 class="budget">budget: 1000 kr</h5>
+          {{ expense.title }} {{ expense.amount }}
+        </li>
+      </ol>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .view-expenses {
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
+  #mat-expenses li {
+    list-style: none;
+    background-color: #e7e7e7;
+    max-height: 244px;
+    max-width: 445px;
     align-items: center;
-  }
-
-  .expenses-form {
-    display: block;
-    width: 100%;
-    padding: 15px;
-  }
-
-  .form-inner {
-    padding: 50px 15px;
-  }
-
-  .expenses-card {
-    display: flex;
     flex-direction: column;
     background-color: #e7e7e7;
     margin: 2%;
     padding: 2%;
-    max-height: 244px;
-    max-width: 445px;
     left: 33px;
     top: 149px;
     border-radius: 8px;
-
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  }
+
+  .expenses-card-container {
+    padding: 50px 15px;
   }
 </style>
