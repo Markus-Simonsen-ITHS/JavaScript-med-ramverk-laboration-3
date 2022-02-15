@@ -72,9 +72,8 @@
         <li v-for="expense in expenses" :key="expense">
           {{ expense.category }}
           <h5 class="budget">budget: 1000 kr</h5>
+          {{ expense.title }} {{ expense.amount }}
         </li>
-        <li>{{ expense.title }}</li>
-        <li>{{ expense.amount }}</li>
       </ol>
     </div>
   </div>
