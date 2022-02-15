@@ -16,15 +16,14 @@
       },
       closeButton() {
         this.toggle = false
-        console.log('test')
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.categories.length > 0) {
-          const spent = this.categories[0].amountSpent
-          const budget = this.categories[0].budget
+        if (this.budgets.length > 0) {
+          const spent = this.budgets[0].amountSpent
+          const budget = this.budgets[0].budget
           const progress = (100 * spent) / budget
           return progress + '%'
         } else {
@@ -47,8 +46,8 @@
         })
         return expenses
       },
-      categories() {
-        return this.$store.getters.getExpenseCategories
+      budgets() {
+        return this.$store.getters.getBudget
       }
     },
     components: {
@@ -107,9 +106,9 @@
   </div>
   <ul class="category-list">
     <CategoryItem
-      v-for="category in categories"
-      :key="category.id"
-      :category="category"
+      v-for="budgetItem in budgets"
+      :key="budgetItem.budgetId"
+      :category="budgetItem"
     />
   </ul>
   <ul class="category-list">
