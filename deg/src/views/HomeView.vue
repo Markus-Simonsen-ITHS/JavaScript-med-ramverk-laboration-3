@@ -23,7 +23,7 @@
       calculateExpenseProgress() {
         if (this.budgets.length > 2) {
           const spent = this.budgets[1].amountSpent
-          const budget = this.budgets[1].budget
+          const budget = this.budgets[1].sum
           const progress = (100 * spent) / budget
           return progress + '%'
         } else {
