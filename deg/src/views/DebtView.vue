@@ -11,9 +11,7 @@
   <DebtComp />
 </template>
 <!--
-  fixa {{}}
-  ta bort payOffDebt eller debt funktionalitet
-  refresha listan när man har lagt till skuld
+  refresha listan när man har lagt till / ta bort skuld
   felhantering vid utfyllning av formulär
   https://stackoverflow.com/questions/42992340/javascript-how-to-set-dot-after-three-digits
   ränta funktionalitet
@@ -22,4 +20,5 @@
      <li v-if="this.debts === []">
       <p class="titleText">Laddar...</p>
     </li>
+  ta bort payOffDebt funktionalitet (måste ändras i addForm komponent)
    -->
