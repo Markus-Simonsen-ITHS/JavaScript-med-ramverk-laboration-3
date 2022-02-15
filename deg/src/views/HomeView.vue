@@ -2,6 +2,7 @@
   import CategoryItem from '../components/home/CategoryItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
+  import BudgetComp from '../components/home/BudgetComp.vue'
 
   export default {
     data() {
@@ -53,13 +54,15 @@
     components: {
       CategoryItem,
       StatusItem,
-      NavBar
+      NavBar,
+      BudgetComp
     }
   }
 </script>
 
 <template>
   <NavBar />
+  <BudgetComp />
   <div class="warning-container" v-if="this.toggle === true">
     <div
       class="warning-card"
@@ -115,14 +118,6 @@
       <p>Lägg till</p>
     </li>
   </ul>
-  <!-- <div
-    v-if="
-      (100 * categories[1].amountSpent) / categories[1].budget === 50 ||
-      (100 * categories[1].amountSpent) / categories[1].budget === 25
-    "
-  >
-    WARNING
-  </div> -->
 </template>
 
 <style scoped>

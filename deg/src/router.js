@@ -39,7 +39,11 @@ const router = createRouter({
     },
     {
       component: DebtView,
-      path: '/debt',
+      path: '/debt'
+    },
+    {
+      component: SparandeView,
+      path: '/sparande',
       meta: { requiresAuth: true }
     },
     {
