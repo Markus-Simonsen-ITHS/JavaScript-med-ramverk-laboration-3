@@ -10,7 +10,7 @@ import store from './store'
 let app
 
 // When logging out or logging in (state change) create app if it is not already created
-auth.onAuthStateChanged(function (user) {
+auth.onAuthStateChanged((user) => {
   if (!app) {
     app = createApp(App)
     app.use(store)
@@ -23,6 +23,7 @@ auth.onAuthStateChanged(function (user) {
     store.dispatch('fetchUser', user.uid)
     store.dispatch('fetchAllIncomeForUser', user.uid)
     store.dispatch('fetchAllExpensesForUser', user.uid)
+    store.dispatch('fetchBudgetsForUser', user.uid)
   } else {
     // No user is signed in.
   }
