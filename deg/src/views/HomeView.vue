@@ -1,5 +1,5 @@
 <script>
-  import CategoryItem from '../components/home/CategoryItem.vue'
+  import BudgetItem from '../components/home/BudgetItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
   import BudgetComp from '../components/home/BudgetComp.vue'
@@ -21,9 +21,9 @@
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 0) {
-          const spent = this.budgets[0].amountSpent
-          const budget = this.budgets[0].budget
+        if (this.budgets.length > 2) {
+          const spent = this.budgets[1].amountSpent
+          const budget = this.budgets[1].budget
           const progress = (100 * spent) / budget
           return progress + '%'
         } else {
@@ -51,7 +51,7 @@
       }
     },
     components: {
-      CategoryItem,
+      BudgetItem,
       StatusItem,
       NavBar,
       BudgetComp
@@ -81,15 +81,21 @@
 
   <div class="account-overview-container">
     <div>
-      <p class="account-overview-name">Matkonto</p>
-      <p class="account-amount-spent">2500 kr</p>
+      <p class="account-overview-name">
+        {{ budgets.length > 2 ? budgets[1].title : 'Laddar' }}
+      </p>
+      <p class="account-amount-spent">
+        {{ budgets.length > 2 ? budgets[1].amountSpent : 0 }} kr
+      </p>
       <div class="account-progress-container">
         <div
           class="account-progress-bar"
           :style="{ width: calculateExpenseProgress }"
         />
       </div>
-      <p class="account-budget">Budget: 4000 kr</p>
+      <p class="account-budget">
+        Budget: {{ budgets.length > 2 ? budgets[1].sum : 0 }} kr
+      </p>
     </div>
   </div>
 
@@ -105,10 +111,10 @@
     </div>
   </div>
   <ul class="category-list">
-    <CategoryItem
+    <BudgetItem
       v-for="budgetItem in budgets"
       :key="budgetItem.budgetId"
-      :category="budgetItem"
+      :budget="budgetItem"
     />
   </ul>
   <ul class="category-list">
