@@ -62,7 +62,7 @@
       <li>Lista</li>
       <button @click="goToChart()">Diagram</button>
     </ul>
-    <div v-if="chart === false" class="expenses-container">
+    <div class="expenses-container">
       <div class="expenses-card">
         <h2 v-for="expense in expenses" :key="expense">
           {{ expense.category }}
@@ -77,7 +77,7 @@
     </div>
   </div>
 
-  <ChartComp v-if="chart === true" />
+  <ChartComp :data="expenses" />
 </template>
 
 <style scoped>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { DoughnutChart } from 'vue-chart-3'
 
   export default {
@@ -6,14 +6,31 @@
     data() {
       return {
         chartData: {
-          labels: ['One', 'Two', 'Three',],
+          labels: [],
           datasets: [
             {
-              data: [1, 2, 3],
+              data: [],
               backgroundColor: ['#faa', '#afa', '#aaf']
             }
           ]
         }
+      }
+    },
+    props: ["data"],
+    mounted() {
+      console.log(this.data)
+    },
+    watch: {
+      data() {
+        let labelArrayVar = []
+        let krArrayVar = []
+        for (let index = 0; index < this.data.length; index++) {
+          const element = this.data[index];
+          labelArrayVar.push(element.category)
+          krArrayVar.push(element.amount)
+        }
+        this.chartData.labels = labelArrayVar
+        this.chartData.datasets[0].data = krArrayVar
       }
     }
   }
