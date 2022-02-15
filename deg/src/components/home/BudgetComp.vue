@@ -19,10 +19,15 @@
           sum: Number(this.sum)
         }
         setDoc(doc(db, 'budget', this.title), docData)
+      },
+      clear() {
+        this.toggle = true
+        this.sum = null
+        this.title = null
+        console.log('hej')
       }
     }
   }
-  console.log()
 </script>
 
 <template>
@@ -39,13 +44,13 @@
       class="buttons"
       v-if="toggle"
       type="button"
-      value="Lägg till"
+      value="Lägg till budget"
       @click="toggle = !toggle"
     />
   </div>
   <!-- The form to add the budget, also the button to submit the budget -->
   <div v-if="!toggle" class="container">
-    <form @submit.prevent="">
+    <form>
       <h1>Lägg till budget:</h1>
       <input class="form-input" type="text" v-model="sum" placeholder="Mängd" />
       <input
@@ -59,7 +64,7 @@
           class="buttons"
           type="submit"
           value="Lägg till"
-          @click="addBudget"
+          @click="addBudget(), clear()"
           @keyup.enter="addBudget"
         />
       </div>
@@ -81,6 +86,7 @@
     border-radius: 10px;
     border: none;
     margin-bottom: 10px;
+    font-size: 20px;
   }
   .button-container {
     margin-top: 10px;
@@ -94,6 +100,6 @@
     font-size: 16px;
     padding: 10px 16px;
     border: none;
-    margin: 0 16px 0 0;
+    margin-bottom: 5px;
   }
 </style>
