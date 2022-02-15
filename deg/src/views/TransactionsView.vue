@@ -3,11 +3,13 @@
   import { collection, getDocs, query, where } from 'firebase/firestore'
   import NavBar from '../components/NavBar.vue'
   import ChartComp from '../components/ChartComp.vue'
+  import FilterComponent from '../components/history/FilterComponent.vue'
 
   export default {
     components: {
       NavBar,
       ChartComp,
+      FilterComponent
     },
     methods: {
       goToAddView() {
@@ -23,10 +25,18 @@
         })
         this.expenses = userExpenses
       },
-      goToChart() {
-        const viewChart = true
-        this.chart = viewChart
+      // Defines which view is to be displayed, default is list
+      setView(view) {
+        this.view = view
       },
+      // Defines the status of items to be displayed, like reoccurring or all items
+      setItemStatus(status) {
+        this.itemStatus = status
+      },
+      // Defines the time period of which items are to be displayed
+      setTimeFilter(timeFilter) {
+        this.timeFilter = timeFilter
+      }
     },
     mounted() {
       this.fetchexpense()
@@ -34,18 +44,23 @@
     data() {
       return {
         expenses: [],
+        view: 'list',
+        itemStatus: 'reoccurring',
+        timeFilter: 'oneMonth'
       }
-    },
+    }
   }
 </script>
 
 <template>
   <NavBar />
+  <FilterComponent
+    @set-view="setView"
+    @change-item-status="setItemStatus"
+    @change-time-filter="setTimeFilter"
+  />
   <!--Show if there aren't any registered transactions-->
-  <div
-    class="view-expenses"
-    v-if="this.expenses === '' || this.expenses === null"
-  >
+  <div class="view-expenses" v-if="expenses === '' || expenses === null">
     <form class="expenses-form">
       <div class="form-inner">
         <h1>Inga utgifter har registrerats</h1>
@@ -55,13 +70,7 @@
   </div>
 
   <!--Show if there are any registered transactions-->
-  <div class="expenses" v-else>
-    <h1>Historik</h1>
-    <p>Denna månad</p>
-    <ul>
-      <li>Lista</li>
-      <button @click="goToChart()">Diagram</button>
-    </ul>
+  <div class="expenses" v-if="view === 'list' && expenses.length > 0">
     <div class="expenses-container">
       <div class="expenses-card">
         <h2 v-for="expense in expenses" :key="expense">
@@ -76,7 +85,6 @@
       </div>
     </div>
   </div>
-
   <ChartComp :data="expenses" />
 </template>
 
