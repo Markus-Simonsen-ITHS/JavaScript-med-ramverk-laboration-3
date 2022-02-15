@@ -18,7 +18,9 @@
     <p class="bold-text align-start">
       {{ category.title ? category.title : 'Övrigt' }}
     </p>
-    <p class="bold-text">{{ category.amountSpent ? category.amountSpent : 0 }} kr</p>
+    <p class="bold-text">
+      {{ category.amountSpent ? category.amountSpent : 0 }} kr
+    </p>
     <p class="smaller-text align-start">Budget</p>
     <p class="smaller-text">{{ category.sum }} kr</p>
   </li>
