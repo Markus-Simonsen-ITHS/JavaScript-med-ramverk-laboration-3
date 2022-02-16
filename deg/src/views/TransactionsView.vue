@@ -82,10 +82,6 @@
   <div class="expenses" v-else>
     <h1>Historik</h1>
     <p>Denna månad</p>
-    <ul>
-      <li>Lista</li>
-      <button @click="goToChart()">Diagram</button>
-    </ul>
   </div>
   <ChartComp :data="expenses" />
 
