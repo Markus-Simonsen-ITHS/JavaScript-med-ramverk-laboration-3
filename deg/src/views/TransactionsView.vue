@@ -105,8 +105,11 @@
             Budget:
             {{ budgetItem.sum }}
           </h5>
-          {{ expense.amount }}
-          {{ expense.date }}
+          {{ expense.title }}
+          {{ expense.amount }} kr
+          <h5>
+            {{ expense.date }}
+          </h5>
         </li>
       </ol>
     </div>
