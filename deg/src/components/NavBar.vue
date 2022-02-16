@@ -55,6 +55,9 @@
         <RouterLink to="/Debt">Skulder</RouterLink>
       </li>
       <li>
+        <RouterLink to="/settings">Inställningar</RouterLink>
+      </li>
+      <li>
         <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
     </ul>
