@@ -28,6 +28,9 @@ const mutations = {
     },
     setLoginError(state, error) {
       state.loginError = error
+    },
+    setBudget(state, budgetArr) {
+      state.budget = budgetArr
     }
   },
   state = {
@@ -55,9 +58,12 @@ const mutations = {
         title: ''
       }
     ],
-    expensesCategories: [
+    budget: [
       {
-        name: '',
+        title: '',
+        sum: 0,
+        id: '',
+        amountSpent: 0,
         expenses: []
       }
     ]
@@ -120,38 +126,66 @@ const mutations = {
       allExpenses.forEach((expense) => {
         expensesArr.push(expense.data())
       })
-      state.dispatch('createExpenseCategories', expensesArr)
+
       state.commit('setExpenses', expensesArr)
     },
-    // Temporary function which creates a category for all found categories in expenses
-    createExpenseCategories(state, expensesArr) {
-      // Create new array to store categories in
-      const categoriesArr = []
+    async fetchBudgetsForUser(state, userId) {
+      // Creates a query which specifies that only documents which matches user id is to be fetched
+      const q = query(collection(db, 'budget'), where('id', '==', userId))
 
-      expensesArr.forEach((expenseObject) => {
-        // Searches categoriesArr if category exists. foundIndex will be -1 if not found
-        const foundIndex = categoriesArr.findIndex(
-          (category) => category.name === expenseObject.category
+      // Fetches all documents that matches the query
+      const budgetSnapshots = await getDocs(q)
+
+      // Creating an array with a default value for expenses which do not have a category
+      const budgetArr = [
+        {
+          title: 'Övrigt',
+          sum: 0,
+          budgetId: Math.random(),
+          id: userId,
+          amountSpent: 0,
+          expenses: []
+        }
+      ]
+
+      // Looping through each budgetitem and adding them to the budget array
+      budgetSnapshots.forEach((budgetSnapshot) => {
+        // Storing the data from the snapshot firebase sends
+        let budgetItem = budgetSnapshot.data()
+        // Adding id to the object
+        budgetItem.bugetId = budgetSnapshot.id
+
+        budgetArr.push(budgetItem)
+      })
+
+      // Looping through all expenses and adding them to a budget in the budget array
+      state.state.expenses.forEach((expense) => {
+        // Checking if the category field in expense is found in the title field in the budget array
+        const foundIndex = budgetArr.findIndex(
+          (budget) =>
+            budget.title.toLocaleLowerCase() ===
+            expense.category.toLocaleLowerCase()
         )
-
-        // If not found, create new object and push to categoriesArr else add to existing index of array
+        // -1 equals not found. Push to default object in array. Else push to matching object in array
         if (foundIndex === -1) {
-          categoriesArr.push({
-            name: expenseObject.category,
-            expenses: [expenseObject],
-            amountSpent: expenseObject.amount,
-            // Temporary static budget amount
-            budget: 1000
-          })
+          budgetArr[0].expenses.push(expense)
+          budgetArr[0].amountSpent =
+            parseInt(budgetArr[0].amountSpent) + parseInt(expense.amount)
         } else {
-          categoriesArr[foundIndex].expenses.push(expenseObject)
-          categoriesArr[foundIndex].amountSpent =
-            parseInt(categoriesArr[foundIndex].amountSpent) +
-            parseInt(expenseObject.amount)
+          // If expenses are defined push to expenses, else create expenses as an array with expense as first object
+          if (budgetArr[foundIndex].expenses) {
+            budgetArr[foundIndex].expenses.push(expense)
+            budgetArr[foundIndex].amountSpent =
+              parseInt(budgetArr[foundIndex].amountSpent) +
+              parseInt(expense.amount)
+          } else {
+            budgetArr[foundIndex].expenses = [expense]
+            budgetArr[foundIndex].amountSpent = parseInt(expense.amount)
+          }
         }
       })
 
-      state.commit('setExpensesCategories', categoriesArr)
+      state.commit('setBudget', budgetArr)
     },
     // Change password (Seems like firebase has a bug with changing password)
     changePassword(state, payload) {
@@ -204,6 +238,9 @@ const mutations = {
     },
     getLoginError(state) {
       return state.loginError
+    },
+    getBudget(state) {
+      return state.budget
     }
   }
 export default createStore({ mutations, state, actions, getters, strict: true })

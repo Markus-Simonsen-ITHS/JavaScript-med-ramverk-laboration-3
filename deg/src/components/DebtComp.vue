@@ -3,9 +3,13 @@
     collection,
     doc,
     addDoc,
-    setDoc,
     getDocs,
-    updateDoc
+    deleteDoc,
+    where,
+    query,
+    updateDoc,
+    deleteField,
+    onSnapshot
   } from 'firebase/firestore'
   import { db } from '../firebase'
 
@@ -14,60 +18,105 @@
       return {
         active: false,
         title: null,
-        selectValue: null,
+        selectedValue: null,
         amount: null,
         date: null,
         interest: null,
         payOffDebt: null,
         toggle: 'block',
-        debts: []
+        modalWord: null,
+        debts: [],
+        indexRef: null,
+        paymentRefArray: []
       }
     },
     created() {
       this.fetchDebtData()
     },
+
     methods: {
-      debtBar(max, pay) {
-        let progress = (100 * pay) / max
-        progress = 100 - progress
-        // debt bar now gets smaller the more of the debt you pay off
-        return progress + '%'
-      },
       async fetchDebtData() {
-        //fetches debt data of current user and adds to debts array
-        const querySnapshot = await getDocs(collection(db, 'skuld'))
-        querySnapshot.forEach((doc) => {
-          if (doc.data().id === this.$store.state.user.id) {
-            this.debts.push(doc.data())
-          }
+        const q = query(
+          collection(db, 'skuld'),
+          where('id', '==', this.$store.state.user.id)
+        )
+        const allDebts = await getDocs(q)
+        allDebts.forEach((doc) => {
+          // ^ fetches debt data of current user and adds to debts array
+          this.debts.push({
+            id: doc.id,
+            // ^ fetches debt data back-end ID's
+            amount: doc.data().amount,
+            title: doc.data().title,
+            payOffDebtId: null,
+            payOffDebt: doc.data().payOffDebt
+          })
+        })
+        await this.fetchPaymentData()
+      },
+      async fetchPaymentData() {
+        // ^ fetches debt payment data back-end ID's
+        const qq = query(
+          collection(db, 'återkommandeUtgift'),
+          where('id', '==', this.$store.state.user.id),
+          where('category', '==', 'skuldavbetalning')
+        )
+        const all = await getDocs(qq)
+        all.forEach((doc) => {
+          this.paymentRefArray.push({ title: doc.data().title, id: doc.id })
         })
       },
       submitDebt() {
-        //submits debt data and clear fields
+        // ^ submits debt data and clear fields
         const docData = {
           id: this.$store.state.user.id,
           title: this.title,
           amount: Number(this.amount),
           date: this.date
         }
-        setDoc(doc(db, 'skuld', this.title), docData)
+        // setDoc(doc(db, 'skuld', this.title), docData)
+        addDoc(collection(db, 'skuld'), docData)
         this.clearFieldsDebt()
+        onSnapshot(collection(db, 'skuld'), () => {
+          console.log('test')
+        })
       },
-      submitPayOffDebt() {
-        //submits debt payment and clear fields
+      async submitPayOffDebt() {
+        // ^ submits debt payment and clear fields
         const docData = {
           id: this.$store.state.user.id,
-          title: this.selectValue + ', avbetalning',
+          title: this.selectedValue,
           amount: Number(this.payOffDebt),
           category: 'skuldavbetalning'
         }
-        addDoc(collection(db, 'återkommandeUtgift'), docData)
-        const docRef = doc(db, 'skuld', this.selectValue)
-        //adds payOffDebt in corresponding backend database object for usage in debtBar
-        updateDoc(docRef, {
-          payOffDebt: Number(this.payOffDebt)
-        })
+        await addDoc(collection(db, 'återkommandeUtgift'), docData)
+        for (let n = 0; n < this.debts.length; n++) {
+          if (this.debts[n].title === this.selectedValue) {
+            // ^ compares to the selected value from the select input
+            const docRef = doc(db, 'skuld', this.debts[n].id)
+            updateDoc(docRef, {
+              // ^ adds payOffDebt in corresponding backend database object for usage in debtBar
+              payOffDebt: Number(this.payOffDebt)
+            })
+          }
+        }
         this.clearFieldsPayOffDebt()
+        await this.fetchPaymentData()
+        for (let n = 0, m = 1; n < this.paymentRefArray.length; n++, m++) {
+          if (this.paymentRefArray[n].title === this.paymentRefArray[m].title) {
+            this.paymentRefArray[n].title = this.paymentRefArray[m].title
+            //deletes old payment if a new one is issued on the same debt
+            this.paymentRefArray.shift()
+            deleteDoc(doc(db, 'återkommandeUtgift', this.paymentRefArray[n].id))
+            // BUG den tar bort den med IDn som börjar med lägst siffra eller bokstav närmast a, inte i ordning av när dom lades till i systemet ----------------------------------------
+          }
+        }
+      },
+      debtBar(max, pay) {
+        let progress = (100 * pay) / max
+        progress = 100 - progress
+        // ^ debt bar now gets smaller the more of the debt you pay off
+        return progress + '%'
       },
       clearFieldsDebt() {
         this.title = ''
@@ -79,8 +128,8 @@
         this.payOffDebt = ''
       },
       onChange(option) {
-        //grabs the selected value from the select input
-        this.selectValue = option.target.value
+        // ^ grabs the selected value from the select input
+        this.selectedValue = option.target.value
       },
       popUp() {
         this.active = true
@@ -88,9 +137,45 @@
       closePopUp() {
         this.active = false
       },
-      removeDebt() {
+      buttonValue(event, index) {
+        this.indexRef = Number(index)
+        // ^ passes along the value used for finding what to delete in removeData()
+        if (event.target.value === 'Ta bort avbetalning') {
+          this.modalWord = 'avbetalning'
+        } else this.modalWord = 'skuld'
+        this.popUp()
+      },
+      async removeData() {
         this.active = false
-        //fortsätt här, men fixa först modal p {{}} för att definiera skuld eller avbetalning
+        for (let n = 0; n < this.debts.length; n++) {
+          for (let m = 0; m < this.paymentRefArray.length; m++) {
+            if (this.paymentRefArray[m].title === this.debts[n].title) {
+              this.debts[n].payOffDebtId = this.paymentRefArray[m].id
+              // ^ finds the id of the payment of the debt and connects it to its debt through the key payOffDebtId, this key is then used to delete the payment (payment only, not the debt),
+            }
+          }
+        }
+        if (this.modalWord === 'skuld') {
+          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
+          await deleteDoc(
+            doc(
+              db,
+              'återkommandeUtgift',
+              this.debts[this.indexRef].payOffDebtId
+            )
+          )
+        } else {
+          await deleteDoc(
+            doc(
+              db,
+              'återkommandeUtgift',
+              this.debts[this.indexRef].payOffDebtId
+            )
+          )
+          updateDoc(doc(db, 'skuld', this.debts[this.indexRef].id), {
+            payOffDebt: deleteField()
+          })
+        }
       }
     }
   }
@@ -98,25 +183,25 @@
 
 <template>
   <h1>Avbetalning av skuld</h1>
+  <div :class="{ modal: true, active: active }">
+    <!-- ^ a modal which covers the screen to allow the user confirm removal of debt or payment of debt -->
+    <div class="modalHeader">
+      <p class="titleText">Varning:</p>
+      <button @click="closePopUp">&times;</button>
+    </div>
+    <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
+    <div class="modalButtons">
+      <input type="button" value="Ja" @click="removeData" />
+      <input type="button" value="Nej" @click="closePopUp" />
+    </div>
+  </div>
+  <div :class="{ overlay: true, active: active }" @click="closePopUp" />
   <ul>
     <li><h2>Skulder:</h2></li>
-    <!-- en modal som täcker skärmen för att låta användaren bekräfta borttagning av skuld eller avbetalning -->
-    <div :class="{ modal: true, active: active }">
-      <div class="modalHeader">
-        <p class="titleText">Varning:</p>
-        <button @click="closePopUp">&times;</button>
-      </div>
-      <p>Är du säker att du vill ta bort din {{}}?</p>
-      <div class="modalButtons">
-        <input type="button" value="Ja" @click="removeDebt" />
-        <input type="button" value="Nej" @click="closePopUp" />
-      </div>
-    </div>
-    <div :class="{ overlay: true, active: active }" @click="closePopUp" />
     <li v-if="this.debts.length === 0">
       <p class="titleText">Du har inga skulder</p>
     </li>
-    <li v-else :key="entry" v-for="entry in this.debts">
+    <li v-else :key="entry.title" v-for="(entry, index) in this.debts">
       <p class="titleText">
         <span class="title">{{ entry.title }}</span>
       </p>
@@ -131,7 +216,7 @@
         />
       </div>
       <div class="flexer">
-        <p v-if="entry.payOffDebt">
+        <p class="smallText" v-if="entry.payOffDebt">
           Avbetalning varje månad: {{ entry.payOffDebt }}
         </p>
         <div class="listButtons">
@@ -139,14 +224,15 @@
             type="button"
             data-modal-target=".modal"
             class="button buttonDebt"
-            @click="popUp"
+            @click="buttonValue($event, index)"
             value="Ta bort skuld"
           />
           <input
+            v-if="entry.payOffDebt"
             type="button"
             data-modal-target=".modal"
             class="button buttonPayment"
-            @click="popUp"
+            @click="buttonValue($event, index)"
             value="Ta bort avbetalning"
           />
         </div>
@@ -250,12 +336,17 @@
   .flexer {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
+  }
+  .flexer p {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   .listButtons {
     display: flex;
-    align-items: center;
     gap: 20px;
     margin-right: 15px;
+    margin-bottom: 10px;
   }
   .button {
     width: 135px !important;
@@ -303,7 +394,7 @@
   .note {
     font-size: 110%;
   }
-  /* styling modal window */
+  /* styling for modal window below */
   .modal {
     position: fixed;
     top: 50%;
@@ -352,5 +443,21 @@
   .modalButtons {
     display: flex;
     justify-content: space-around;
+  }
+
+  @media screen and (max-width: 900px) {
+    .flexer {
+      flex-direction: column;
+    }
+    .smallText {
+      font-size: 120%;
+    }
+    .listButtons {
+      margin-top: 10px;
+    }
+
+    .titleText {
+      font-size: 120%;
+    }
   }
 </style>
