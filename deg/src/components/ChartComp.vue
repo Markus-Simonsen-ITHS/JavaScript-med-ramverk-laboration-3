@@ -53,5 +53,5 @@
 </script>
 
 <template>
-  <DoughnutChart :chartData="chartData" />
+  <DoughnutChart :chart-data="chartData" />
 </template>
