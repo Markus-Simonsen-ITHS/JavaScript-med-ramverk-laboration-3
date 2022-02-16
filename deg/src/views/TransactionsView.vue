@@ -52,6 +52,11 @@
         itemStatus: 'reoccurring',
         timeFilter: 'oneMonth'
       }
+    },
+    computed: {
+      budgets() {
+        return this.$store.getters.getBudget
+      }
     }
   }
 </script>
@@ -86,11 +91,22 @@
 
   <div class="expenses-card-container">
     <div class="expenses-card">
-      <ol id="mat-expenses">
+      <ol id="category-expenses">
         <li v-for="expense in expenses" :key="expense">
+          <div class="logo-container">
+            <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
+          </div>
           {{ expense.category }}
-          <h5 class="budget">budget: 1000 kr</h5>
-          {{ expense.title }} {{ expense.amount }}
+          <h5
+            v-for="budgetItem in budgets"
+            :key="budgetItem.budgetId"
+            :budget="budgetItem"
+          >
+            Budget:
+            {{ budgetItem.sum }}
+          </h5>
+          {{ expense.amount }}
+          {{ expense.date }}
         </li>
       </ol>
     </div>
@@ -98,23 +114,30 @@
 </template>
 
 <style scoped>
-  #mat-expenses li {
+  #category-expenses li {
     list-style: none;
-    background-color: #e7e7e7;
-    max-height: 244px;
-    max-width: 445px;
-    align-items: center;
-    flex-direction: column;
-    background-color: #e7e7e7;
-    margin: 2%;
-    padding: 2%;
-    left: 33px;
-    top: 149px;
+    margin: 3%;
+    padding: 3%;
     border-radius: 8px;
+    background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
   .expenses-card-container {
-    padding: 50px 15px;
+    max-width: 545px;
+
+    margin: 3%;
+    padding: 3%;
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .logo {
+    border-radius: 5px;
+    max-width: 100%;
+    width: 20%;
+    max-height: 100%;
   }
 </style>
