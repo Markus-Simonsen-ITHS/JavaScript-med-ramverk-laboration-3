@@ -16,16 +16,22 @@
         }
       }
     },
-    props: ["data"],
+    props: {
+      data: {
+        type: Object,
+        required: true
+      }
+    },
     watch: {
       data() {
         let labelArrayVar = []
         let krArrayVar = []
         for (let index = 0; index < this.data.length; index++) {
-          const element = this.data[index];
+          const element = this.data[index]
           const cetegory = element.category
-          if(this.findInArray(labelArrayVar, cetegory) != -1) {
-            krArrayVar[this.findInArray(labelArrayVar, cetegory)] += element.amount
+          if (this.findInArray(labelArrayVar, cetegory) != -1) {
+            krArrayVar[this.findInArray(labelArrayVar, cetegory)] +=
+              element.amount
           } else {
             labelArrayVar.push(cetegory)
             krArrayVar.push(element.amount)
@@ -38,13 +44,12 @@
     methods: {
       findInArray(array, toFind) {
         for (let index = 0; index < array.length; index++) {
-          const element = array[index];
-          if(element == toFind) {
+          const element = array[index]
+          if (element == toFind) {
             return index
-            }
-          else {
+          } else {
             return -1
-            }
+          }
         }
         return -1
       }
