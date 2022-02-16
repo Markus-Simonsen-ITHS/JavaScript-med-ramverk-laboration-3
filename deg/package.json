@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "firebase": "^9.6.5",
+    "prettier": "^2.5.1",
     "vue": "^3.2.25",
     "vue-chart-3": "^3.0.9",
     "vue-router": "^4.0.12",
@@ -17,7 +18,8 @@
     "build": "vite build",
     "dev": "vite --host",
     "preview": "vite preview --host",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write"
   },
   "version": "0.0.0"
 }

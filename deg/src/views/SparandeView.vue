@@ -36,8 +36,8 @@
           <input type="range" min="100" max="10000" />
         </div> -->
         <div class="result">
-            <span>Din summering</span>
-            <p>60 000 kr</p>
+          <span>Din summering</span>
+          <p>60 000 kr</p>
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@
     border: 1px solid #000000;
     background-color: #000000;
     transform: rotate(360deg);
-    height:80vh;
+    height: 80vh;
   }
 
   .loan-col {
@@ -130,8 +130,7 @@
     font-size: 12px;
     line-height: 14px;
     color: #000000;
-    padding-top:1em;
-
+    padding-top: 1em;
   }
   .loan-col h4 span {
     padding-left: 14em;
@@ -160,42 +159,36 @@
     border-radius: 100px;
     background: #eeeeee;
   }
-.result {
+  .result {
+    padding-top: 2rem;
+  }
+  .result span {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+  }
 
-padding-top:2rem;
-}
-.result span{
+  .result p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 23px;
+    line-height: 27px;
+    color: #000000;
+  }
 
-font-style: normal;
-font-weight:bold;
-font-size: 20px;
-line-height: 23px;
-color: #000000;
-
-
-}
-
-.result p {
-
-font-style: normal;
-font-weight: normal;
-font-size: 23px;
-line-height: 27px;
-color: #000000;
-}
-
-@media (max-width:980px) {
+  @media (max-width: 980px) {
     .divider {
-        display: none;
+      display: none;
     }
     .row {
-    margin-top:30%;
-    flex-direction: column;
-    justify-content: center;
-    
+      margin-top: 30%;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .column {
+      padding-top: 20%;
+    }
   }
-  .column {
-      padding-top:20%;
-  }
-}
 </style>
