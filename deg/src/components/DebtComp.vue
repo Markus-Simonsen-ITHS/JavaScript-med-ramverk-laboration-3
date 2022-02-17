@@ -74,7 +74,6 @@
           amount: Number(this.amount),
           date: this.date
         }
-        // setDoc(doc(db, 'skuld', this.title), docData)
         addDoc(collection(db, 'skuld'), docData)
         this.clearFieldsDebt()
         onSnapshot(collection(db, 'skuld'), () => {
@@ -104,8 +103,7 @@
         await this.fetchPaymentData()
         for (let n = 0, m = 1; n < this.paymentRefArray.length; n++, m++) {
           if (this.paymentRefArray[n].title === this.paymentRefArray[m].title) {
-            this.paymentRefArray[n].title = this.paymentRefArray[m].title
-            //deletes old payment if a new one is issued on the same debt
+            // ^ deletes old payment if a new one is issued on the same debt
             this.paymentRefArray.shift()
             deleteDoc(doc(db, 'återkommandeUtgift', this.paymentRefArray[n].id))
             // BUG den tar bort den med IDn som börjar med lägst siffra eller bokstav närmast a, inte i ordning av när dom lades till i systemet ----------------------------------------
