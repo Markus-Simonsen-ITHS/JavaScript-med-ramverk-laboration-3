@@ -46,6 +46,7 @@
         v-model="newPassword"
       />
       <br />
+      <br />
       <button id="changePassword" @click="changePassword">
         Change Password
       </button>
@@ -58,7 +59,11 @@
         name="password"
         type="password"
       />
+      <br />
+      <br />
       <button @click="deleteAccount">Delete account</button>
+      <br />
+      <br />
     </div>
   </div>
 </template>

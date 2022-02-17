@@ -7,12 +7,47 @@
       return {
         sum: null,
         title: null,
-        toggle: true
+        toggle: true,
+        errors: {
+          titleError: false,
+          amountError: false
+        }
       }
     },
     components: {},
     methods: {
+      isTitleValid() {
+        if (!this.title) {
+          this.errors.titleError = true
+          return false
+        } else {
+          this.errors.titleError = false
+          return true
+        }
+      },
+      isAmountValid() {
+        if (!this.amount) {
+          this.errors.amountError = 'Du måste fylla i ett belopp'
+          return false
+        } else if (parseInt(this.amount) < 1) {
+          this.errors.amountError = 'Belopp måste vara mer än 0'
+          return false
+        } else if (/.*[a-zA-Z].*/.test(this.amount)) {
+          this.errors.amountError = 'Belopp kan inte innehålla bokstäver'
+          return false
+        } else {
+          this.errors.amountError = false
+          return true
+        }
+      },
       addBudget() {
+        let errors = false
+
+        if (!this.isTitleValid()) errors = true
+        if (!this.isAmountValid()) errors = true
+
+        if (errors) return
+
         const docData = {
           id: this.$store.state.user.id,
           title: this.title,
@@ -32,6 +67,9 @@
 
 <template>
   <!-- A button that toggles the function to add a new budget -->
+  <label class="error-message" for="amount-input" v-if="errors.amountError">
+    {{ errors.amountError }}
+  </label>
   <div class="addbutton-container">
     <input
       class="buttons"
@@ -49,7 +87,11 @@
     />
   </div>
   <!-- The form to add the budget, also the button to submit the budget -->
-  <div v-if="!toggle" class="container">
+  <div
+    v-if="!toggle"
+    class="container"
+    :class="{ 'input-error': errors.amountError }"
+  >
     <form>
       <h1>Lägg till budget:</h1>
       <input class="form-input" type="text" v-model="sum" placeholder="Mängd" />
@@ -101,5 +143,13 @@
     padding: 10px 16px;
     border: none;
     margin-bottom: 5px;
+  }
+  .input-error {
+    border: 1px solid red;
+  }
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+    align-self: center;
   }
 </style>
