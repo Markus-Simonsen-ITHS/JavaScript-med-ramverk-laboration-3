@@ -80,8 +80,7 @@
 
   <!--Show if there are any registered transactions-->
   <div class="expenses" v-else>
-    <h1>Historik</h1>
-    <p>Denna månad</p>
+    <h2>Denna månad</h2>
   </div>
   <ChartComp :data="expenses" />
 
@@ -89,9 +88,7 @@
     <div class="expenses-card">
       <ol id="category-expenses">
         <li v-for="expense in expenses" :key="expense">
-          <div class="logo-container">
-            <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
-          </div>
+          <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
           {{ expense.category }}
           <h5
             v-for="budgetItem in budgets"
@@ -99,13 +96,10 @@
             :budget="budgetItem"
           >
             Budget:
-            {{ budgetItem.sum }}
+            {{ budgetItem.sum }} kr
           </h5>
           {{ expense.title }}
           {{ expense.amount }} kr
-          <h5>
-            {{ expense.date }}
-          </h5>
         </li>
       </ol>
     </div>
@@ -113,20 +107,35 @@
 </template>
 
 <style scoped>
-  #category-expenses li {
-    list-style: none;
+  .expenses {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+    padding: auto;
+    font-size: 1rem;
+  }
+  .expenses-card-container {
+    height: 244px;
+    width: 445px;
+    left: 33px;
     margin: 3%;
+    border-radius: 8px;
+  }
+  #category-expenses li {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 2%;
     padding: 3%;
     border-radius: 8px;
     background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
-  .expenses-card-container {
-    max-width: 545px;
-
-    margin: 3%;
-    padding: 3%;
+  #category-expenses {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
   }
 
   .logo-container {
@@ -135,6 +144,7 @@
   }
   .logo {
     border-radius: 5px;
+    min-width: 50px;
     max-width: 100%;
     width: 20%;
     max-height: 100%;
