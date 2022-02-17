@@ -2,11 +2,13 @@
   export default {
     data() {
       return {
-        // A boolean for the hamburger-menu.
+        // A boolean for the hamburger-menu. This bool is the key to making
+        // the menu work.
         collapsed: true
       }
     },
     methods: {
+      // A method that sign you out when triggered (see "Logga ut" router link).
       signOut() {
         this.$store.dispatch('logOut')
       }
@@ -15,7 +17,8 @@
 </script>
 
 <template>
-  <!-- The nav, used v-bind on style to open and close the menu. -->
+  <!-- The nav, used v-bind on style to open and close the menu. When "collapsed"
+  is true it uses the px-value to the left and vice versa. -->
   <div
     class="navbar"
     :style="{
@@ -25,7 +28,8 @@
   >
     <!-- The icon for the menu, if clicked toggles true/false for "collapsed". -->
     <div class="container" @click="collapsed = !collapsed">
-      <!-- Styling to get opening and closing effect on the icon. -->
+      <!-- The icon for the hamburger menu. Three divs that are styled as three
+      bars, also gets styled depending on "collapsed" with v-bind (:style). -->
       <div
         class="bar1"
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
@@ -40,7 +44,7 @@
       />
     </div>
     ¨
-    <!-- The links -->
+    <!-- The links inside the navbar. -->
     <ul>
       <li>
         <RouterLink to="/">Hem</RouterLink>
@@ -57,6 +61,8 @@
       <li>
         <RouterLink to="/settings">Inställningar</RouterLink>
       </li>
+      <!-- When clicking "Logga ut" it takes you to the landing page and also
+      runs a method that logs you out. -->
       <li>
         <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
@@ -65,7 +71,7 @@
 </template>
 
 <style scoped>
-  /* CSS for the entire navbar, making it so that is stays on the top right corner
+  /* CSS for the entire navbar, so that is stays on the top right corner
   of the screen. */
   .navbar {
     color: white;
@@ -79,7 +85,7 @@
     right: 0;
     bottom: 0;
     padding: 0.5em;
-
+/* A transition effect to smoothly open and close the menu. */
     transition: 0.3s ease;
 
     display: flex;
@@ -112,7 +118,7 @@
     text-decoration: none;
     color: rgb(0, 0, 0);
   }
-  /* The "Hamburger icon". */
+  /* The "Hamburger icon". As mentioned previously, just three bars.  */
   .bar1,
   .bar2,
   .bar3 {
@@ -121,11 +127,13 @@
     background-color: #333;
     transition: 0.1s ease;
   }
+  /* From here the CSS only applies to desktop (over 980px). */
   @media (min-width: 980px) {
     .container {
       display: none;
     }
     .navbar {
+      /* Removed background color, color, box-shadow, float, position */
       background-color: rgba(255, 0, 0, 0);
       color: rgba(51, 51, 51, 0);
       box-shadow: 0px 0px 0px 0px #676767;
@@ -134,10 +142,6 @@
       float: none;
       position: unset;
       z-index: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0;
 
       transition: none;
 
@@ -151,9 +155,12 @@
     li {
       font-weight: lighter;
     }
+    /* CSS for the links, "a.router-link-exact-active" makes it so that the link
+    you are currently in higlights in the navbar. */
     a.router-link-exact-active {
       font-weight: bold;
     }
+    /* A hover effect, makes the text "glow" when the mouse is over it. */
     li a:hover {
       border-bottom-color: #333;
       border-bottom: 3px;
