@@ -7,6 +7,7 @@ import AddView from './views/AddView.vue'
 import TransactionsView from './views/TransactionsView.vue'
 import DebtView from './views/DebtView.vue'
 import SparandeView from './views/SparandeView.vue'
+import SettingsView from './views/SettingsView.vue'
 
 import { auth } from './firebase'
 
@@ -49,6 +50,11 @@ const router = createRouter({
     {
       component: SparandeView,
       path: '/sparande',
+      meta: { requiresAuth: true }
+    },
+    {
+      component: SettingsView,
+      path: '/settings',
       meta: { requiresAuth: true }
     },
     {

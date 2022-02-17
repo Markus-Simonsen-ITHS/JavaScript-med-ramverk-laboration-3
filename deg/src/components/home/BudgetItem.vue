@@ -1,7 +1,7 @@
 <script>
   export default {
     props: {
-      category: {
+      budget: {
         required: true,
         type: Object
       }
@@ -16,11 +16,13 @@
       <img src="../../../assets/fox.jpeg" alt="Fox" />
     </div>
     <p class="bold-text align-start">
-      {{ category.name ? category.name : 'Övrigt' }}
+      {{ budget.title ? budget.title : 'Övrigt' }}
     </p>
-    <p class="bold-text">{{ category.amountSpent }} kr</p>
+    <p class="bold-text">
+      {{ budget.amountSpent ? budget.amountSpent : 0 }} kr
+    </p>
     <p class="smaller-text align-start">Budget</p>
-    <p class="smaller-text">{{ category.budget }} kr</p>
+    <p class="smaller-text">{{ budget.sum }} kr</p>
   </li>
 </template>
 

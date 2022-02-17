@@ -8,7 +8,8 @@
     where,
     query,
     updateDoc,
-    deleteField
+    deleteField,
+    onSnapshot
   } from 'firebase/firestore'
   import { db } from '../firebase'
 
@@ -25,7 +26,6 @@
         toggle: 'block',
         modalWord: null,
         debts: [],
-        docRefArray: [],
         indexRef: null,
         paymentRefArray: []
       }
@@ -33,13 +33,8 @@
     created() {
       this.fetchDebtData()
     },
+
     methods: {
-      debtBar(max, pay) {
-        let progress = (100 * pay) / max
-        progress = 100 - progress
-        // ^ debt bar now gets smaller the more of the debt you pay off
-        return progress + '%'
-      },
       async fetchDebtData() {
         const q = query(
           collection(db, 'skuld'),
@@ -47,15 +42,20 @@
         )
         const allDebts = await getDocs(q)
         allDebts.forEach((doc) => {
-          this.debts.push(doc.data())
           // ^ fetches debt data of current user and adds to debts array
-          this.docRefArray.push({
-            // ^ fetches debt data back end ID's
+          this.debts.push({
             id: doc.id,
+            // ^ fetches debt data back-end ID's
+            amount: doc.data().amount,
             title: doc.data().title,
-            payOffDebtId: null
+            payOffDebtId: null,
+            payOffDebt: doc.data().payOffDebt
           })
         })
+        await this.fetchPaymentData()
+      },
+      async fetchPaymentData() {
+        // ^ fetches debt payment data back-end ID's
         const qq = query(
           collection(db, 'återkommandeUtgift'),
           where('id', '==', this.$store.state.user.id),
@@ -64,7 +64,6 @@
         const all = await getDocs(qq)
         all.forEach((doc) => {
           this.paymentRefArray.push({ title: doc.data().title, id: doc.id })
-          // ^ fetches debt payment data back end ID's
         })
       },
       submitDebt() {
@@ -78,6 +77,9 @@
         // setDoc(doc(db, 'skuld', this.title), docData)
         addDoc(collection(db, 'skuld'), docData)
         this.clearFieldsDebt()
+        onSnapshot(collection(db, 'skuld'), () => {
+          console.log('test')
+        })
       },
       async submitPayOffDebt() {
         // ^ submits debt payment and clear fields
@@ -88,10 +90,10 @@
           category: 'skuldavbetalning'
         }
         await addDoc(collection(db, 'återkommandeUtgift'), docData)
-        for (let n = 0; n < this.docRefArray.length; n++) {
-          if (this.docRefArray[n].title === this.selectedValue) {
+        for (let n = 0; n < this.debts.length; n++) {
+          if (this.debts[n].title === this.selectedValue) {
             // ^ compares to the selected value from the select input
-            const docRef = doc(db, 'skuld', this.docRefArray[n].id)
+            const docRef = doc(db, 'skuld', this.debts[n].id)
             updateDoc(docRef, {
               // ^ adds payOffDebt in corresponding backend database object for usage in debtBar
               payOffDebt: Number(this.payOffDebt)
@@ -99,6 +101,22 @@
           }
         }
         this.clearFieldsPayOffDebt()
+        await this.fetchPaymentData()
+        for (let n = 0, m = 1; n < this.paymentRefArray.length; n++, m++) {
+          if (this.paymentRefArray[n].title === this.paymentRefArray[m].title) {
+            this.paymentRefArray[n].title = this.paymentRefArray[m].title
+            //deletes old payment if a new one is issued on the same debt
+            this.paymentRefArray.shift()
+            deleteDoc(doc(db, 'återkommandeUtgift', this.paymentRefArray[n].id))
+            // BUG den tar bort den med IDn som börjar med lägst siffra eller bokstav närmast a, inte i ordning av när dom lades till i systemet ----------------------------------------
+          }
+        }
+      },
+      debtBar(max, pay) {
+        let progress = (100 * pay) / max
+        progress = 100 - progress
+        // ^ debt bar now gets smaller the more of the debt you pay off
+        return progress + '%'
       },
       clearFieldsDebt() {
         this.title = ''
@@ -129,21 +147,21 @@
       },
       async removeData() {
         this.active = false
-        for (let n = 0; n < this.docRefArray.length; n++) {
+        for (let n = 0; n < this.debts.length; n++) {
           for (let m = 0; m < this.paymentRefArray.length; m++) {
-            if (this.paymentRefArray[m].title === this.docRefArray[n].title) {
-              this.docRefArray[n].payOffDebtId = this.paymentRefArray[m].id
+            if (this.paymentRefArray[m].title === this.debts[n].title) {
+              this.debts[n].payOffDebtId = this.paymentRefArray[m].id
               // ^ finds the id of the payment of the debt and connects it to its debt through the key payOffDebtId, this key is then used to delete the payment (payment only, not the debt),
             }
           }
         }
         if (this.modalWord === 'skuld') {
-          await deleteDoc(doc(db, 'skuld', this.docRefArray[this.indexRef].id))
+          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
           await deleteDoc(
             doc(
               db,
               'återkommandeUtgift',
-              this.docRefArray[this.indexRef].payOffDebtId
+              this.debts[this.indexRef].payOffDebtId
             )
           )
         } else {
@@ -151,10 +169,10 @@
             doc(
               db,
               'återkommandeUtgift',
-              this.docRefArray[this.indexRef].payOffDebtId
+              this.debts[this.indexRef].payOffDebtId
             )
           )
-          updateDoc(doc(db, 'skuld', this.docRefArray[this.indexRef].id), {
+          updateDoc(doc(db, 'skuld', this.debts[this.indexRef].id), {
             payOffDebt: deleteField()
           })
         }
@@ -183,7 +201,7 @@
     <li v-if="this.debts.length === 0">
       <p class="titleText">Du har inga skulder</p>
     </li>
-    <li v-else :key="entry" v-for="(entry, index) in this.debts">
+    <li v-else :key="entry.title" v-for="(entry, index) in this.debts">
       <p class="titleText">
         <span class="title">{{ entry.title }}</span>
       </p>
@@ -198,7 +216,7 @@
         />
       </div>
       <div class="flexer">
-        <p v-if="entry.payOffDebt">
+        <p class="smallText" v-if="entry.payOffDebt">
           Avbetalning varje månad: {{ entry.payOffDebt }}
         </p>
         <div class="listButtons">
@@ -318,12 +336,17 @@
   .flexer {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
+  }
+  .flexer p {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   .listButtons {
     display: flex;
-    align-items: center;
     gap: 20px;
     margin-right: 15px;
+    margin-bottom: 10px;
   }
   .button {
     width: 135px !important;
@@ -420,5 +443,21 @@
   .modalButtons {
     display: flex;
     justify-content: space-around;
+  }
+
+  @media screen and (max-width: 900px) {
+    .flexer {
+      flex-direction: column;
+    }
+    .smallText {
+      font-size: 120%;
+    }
+    .listButtons {
+      margin-top: 10px;
+    }
+
+    .titleText {
+      font-size: 120%;
+    }
   }
 </style>
