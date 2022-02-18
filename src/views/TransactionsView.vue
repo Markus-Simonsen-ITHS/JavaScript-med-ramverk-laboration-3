@@ -82,9 +82,9 @@
   <div class="expenses" v-else>
     <h2>Denna månad</h2>
   </div>
-  <ChartComp :data="expenses" />
+  <ChartComp :data-b="expenses" v-show="view === 'chart'" />
 
-  <div class="expenses-card-container">
+  <div class="expenses-card-container" v-if="view === 'list'">
     <div class="expenses-card">
       <ol id="category-expenses">
         <li v-for="expense in expenses" :key="expense">
@@ -98,6 +98,7 @@
             Budget:
             {{ budgetItem.sum }} kr
           </h5>
+
           {{ expense.title }}
           {{ expense.amount }} kr
         </li>
