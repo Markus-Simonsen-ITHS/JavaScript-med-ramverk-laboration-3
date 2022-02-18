@@ -1,3 +1,3 @@
 # A Vue.js template for Vite
 
-hejsan
+A simple economy manager.
