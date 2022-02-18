@@ -43,7 +43,6 @@
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
-    ¨
     <!-- The links inside the navbar. -->
     <ul>
       <li>
@@ -85,7 +84,7 @@
     right: 0;
     bottom: 0;
     padding: 0.5em;
-/* A transition effect to smoothly open and close the menu. */
+    /* A transition effect to smoothly open and close the menu. */
     transition: 0.3s ease;
 
     display: flex;
