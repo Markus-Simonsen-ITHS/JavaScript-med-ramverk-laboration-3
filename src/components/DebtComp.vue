@@ -8,32 +8,35 @@
     where,
     query,
     updateDoc,
-    deleteField,
-    onSnapshot
+    deleteField
   } from 'firebase/firestore'
   import { db } from '../firebase'
 
   export default {
     data() {
       return {
-        active: false,
         title: null,
-        selectedValue: null,
         amount: null,
         date: null,
         interest: null,
         payOffDebt: null,
+        selectedValue: null,
+        // ^ value from select menu
         toggle: 'block',
+        // ^ hides debt progress bar if no debts
+        active: false,
         modalWord: null,
         debts: [],
+        // ^ main debt array, filled with the debt objects
         indexRef: null,
+        // ^ used to find which debt is in which position in the list element
         paymentRefArray: []
+        // ^ used to find payment for deletion
       }
     },
     created() {
       this.fetchDebtData()
     },
-
     methods: {
       async fetchDebtData() {
         const q = query(
@@ -63,7 +66,10 @@
         )
         const all = await getDocs(qq)
         all.forEach((doc) => {
-          this.paymentRefArray.push({ title: doc.data().title, id: doc.id })
+          this.paymentRefArray.push({
+            title: doc.data().title,
+            id: doc.id
+          })
         })
       },
       submitDebt() {
@@ -76,9 +82,6 @@
         }
         addDoc(collection(db, 'skuld'), docData)
         this.clearFieldsDebt()
-        onSnapshot(collection(db, 'skuld'), () => {
-          console.log('test')
-        })
       },
       async submitPayOffDebt() {
         // ^ submits debt payment and clear fields
@@ -100,15 +103,17 @@
           }
         }
         this.clearFieldsPayOffDebt()
-        await this.fetchPaymentData()
-        for (let n = 0, m = 1; n < this.paymentRefArray.length; n++, m++) {
-          if (this.paymentRefArray[n].title === this.paymentRefArray[m].title) {
+        if (this.paymentRefArray.some((e) => e.title === this.selectedValue)) {
+          console.log('test')
+          let deleteThis = this.paymentRefArray.filter(
+            (e) => e.title === this.selectedValue
+          )
+          deleteThis.forEach((e) =>
             // ^ deletes old payment if a new one is issued on the same debt
-            this.paymentRefArray.shift()
-            deleteDoc(doc(db, 'återkommandeUtgift', this.paymentRefArray[n].id))
-            // BUG den tar bort den med IDn som börjar med lägst siffra eller bokstav närmast a, inte i ordning av när dom lades till i systemet ----------------------------------------
-          }
+            deleteDoc(doc(db, 'återkommandeUtgift', e.id))
+          )
         }
+        await this.fetchPaymentData()
       },
       debtBar(max, pay) {
         let progress = (100 * pay) / max
@@ -154,14 +159,16 @@
           }
         }
         if (this.modalWord === 'skuld') {
-          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
-          await deleteDoc(
-            doc(
-              db,
-              'återkommandeUtgift',
-              this.debts[this.indexRef].payOffDebtId
+          if (this.debts[this.indexRef].payOffDebt) {
+            await deleteDoc(
+              doc(
+                db,
+                'återkommandeUtgift',
+                this.debts[this.indexRef].payOffDebtId
+              )
             )
-          )
+          }
+          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
         } else {
           await deleteDoc(
             doc(
@@ -251,7 +258,7 @@
           @click="submitDebt"
           @keyup.enter="submitDebt"
         />
-        <input type="button" value="Avbryt" @click="clearFieldsDebt" />
+        <input type="button" value="Rensa fälten" @click="clearFieldsDebt" />
       </div>
     </form>
     <form @submit.prevent="">
@@ -277,7 +284,11 @@
           @click="submitPayOffDebt"
           @keyup.enter="submitPayOffDebt"
         />
-        <input type="button" value="Avbryt" @click="clearFieldsPayOffDebt" />
+        <input
+          type="button"
+          value="Rensa fälten"
+          @click="clearFieldsPayOffDebt"
+        />
       </div>
     </form>
   </div>
