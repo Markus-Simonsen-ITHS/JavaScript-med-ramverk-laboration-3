@@ -11,7 +11,6 @@
   <DebtComp />
 </template>
 <!--
-
   felhantering vid utfyllning av formulär (felt ej tomma, måste vara nummer, summa över 0)
 
   https://stackoverflow.com/questions/42992340/javascript-how-to-set-dot-after-three-digits
