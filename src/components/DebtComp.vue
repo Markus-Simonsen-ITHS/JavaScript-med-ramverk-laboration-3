@@ -8,32 +8,36 @@
     where,
     query,
     updateDoc,
-    deleteField,
-    onSnapshot
+    deleteField
   } from 'firebase/firestore'
   import { db } from '../firebase'
 
   export default {
     data() {
       return {
-        active: false,
         title: null,
-        selectedValue: null,
         amount: null,
         date: null,
         interest: null,
         payOffDebt: null,
+        selectedValue: null,
+        // ^ value from select menu
         toggle: 'block',
+        // ^ hides debt progress bar if no debts
+        active: false,
         modalWord: null,
         debts: [],
+        // ^ main debt array, filled with the debt objects
         indexRef: null,
+        // ^ used to find which debt is in which position in the list element
         paymentRefArray: []
+        // ^ used to find payment to delete
       }
     },
     created() {
       this.fetchDebtData()
+      this.fetchPaymentData()
     },
-
     methods: {
       async fetchDebtData() {
         const q = query(
@@ -43,16 +47,24 @@
         const allDebts = await getDocs(q)
         allDebts.forEach((doc) => {
           // ^ fetches debt data of current user and adds to debts array
-          this.debts.push({
+          let docData = {
             id: doc.id,
             // ^ fetches debt data back-end ID's
             amount: doc.data().amount,
             title: doc.data().title,
             payOffDebtId: null,
             payOffDebt: doc.data().payOffDebt
-          })
+          }
+          if (this.debts.some((inArray) => inArray.id === doc.id)) {
+            // ^ automatically updates list when new data
+            let position = this.debts.findIndex((inArray) => {
+              return inArray.id === doc.id
+            })
+            this.debts.splice(position, 1, docData)
+          } else {
+            this.debts.push(docData)
+          }
         })
-        await this.fetchPaymentData()
       },
       async fetchPaymentData() {
         // ^ fetches debt payment data back-end ID's
@@ -63,10 +75,13 @@
         )
         const all = await getDocs(qq)
         all.forEach((doc) => {
-          this.paymentRefArray.push({ title: doc.data().title, id: doc.id })
+          this.paymentRefArray.push({
+            title: doc.data().title,
+            id: doc.id
+          })
         })
       },
-      submitDebt() {
+      async submitDebt() {
         // ^ submits debt data and clear fields
         const docData = {
           id: this.$store.state.user.id,
@@ -76,9 +91,7 @@
         }
         addDoc(collection(db, 'skuld'), docData)
         this.clearFieldsDebt()
-        onSnapshot(collection(db, 'skuld'), () => {
-          console.log('test')
-        })
+        await this.fetchDebtData()
       },
       async submitPayOffDebt() {
         // ^ submits debt payment and clear fields
@@ -100,18 +113,22 @@
           }
         }
         this.clearFieldsPayOffDebt()
-        await this.fetchPaymentData()
-        for (let n = 0, m = 1; n < this.paymentRefArray.length; n++, m++) {
-          if (this.paymentRefArray[n].title === this.paymentRefArray[m].title) {
-            // ^ deletes old payment if a new one is issued on the same debt
-            this.paymentRefArray.shift()
-            deleteDoc(doc(db, 'återkommandeUtgift', this.paymentRefArray[n].id))
-            // BUG den tar bort den med IDn som börjar med lägst siffra eller bokstav närmast a, inte i ordning av när dom lades till i systemet ----------------------------------------
-          }
+        if (this.paymentRefArray.some((e) => e.title === this.selectedValue)) {
+          // ^ deletes old payment if a new one is issued on the same debt
+          let deleteThis = this.paymentRefArray.filter(
+            (e) => e.title === this.selectedValue
+          )
+          deleteThis.forEach((e) =>
+            deleteDoc(doc(db, 'återkommandeUtgift', e.id))
+          )
         }
+        await this.fetchPaymentData()
+        await this.fetchDebtData()
       },
       debtBar(max, pay) {
         let progress = (100 * pay) / max
+        if (progress > 100) progress = 100
+        // ^ baren blir tom ifall kvarstående avbetalning går under 0
         progress = 100 - progress
         // ^ debt bar now gets smaller the more of the debt you pay off
         return progress + '%'
@@ -154,14 +171,20 @@
           }
         }
         if (this.modalWord === 'skuld') {
-          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
-          await deleteDoc(
-            doc(
-              db,
-              'återkommandeUtgift',
-              this.debts[this.indexRef].payOffDebtId
+          if (this.debts[this.indexRef].payOffDebt) {
+            await deleteDoc(
+              doc(
+                db,
+                'återkommandeUtgift',
+                this.debts[this.indexRef].payOffDebtId
+              )
             )
-          )
+            this.debts[this.indexRef].payOffDebt = null
+            // ^ removes the deleted entry from being rendered in the list
+          }
+          await deleteDoc(doc(db, 'skuld', this.debts[this.indexRef].id))
+          this.debts.splice(this.indexRef, 1)
+          // ^ removes the deleted entry from being rendered in the list
         } else {
           await deleteDoc(
             doc(
@@ -170,6 +193,8 @@
               this.debts[this.indexRef].payOffDebtId
             )
           )
+          this.debts[this.indexRef].payOffDebt = null
+          // ^ removes the deleted entry from being rendered in the list
           updateDoc(doc(db, 'skuld', this.debts[this.indexRef].id), {
             payOffDebt: deleteField()
           })
@@ -251,7 +276,7 @@
           @click="submitDebt"
           @keyup.enter="submitDebt"
         />
-        <input type="button" value="Avbryt" @click="clearFieldsDebt" />
+        <input type="button" value="Rensa fälten" @click="clearFieldsDebt" />
       </div>
     </form>
     <form @submit.prevent="">
@@ -277,7 +302,11 @@
           @click="submitPayOffDebt"
           @keyup.enter="submitPayOffDebt"
         />
-        <input type="button" value="Avbryt" @click="clearFieldsPayOffDebt" />
+        <input
+          type="button"
+          value="Rensa fälten"
+          @click="clearFieldsPayOffDebt"
+        />
       </div>
     </form>
   </div>
@@ -318,6 +347,7 @@
     margin-top: 10px;
     padding-bottom: 10px;
     width: 80%;
+    max-width: 1200px;
   }
   .barContainer {
     background-color: #c4c4c4;
@@ -356,6 +386,7 @@
     background-color: #e7e7e7;
     border-radius: 8px;
     width: 70%;
+    max-width: 630px;
     margin-top: 50px;
     margin-bottom: 30px;
   }
