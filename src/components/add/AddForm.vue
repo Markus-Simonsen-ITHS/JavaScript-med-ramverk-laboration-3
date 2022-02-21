@@ -58,6 +58,7 @@
         }
       },
       submit() {
+        console.log(this.category)
         // If any errors are found, this is set to true
         let errors = false
         // Validating input
@@ -86,6 +87,13 @@
       }
     },
     computed: {
+      categories() {
+        const categories = []
+        this.$store.getters.getBudget.forEach((budget) => {
+          categories.push(budget.title)
+        })
+        return categories
+      },
       // Calculates the desired width of the amount input based on number of characters. One number is around 27px wide
       inputWidth() {
         const chars = this.amount.toString().length
@@ -144,7 +152,13 @@
   <form @submit.prevent="submit">
     <select v-model="category">
       <option value="">Kategori</option>
-      <option value="mat">Mat</option>
+      <option
+        v-for="fetchedCategory in categories"
+        :key="fetchedCategory"
+        :value="fetchedCategory"
+      >
+        {{ fetchedCategory }}
+      </option>
     </select>
     <input
       class="form-input"
@@ -171,12 +185,7 @@
       <label for="reocurringExpense">Repetera varje månad</label>
     </div>
     <div class="button-container">
-      <input
-        type="submit"
-        value="Lägg till"
-        @click="submit"
-        @keyup.enter="submit"
-      />
+      <input type="submit" value="Lägg till" />
       <input type="button" value="Avbryt" @click="goToHome" />
     </div>
   </form>
