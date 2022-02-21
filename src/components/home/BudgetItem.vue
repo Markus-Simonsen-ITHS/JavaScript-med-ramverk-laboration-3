@@ -1,6 +1,7 @@
 <script>
   import { doc, deleteDoc } from 'firebase/firestore'
   import { db } from '../../firebase'
+  import AutoImage from '../AutoImage.vue'
   export default {
     props: {
       budget: {
@@ -13,7 +14,8 @@
         console.log(budget.title)
         await deleteDoc(doc(db, 'budget', budget.title))
       }
-    }
+    },
+    components: { AutoImage }
   }
 </script>
 
@@ -21,7 +23,8 @@
   <li class="expense-category">
     <div class="category-img-container">
       <!-- Placeholder img -->
-      <img src="../../../assets/fox.jpeg" alt="Fox" />
+      <!-- <img src="../../../assets/fox.jpeg" alt="Fox" /> -->
+      <AutoImage :category-name="budget.title ? budget.title : 'Övrigt'" />
     </div>
     <p class="bold-text align-start">
       {{ budget.title ? budget.title : 'Övrigt' }}
