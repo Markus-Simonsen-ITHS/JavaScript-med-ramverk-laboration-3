@@ -3,6 +3,7 @@
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
   import BudgetComp from '../components/home/BudgetComp.vue'
+  import WarningComponent from '../components/home/WarningComponent.vue'
 
   export default {
     data() {
@@ -25,9 +26,9 @@
           const spent = this.budgets[1].amountSpent
           const budget = this.budgets[1].sum
           const progress = (100 * spent) / budget
-          return progress + '%'
+          return progress
         } else {
-          return '0%'
+          return 0
         }
       },
       // Gets all income from the store and calculates the total amount
@@ -54,7 +55,8 @@
       BudgetItem,
       StatusItem,
       NavBar,
-      BudgetComp
+      BudgetComp,
+      WarningComponent
     }
   }
 </script>
@@ -62,22 +64,7 @@
 <template>
   <NavBar />
   <BudgetComp />
-  <div class="warning-container" v-if="this.toggle === true">
-    <div
-      class="warning-card"
-      v-if="
-        this.calculateExpenseProgress === '50%' ||
-        this.calculateExpenseProgress === '25%'
-      "
-    >
-      <p>Varning, Lorem ipsum dolor sit amet!</p>
-      <div id="close-button" @click="closeButton">
-        <div class="close-button">
-          <div class="close-button-r" />
-        </div>
-      </div>
-    </div>
-  </div>
+  <WarningComponent :amount-spent="calculateExpenseProgress" />
 
   <div class="account-overview-container">
     <div>
@@ -90,7 +77,10 @@
       <div class="account-progress-container">
         <div
           class="account-progress-bar"
-          :style="{ width: calculateExpenseProgress }"
+          :style="{
+            width: calculateExpenseProgress + '%',
+            maxWidth: 100 + '%'
+          }"
         />
       </div>
       <p class="account-budget">
@@ -126,38 +116,6 @@
 </template>
 
 <style scoped>
-  .close-button {
-    height: 25px;
-    width: 2px;
-    margin-left: 12px;
-    background-color: white;
-    transform: rotate(45deg);
-    margin: 0 16px 0 0;
-  }
-
-  .close-button-r {
-    height: 25px;
-    width: 2px;
-    background-color: white;
-    transform: rotate(90deg);
-  }
-
-  .warning-card {
-    background-color: lightcoral;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 1px 5px 5px 0px #676767;
-    width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .warning-container p {
-    font-size: 16px;
-  }
-
   .account-overview-container {
     padding: 10px;
   }
