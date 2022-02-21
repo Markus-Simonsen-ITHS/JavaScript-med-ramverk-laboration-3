@@ -1,10 +1,18 @@
 <script>
+  import { doc, deleteDoc } from 'firebase/firestore'
+  import { db } from '../../firebase'
   import AutoImage from '../AutoImage.vue'
   export default {
     props: {
       budget: {
         required: true,
         type: Object
+      }
+    },
+    methods: {
+      async removeBudget(budget) {
+        console.log(budget.title)
+        await deleteDoc(doc(db, 'budget', budget.title))
       }
     },
     components: { AutoImage }
@@ -21,20 +29,41 @@
     <p class="bold-text align-start">
       {{ budget.title ? budget.title : 'Övrigt' }}
     </p>
-    <p class="bold-text">
+    <p class="bold-text align-end">
       {{ budget.amountSpent ? budget.amountSpent : 0 }} kr
     </p>
     <p class="smaller-text align-start">Budget</p>
-    <p class="smaller-text">{{ budget.sum }} kr</p>
+    <p class="smaller-text align-end">{{ budget.sum }} kr</p>
+    <!-- <p class="remove-btn" @click="removeBudget(budget)">X</p> -->
+    <div id="close-button" @click="removeBudget(budget)">
+      <div class="close-button">
+        <div class="close-button-r" />
+      </div>
+    </div>
   </li>
 </template>
 
 <style scoped>
+  .close-button {
+    height: 25px;
+    width: 2px;
+    margin-left: 12px;
+    background-color: black;
+    transform: rotate(45deg);
+    margin: 0 16px 0 0;
+  }
+
+  .close-button-r {
+    height: 25px;
+    width: 2px;
+    background-color: black;
+    transform: rotate(90deg);
+  }
   .expense-category {
     border-radius: 5px;
     list-style-type: none;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     background-color: #e7e7e7;
     align-content: center;
     justify-items: center;
@@ -52,18 +81,34 @@
     margin: 10px;
   }
   .align-start {
-    justify-self: flex-start;
+    justify-self: start;
+    grid-column: 2;
+  }
+  .align-end {
+    justify-self: end;
   }
   .smaller-text {
     font-size: 1rem;
+    padding-bottom: 20px;
   }
   .bold-text {
     font-weight: bold;
+    padding-top: 16px;
+  }
+
+  #close-button {
+    grid-column: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border-radius: 10px;
+    padding: 16px;
+    align-self: center;
+    justify-self: end;
   }
 
   @media screen and (min-width: 700px) {
     .expense-category {
-      grid-template-columns: 0.5fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1frr;
     }
     .category-img-container {
       height: 100px;
