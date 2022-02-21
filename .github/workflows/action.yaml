@@ -1,7 +1,3 @@
-defaults:
-  run:
-    working-directory: ./deg
-
 name: ESLint & Prettier CI
 on:
   pull_request:
