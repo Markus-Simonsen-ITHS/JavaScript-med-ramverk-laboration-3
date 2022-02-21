@@ -1,11 +1,13 @@
 <script>
+  import AutoImage from '../AutoImage.vue'
   export default {
     props: {
       budget: {
         required: true,
         type: Object
       }
-    }
+    },
+    components: { AutoImage }
   }
 </script>
 
@@ -13,7 +15,8 @@
   <li class="expense-category">
     <div class="category-img-container">
       <!-- Placeholder img -->
-      <img src="../../../assets/fox.jpeg" alt="Fox" />
+      <!-- <img src="../../../assets/fox.jpeg" alt="Fox" /> -->
+      <AutoImage :category-name="budget.title ? budget.title : 'Övrigt'" />
     </div>
     <p class="bold-text align-start">
       {{ budget.title ? budget.title : 'Övrigt' }}
