@@ -69,10 +69,12 @@
         if (!this.isAmountValid()) errors = true
         // If any error is found, return the function
         if (errors) return
+
         // If date is not set, setting date to today
         if (!this.date) {
           this.date = moment().format('YYYY-MM-DD')
         }
+
         const payload = {
           id: this.$store.getters.getUser.id,
           title: this.title,
