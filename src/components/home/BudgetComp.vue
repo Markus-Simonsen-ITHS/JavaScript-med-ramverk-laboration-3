@@ -30,10 +30,7 @@
           amount: Number(this.amount)
         }
         setDoc(doc(db, 'budget', this.title), docData)
-        this.toggle = true
-        this.amount = null
-        this.title = null
-        console.log('hej')
+        this.$router.push('/')
       },
       isTitleValid() {
         if (!this.title) {
@@ -74,27 +71,13 @@
 </script>
 
 <template>
-  <!-- A button that toggles the function to add a new budget -->
-  <div class="addbutton-container">
-    <input
-      class="buttons"
-      v-if="!toggle"
-      type="button"
-      value="Avbryt"
-      @click="toggle = !toggle"
-    />
-    <input
-      class="buttons"
-      v-if="toggle"
-      type="button"
-      value="Lägg till budget"
-      @click="toggle = !toggle"
-    />
-  </div>
   <!-- The form to add the budget, also the button to submit the budget -->
-  <div v-if="!toggle" class="container">
+  <RouterLink to="/"
+    ><input class="buttons" type="button" value="Avbryt"
+  /></RouterLink>
+  <div class="container">
+    <h1>Lägg till budget:</h1>
     <form>
-      <h1>Lägg till budget:</h1>
       <label for="add-title" class="error-message" v-if="errors.titleError"
         >Du måste fylla i ett namn</label
       >
@@ -116,13 +99,14 @@
         :class="{ 'input-error': errors.amountError }"
       />
       <div class="button-container">
-        <input
+        <button
           class="buttons"
           type="submit"
-          value="Lägg till"
           @click="addBudget"
           @keyup.enter="addBudget"
-        />
+        >
+          Lägg till
+        </button>
       </div>
     </form>
   </div>
