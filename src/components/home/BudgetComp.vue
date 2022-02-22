@@ -7,7 +7,6 @@
       return {
         amount: null,
         title: null,
-        toggle: true,
         errors: {
           titleError: false,
           amountError: false
