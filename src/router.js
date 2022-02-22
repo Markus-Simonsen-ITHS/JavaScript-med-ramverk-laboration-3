@@ -8,6 +8,7 @@ import TransactionsView from './views/TransactionsView.vue'
 import DebtView from './views/DebtView.vue'
 import SparandeView from './views/SparandeView.vue'
 import SettingsView from './views/SettingsView.vue'
+import BudgetView from './views/BudgetView.vue'
 
 import { auth } from './firebase'
 
@@ -57,6 +58,7 @@ const router = createRouter({
       path: '/settings',
       meta: { requiresAuth: true }
     },
+    { component: BudgetView, path: '/budget', meta: { requiresAuth: true } },
     {
       path: '/:notFound(.*)',
       redirect: '/'
