@@ -22,7 +22,12 @@
 
   <h1>Råd och guidning</h1>
   <p>Få tips och råd om hur du ska spara och hantera din ekonomi</p>
-
+  <div
+    class="logOutMessage"
+    :style="{ display: this.$store.state.logoutMessage }"
+  >
+    <p>Du har blivit utloggad</p>
+  </div>
   <LoginForm only-register="true" />
 </template>
 
@@ -37,5 +42,18 @@
 
   p {
     font-size: 1.5rem;
+  }
+  .logOutMessage p {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding-top: 20px;
+  }
+  .logOutMessage {
+    margin-bottom: -20px;
+    width: 100%;
+    height: 40px;
+    background-color: #e7e7e7;
+    border-radius: 8px;
   }
 </style>
