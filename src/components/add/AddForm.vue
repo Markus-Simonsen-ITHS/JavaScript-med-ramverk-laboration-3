@@ -1,4 +1,6 @@
 <script>
+  import moment from 'moment'
+
   export default {
     emits: ['addExpense', 'addIncome'],
     data() {
@@ -58,7 +60,6 @@
         }
       },
       submit() {
-        console.log(this.category)
         // If any errors are found, this is set to true
         let errors = false
         // Validating input
@@ -67,6 +68,11 @@
 
         // If any error is found, return the function
         if (errors) return
+
+        // If date is not set, setting date to today
+        if (!this.date) {
+          this.date = moment().format('YYYY-MM-DD')
+        }
 
         const payload = {
           id: this.$store.getters.getUser.id,
