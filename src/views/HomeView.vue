@@ -47,6 +47,15 @@
         })
         return expenses
       },
+      reocurringExpenses() {
+        // ^ fetches reocurring expense data from the store and calculates the total amount
+        let expensesRe = 0
+        this.$store.getters.getExpensesReocurring.forEach((expenseObject) => {
+          expensesRe += parseInt(expenseObject.amount)
+        })
+        return expensesRe
+      },
+
       budgets() {
         return this.$store.getters.getBudget
       }
@@ -91,7 +100,11 @@
 
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
-    <StatusItem :key="totalExpenses.name" :status="totalExpenses" />
+    <StatusItem
+      :key="totalExpenses.name"
+      :status="totalExpenses"
+      :expenses="reocurringExpenses"
+    />
   </div>
   <div class="overview-container">
     <h1>Översikt</h1>

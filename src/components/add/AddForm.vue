@@ -1,19 +1,21 @@
 <script>
+  import SliderComp from '../home/SliderComp.vue'
   export default {
     emits: ['addExpense', 'addIncome'],
     data() {
       return {
         displayAddExpense: true,
         category: '',
+        checkbox: 'false',
         title: null,
         date: null,
-        checkbox: false,
         amount: '0',
         addType: 'expense',
         errors: {
           titleError: false,
           amountError: false
-        }
+        },
+        label: 'Repetera varje månad'
       }
     },
     methods: {
@@ -64,10 +66,8 @@
         // Validating input
         if (!this.isTitleValid()) errors = true
         if (!this.isAmountValid()) errors = true
-
         // If any error is found, return the function
         if (errors) return
-
         const payload = {
           id: this.$store.getters.getUser.id,
           title: this.title,
@@ -81,9 +81,11 @@
         } else {
           this.$emit('addIncome', payload)
         }
-
         // Navigate to home
         this.$router.push('/')
+      },
+      onChecked(checkbox) {
+        this.checkbox = checkbox
       }
     },
     computed: {
@@ -117,7 +119,8 @@
       addType() {
         this.errors.titleError = false
       }
-    }
+    },
+    components: { SliderComp }
   }
 </script>
 
@@ -172,18 +175,7 @@
       >Du måste fylla i ett namn</label
     >
     <input class="form-input" type="date" v-model="date" placeholder="Datum" />
-    <div class="reocurringExpense-container">
-      <label for="reocurringExpense" class="switch">
-        <input
-          id="reocurringExpense"
-          type="checkbox"
-          value="reocurringExpense"
-          v-model="checkbox"
-        />
-        <span class="slider" />
-      </label>
-      <label for="reocurringExpense">Repetera varje månad</label>
-    </div>
+    <SliderComp @checkbox="onChecked" :label="label" />
     <div class="button-container">
       <input type="submit" value="Lägg till" />
       <input type="button" value="Avbryt" @click="goToHome" />
@@ -244,72 +236,6 @@
   }
   input[type='date'] {
     margin-bottom: 20px;
-  }
-
-  .reocurringExpense-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-
-  .reocurringExpense-container .switch {
-    margin-right: 10px;
-  }
-
-  /* Checkbox as a slider */
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 25px;
-  }
-
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    border-radius: 34px;
-  }
-
-  .slider:before {
-    position: absolute;
-    border-radius: 50%;
-    content: '';
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 2px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  input:checked + .slider {
-    background-color: #2196f3;
-  }
-
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196f3;
-  }
-
-  /* The sliding animation */
-  input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
   }
 
   .button-container {
