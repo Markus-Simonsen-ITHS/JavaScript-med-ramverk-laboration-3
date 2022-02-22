@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "firebase": "^9.6.5",
+    "moment": "^2.29.1",
     "prettier": "^2.5.1",
     "vue": "^3.2.25",
     "vue-chart-3": "^3.1.0",
