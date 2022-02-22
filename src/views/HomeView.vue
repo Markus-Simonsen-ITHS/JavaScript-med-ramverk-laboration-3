@@ -23,7 +23,7 @@
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 0) {
+        if (this.budgets.length > 1) {
           const spent = parseInt(this.budgets[1].amountSpent)
           const budget = parseInt(this.budgets[1].sum)
           const progress = (100 * spent) / budget
