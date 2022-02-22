@@ -4,7 +4,6 @@
   import BudgetItem from '../components/home/BudgetItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
-  import BudgetComp from '../components/home/BudgetComp.vue'
   import WarningComponent from '../components/home/WarningComponent.vue'
 
   export default {
@@ -93,7 +92,6 @@
       BudgetItem,
       StatusItem,
       NavBar,
-      BudgetComp,
       WarningComponent
     }
   }
@@ -101,8 +99,10 @@
 
 <template>
   <NavBar />
-  <BudgetComp />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
+  <RouterLink to="/Budget"
+    ><input class="buttons" type="button" value="Lägg till budget"
+  /></RouterLink>
 
   <div class="account-overview-container">
     <div>
@@ -272,6 +272,15 @@
     gap: 15px;
     justify-content: right;
     align-items: center;
+  }
+  .buttons {
+    background-color: #292929;
+    color: #fff;
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: none;
+    margin-bottom: 5px;
   }
   @media screen and (min-width: 700px) {
     .warning-card {
