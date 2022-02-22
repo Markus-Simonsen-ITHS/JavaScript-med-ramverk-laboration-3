@@ -3,9 +3,13 @@
   import { db } from '../../firebase'
   import AutoImage from '../AutoImage.vue'
   export default {
+    emits: ['setActiveBudget'],
     props: {
       budget: {
         required: true,
+        type: Object
+      },
+      activeBudget: {
         type: Object
       }
     },
@@ -13,6 +17,10 @@
       async removeBudget(budget) {
         console.log(budget.title)
         await deleteDoc(doc(db, 'budget', budget.title))
+      },
+      setActiveBudget() {
+        console.log('this.budget', this.budget)
+        this.$emit('setActiveBudget', this.budget)
       }
     },
     components: { AutoImage }
@@ -20,7 +28,14 @@
 </script>
 
 <template>
-  <li class="expense-category">
+  <li
+    class="expense-category"
+    :class="{ active: budget.budgetId === activeBudget.budgetId }"
+    @click="setActiveBudget"
+  >
+    budget.id: {{ budget.id }} activeBudget.id:
+    {{ activeBudget.id }} budget.budgetId:
+    {{ budget.budgetId }} activeBudget.budgetId: {{ activeBudget.budgetId }}
     <div class="category-img-container">
       <!-- Placeholder img -->
       <!-- <img src="../../../assets/fox.jpeg" alt="Fox" /> -->
@@ -44,6 +59,9 @@
 </template>
 
 <style scoped>
+  .active {
+    border: 1px solid black;
+  }
   .close-button {
     height: 25px;
     width: 2px;

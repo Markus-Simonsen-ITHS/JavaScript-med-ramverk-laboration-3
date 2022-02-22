@@ -4,11 +4,13 @@
   import NavBar from '../components/NavBar.vue'
   import BudgetComp from '../components/home/BudgetComp.vue'
   import WarningComponent from '../components/home/WarningComponent.vue'
+  import AccountOverviewComponent from '../components/home/AccountOverviewComponent.vue'
 
   export default {
     data() {
       return {
-        toggle: true
+        toggle: true,
+        activeBudget: { id: null }
       }
     },
     methods: {
@@ -17,15 +19,19 @@
       },
       closeButton() {
         this.toggle = false
+      },
+      setActiveBudget(budget) {
+        this.activeBudget = budget
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 2) {
+        if (this.budgets.length > 1) {
           const spent = this.budgets[1].amountSpent
           const budget = this.budgets[1].sum
           const progress = (100 * spent) / budget
+          console.log('progress', progress)
           return progress
         } else {
           return 0
@@ -56,7 +62,8 @@
       StatusItem,
       NavBar,
       BudgetComp,
-      WarningComponent
+      WarningComponent,
+      AccountOverviewComponent
     }
   }
 </script>
@@ -65,29 +72,10 @@
   <NavBar />
   <BudgetComp />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
-
-  <div class="account-overview-container">
-    <div>
-      <p class="account-overview-name">
-        {{ budgets.length > 2 ? budgets[1].title : 'Laddar' }}
-      </p>
-      <p class="account-amount-spent">
-        {{ budgets.length > 2 ? budgets[1].amountSpent : 0 }} kr
-      </p>
-      <div class="account-progress-container">
-        <div
-          class="account-progress-bar"
-          :style="{
-            width: calculateExpenseProgress + '%',
-            maxWidth: 100 + '%'
-          }"
-        />
-      </div>
-      <p class="account-budget">
-        Budget: {{ budgets.length > 2 ? budgets[1].sum : 0 }} kr
-      </p>
-    </div>
-  </div>
+  <AccountOverviewComponent
+    :budget="activeBudget"
+    :expense-progress="calculateExpenseProgress"
+  />
 
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
@@ -105,6 +93,8 @@
       v-for="budgetItem in budgets"
       :key="budgetItem.budgetId"
       :budget="budgetItem"
+      :active-budget="activeBudget"
+      @set-active-budget="setActiveBudget"
     />
   </ul>
   <ul class="category-list">
@@ -116,35 +106,6 @@
 </template>
 
 <style scoped>
-  .account-overview-container {
-    padding: 10px;
-  }
-
-  .account-overview-name {
-    font-size: 1rem;
-    margin: 0;
-  }
-  .account-amount-spent {
-    margin: 0;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-  }
-  .account-progress-container {
-    margin-top: 10px;
-    background-color: #c4c4c4;
-    height: 15px;
-    border-radius: 10px;
-  }
-  .account-progress-bar {
-    background-color: #212121;
-    border-radius: 10px;
-    height: 100%;
-    width: 70%;
-  }
-  .account-budget {
-    text-align: end;
-    font-size: 1rem;
-  }
   .status-container {
     padding: 10px;
     display: grid;
