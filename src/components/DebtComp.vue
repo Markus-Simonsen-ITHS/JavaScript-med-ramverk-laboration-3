@@ -477,16 +477,16 @@
   @media screen and (max-width: 900px) {
     .flexer {
       flex-direction: column;
+      margin-bottom: 20px;
     }
     .smallText {
-      font-size: 120%;
+      font-size: 140%;
+    }
+    .titleText {
+      font-size: 160%;
     }
     .listButtons {
-      margin-top: 10px;
-    }
-
-    .titleText {
-      font-size: 120%;
+      margin-top: 15px;
     }
   }
 </style>
