@@ -22,10 +22,7 @@
 
   <h1>Råd och guidning</h1>
   <p>Få tips och råd om hur du ska spara och hantera din ekonomi</p>
-  <div
-    class="logOutMessage"
-    :style="{ display: this.$store.state.logoutMessage }"
-  >
+  <div v-if="this.$store.state.logoutMessage" class="logOutMessage">
     <p>Du har blivit utloggad</p>
   </div>
   <LoginForm only-register="true" />

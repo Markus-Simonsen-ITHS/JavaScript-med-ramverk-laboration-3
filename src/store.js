@@ -15,7 +15,7 @@ const mutations = {
       state.user = user
     },
     displayLogoutMessage(state) {
-      state.logoutMessage = 'block'
+      state.logoutMessage = true
     },
     setIncome(state, incomeArr) {
       state.income = incomeArr
@@ -36,7 +36,7 @@ const mutations = {
   state = {
     counter: 0,
     user: {},
-    logoutMessage: 'none',
+    logoutMessage: false,
     loginError: '',
     income: [
       {
