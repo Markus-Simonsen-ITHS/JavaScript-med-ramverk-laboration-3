@@ -22,8 +22,8 @@
   <div
     class="navbar"
     :style="{
-      width: collapsed ? '35px' : '180px',
-      height: collapsed ? '35px' : '450px'
+      width: collapsed ? '35px' : '200px',
+      height: collapsed ? '35px' : '500px'
     }"
   >
     <!-- The icon for the menu, if clicked toggles true/false for "collapsed". -->

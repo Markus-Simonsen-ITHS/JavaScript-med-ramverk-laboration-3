@@ -1,8 +1,9 @@
 <script>
+  import moment from 'moment'
+
   import BudgetItem from '../components/home/BudgetItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
-  import BudgetComp from '../components/home/BudgetComp.vue'
   import WarningComponent from '../components/home/WarningComponent.vue'
   import AccountOverviewComponent from '../components/home/AccountOverviewComponent.vue'
 
@@ -52,7 +53,10 @@
       totalIncome() {
         let income = { name: 'Intäkter', amount: 0 }
         this.$store.getters.getIncome.forEach((incomeObject) => {
-          income.amount += parseInt(incomeObject.amount)
+          // Checking if the date of the income is the same month as today
+          if (moment(incomeObject.date).isSame(new Date(), 'month')) {
+            income.amount += parseInt(incomeObject.amount)
+          }
         })
         return income
       },
@@ -60,12 +64,57 @@
       totalExpenses() {
         let expenses = { name: 'Utgifter', amount: 0 }
         this.$store.getters.getExpenses.forEach((expenseObject) => {
-          expenses.amount += parseInt(expenseObject.amount)
+          // Checking if the date of the expense is the same month as today
+          if (moment(expenseObject.date).isSame(new Date(), 'month')) {
+            expenses.amount += parseInt(expenseObject.amount)
+          }
         })
         return expenses
       },
+      reocurringExpenses() {
+        // ^ fetches reocurring expense data from the store and calculates the total amount
+        let expensesRe = 0
+        this.$store.getters.getExpensesReocurring.forEach((expenseObject) => {
+          expensesRe += parseInt(expenseObject.amount)
+        })
+        return expensesRe
+      },
+      // Recieves all budgets from the store and filters so that only expenses
+      // which are from this month is displayed
       budgets() {
-        return this.$store.getters.getBudget
+        // creating new array to store the expenses
+        const budgets = []
+        // looping through all budgets in the store
+        this.$store.getters.getBudget.forEach((budget) => {
+          // Pushing each budget to the new array
+          budgets.push({
+            title: budget.title,
+            items: [],
+            amountSpent: 0,
+            sum: budget.sum,
+            budgetId: budget.budgetId
+          })
+
+          // Checking if budget.expenses exists
+          if (budget.expenses) {
+            // looping through all expenses in each budget
+            budget.expenses.forEach((item) => {
+              // Checking which index the budget is in new array
+              const foundIndex = budgets.findIndex(
+                (_budget) => _budget.title === budget.title
+              )
+              // If the expense is in the same month as today, add to created
+              // budget array
+              if (moment(item.date).isSame(new Date(), 'month')) {
+                budgets[foundIndex].amountSpent =
+                  parseInt(budgets[foundIndex].amountSpent) +
+                  parseInt(item.amount)
+                budgets[foundIndex].items.push(item)
+              }
+            })
+          }
+        })
+        return budgets
       }
     },
     watch: {
@@ -77,7 +126,7 @@
       BudgetItem,
       StatusItem,
       NavBar,
-      BudgetComp,
+
       WarningComponent,
       AccountOverviewComponent
     }
@@ -86,16 +135,23 @@
 
 <template>
   <NavBar />
-  <BudgetComp />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
   <AccountOverviewComponent
     :budget="activeBudget"
     :expense-progress="calculateExpenseProgress"
   />
 
+  <RouterLink to="/Budget"
+    ><input class="buttons" type="button" value="Lägg till budget"
+  /></RouterLink>
+
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
-    <StatusItem :key="totalExpenses.name" :status="totalExpenses" />
+    <StatusItem
+      :key="totalExpenses.name"
+      :status="totalExpenses"
+      :expenses="reocurringExpenses"
+    />
   </div>
   <div class="overview-container">
     <h1>Översikt</h1>
@@ -211,6 +267,15 @@
     gap: 15px;
     justify-content: right;
     align-items: center;
+  }
+  .buttons {
+    background-color: #292929;
+    color: #fff;
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: none;
+    margin-bottom: 5px;
   }
   @media screen and (min-width: 700px) {
     .warning-card {
