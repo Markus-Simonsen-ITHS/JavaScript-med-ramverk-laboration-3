@@ -141,7 +141,7 @@ const mutations = {
         {
           title: 'Övrigt',
           sum: 0,
-          budgetId: Math.random(),
+          budgetId: '101010',
           id: userId,
           amountSpent: 0,
           expenses: []
@@ -153,11 +153,11 @@ const mutations = {
         // Storing the data from the snapshot firebase sends
         let budgetItem = budgetSnapshot.data()
         // Adding id to the object
-        budgetItem.bugetId = budgetSnapshot.id
+        budgetItem.budgetId = budgetSnapshot.id
 
         budgetArr.push(budgetItem)
       })
-      console.log('budgetArr', budgetArr)
+
       // Looping through all expenses and adding them to a budget in the budget array
       state.state.expenses.forEach((expense) => {
         // Checking if the category field in expense is found in the title field in the budget array
