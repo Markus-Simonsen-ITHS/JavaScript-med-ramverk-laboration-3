@@ -20,7 +20,7 @@
         {{ budget ? budget.title : 'Laddar' }}
       </p>
       <p class="account-amount-spent">
-        {{ budget ? budget.amountSpent : 0 }} kr
+        {{ budget.amountSpent ? budget.amountSpent : 0 }} kr
       </p>
       <div class="account-progress-container">
         <div
@@ -31,7 +31,7 @@
           }"
         />
       </div>
-      <p class="account-budget">Budget: {{ budget ? budget.sum : 0 }} kr</p>
+      <p class="account-budget">Budget: {{ budget.sum ? budget.sum : 0 }} kr</p>
     </div>
   </div>
 </template>

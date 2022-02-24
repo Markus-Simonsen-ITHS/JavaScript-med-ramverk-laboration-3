@@ -10,7 +10,8 @@
         type: Object
       },
       activeBudget: {
-        type: Object
+        type: Object,
+        required: true
       }
     },
     methods: {
@@ -19,7 +20,6 @@
         await deleteDoc(doc(db, 'budget', budget.title))
       },
       setActiveBudget() {
-        console.log('this.budget', this.budget)
         this.$emit('setActiveBudget', this.budget)
       }
     },
@@ -33,12 +33,7 @@
     :class="{ active: budget.budgetId === activeBudget.budgetId }"
     @click="setActiveBudget"
   >
-    budget.id: {{ budget.id }} activeBudget.id:
-    {{ activeBudget.id }} budget.budgetId:
-    {{ budget.budgetId }} activeBudget.budgetId: {{ activeBudget.budgetId }}
     <div class="category-img-container">
-      <!-- Placeholder img -->
-      <!-- <img src="../../../assets/fox.jpeg" alt="Fox" /> -->
       <AutoImage :category-name="budget.title ? budget.title : 'Övrigt'" />
     </div>
     <p class="bold-text align-start">
@@ -59,9 +54,6 @@
 </template>
 
 <style scoped>
-  .active {
-    border: 1px solid black;
-  }
   .close-button {
     height: 25px;
     width: 2px;
@@ -122,6 +114,13 @@
     padding: 16px;
     align-self: center;
     justify-self: end;
+  }
+
+  .active {
+    /* border: 1px solid black; */
+    color: white;
+    background-color: #404040;
+    box-shadow: 1px 1px 5px 1px #676767;
   }
 
   @media screen and (min-width: 700px) {

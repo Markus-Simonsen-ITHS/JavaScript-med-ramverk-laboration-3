@@ -22,16 +22,27 @@
       },
       setActiveBudget(budget) {
         this.activeBudget = budget
+        localStorage.setItem('activeBudget', JSON.stringify(budget))
+      },
+      checkLocalStorage() {
+        const localStorageActiveBudget = JSON.parse(
+          localStorage.getItem('activeBudget')
+        )
+        if (localStorageActiveBudget) {
+          this.activeBudget = localStorageActiveBudget
+        } else {
+          console.log(this.budgets[0])
+          this.activeBudget = this.budgets[0]
+        }
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 1) {
-          const spent = this.budgets[1].amountSpent
-          const budget = this.budgets[1].sum
+        if (this.activeBudget.amountSpent) {
+          const spent = this.activeBudget.amountSpent
+          const budget = this.activeBudget.sum
           const progress = (100 * spent) / budget
-          console.log('progress', progress)
           return progress
         } else {
           return 0
@@ -55,6 +66,11 @@
       },
       budgets() {
         return this.$store.getters.getBudget
+      }
+    },
+    watch: {
+      budgets() {
+        this.checkLocalStorage()
       }
     },
     components: {
