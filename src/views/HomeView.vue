@@ -69,21 +69,25 @@
             sum: budget.sum,
             id: budget.id
           })
-          // looping through all expenses in each budget
-          budget.expenses.forEach((item) => {
-            // Checking which index the budget is in new array
-            const foundIndex = budgets.findIndex(
-              (_budget) => _budget.title === budget.title
-            )
-            // If the expense is in the same month as today, add to created
-            // budget array
-            if (moment(item.date).isSame(new Date(), 'month')) {
-              budgets[foundIndex].amountSpent =
-                parseInt(budgets[foundIndex].amountSpent) +
-                parseInt(item.amount)
-              budgets[foundIndex].items.push(item)
-            }
-          })
+
+          // Checking if budget.expenses exists
+          if (budget.expenses) {
+            // looping through all expenses in each budget
+            budget.expenses.forEach((item) => {
+              // Checking which index the budget is in new array
+              const foundIndex = budgets.findIndex(
+                (_budget) => _budget.title === budget.title
+              )
+              // If the expense is in the same month as today, add to created
+              // budget array
+              if (moment(item.date).isSame(new Date(), 'month')) {
+                budgets[foundIndex].amountSpent =
+                  parseInt(budgets[foundIndex].amountSpent) +
+                  parseInt(item.amount)
+                budgets[foundIndex].items.push(item)
+              }
+            })
+          }
         })
         return budgets
       }
