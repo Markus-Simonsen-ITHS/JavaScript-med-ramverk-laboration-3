@@ -23,7 +23,6 @@ auth.onAuthStateChanged((user) => {
     store.dispatch('fetchUser', user.uid)
     store.dispatch('fetchAllIncomeForUser', user.uid)
     store.dispatch('fetchAllExpensesForUser', user.uid)
-    store.dispatch('fetchBudgetsForUser', user.uid)
   } else {
     // No user is signed in.
   }

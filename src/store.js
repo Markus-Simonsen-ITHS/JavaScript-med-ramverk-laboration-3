@@ -37,7 +37,6 @@ const mutations = {
     }
   },
   state = {
-    counter: 0, //vad gör den här?
     user: {},
     logoutMessage: 'none',
     loginError: '',
@@ -150,6 +149,8 @@ const mutations = {
         expensesReArr.push(expense.data())
       })
 
+      state.dispatch('fetchBudgetsForUser', userId)
+
       state.commit('setExpenses', expensesArr)
       state.commit('setExpensesReocurring', expensesReArr)
     },
@@ -164,7 +165,7 @@ const mutations = {
       const budgetArr = [
         {
           title: 'Övrigt',
-          sum: 0,
+          amount: 0,
           budgetId: '101010',
           id: userId,
           amountSpent: 0,

@@ -23,14 +23,19 @@
       },
       setActiveBudget(budget) {
         this.activeBudget = budget
-        localStorage.setItem('activeBudget', JSON.stringify(budget))
+        localStorage.setItem('activeBudget', JSON.stringify(budget.budgetId))
       },
       checkLocalStorage() {
         const localStorageActiveBudget = JSON.parse(
           localStorage.getItem('activeBudget')
         )
         if (localStorageActiveBudget) {
-          this.activeBudget = localStorageActiveBudget
+          let activeBudgetTemp = this.budgets.find(
+            (budget) => budget.budgetId === localStorageActiveBudget
+          )
+          this.activeBudget = activeBudgetTemp
+            ? activeBudgetTemp
+            : this.budgets[0]
         } else {
           console.log(this.budgets[0])
           this.activeBudget = this.budgets[0]
@@ -91,7 +96,7 @@
             title: budget.title,
             items: [],
             amountSpent: 0,
-            sum: budget.sum,
+            sum: budget.amount,
             budgetId: budget.budgetId
           })
 
@@ -114,6 +119,7 @@
             })
           }
         })
+
         return budgets
       }
     },
