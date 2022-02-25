@@ -100,9 +100,6 @@
 <template>
   <NavBar />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
-  <RouterLink to="/Budget"
-    ><input class="buttons" type="button" value="Lägg till budget"
-  /></RouterLink>
 
   <div class="account-overview-container">
     <div>
@@ -125,6 +122,11 @@
         Budget: {{ budgets.length > 1 ? budgets[1].sum : 0 }} kr
       </p>
     </div>
+  </div>
+  <div id="budget-button">
+    <RouterLink to="/Budget"
+      ><input class="buttons" type="button" value="Lägg till budget"
+    /></RouterLink>
   </div>
 
   <div class="status-container">
@@ -281,6 +283,10 @@
     padding: 10px 16px;
     border: none;
     margin-bottom: 5px;
+  }
+  #budget-button {
+    display: flex;
+    justify-content: center;
   }
   @media screen and (min-width: 700px) {
     .warning-card {
