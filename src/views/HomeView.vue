@@ -125,6 +125,9 @@
         return budgets
       }
     },
+    mounted() {
+      this.checkLocalStorage()
+    },
     watch: {
       budgets() {
         this.checkLocalStorage()
