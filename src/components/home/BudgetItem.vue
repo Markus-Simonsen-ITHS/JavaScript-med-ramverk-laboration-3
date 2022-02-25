@@ -43,7 +43,7 @@
       {{ budget.amountSpent ? budget.amountSpent : 0 }} kr
     </p>
     <p class="smaller-text align-start">Budget</p>
-    <p class="smaller-text align-end">{{ budget.sum }} kr</p>
+    <p class="smaller-text align-end">{{ budget.amount }} kr</p>
     <!-- <p class="remove-btn" @click="removeBudget(budget)">X</p> -->
     <div id="close-button" @click="removeBudget(budget)">
       <div class="close-button">
