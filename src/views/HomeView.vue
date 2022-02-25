@@ -54,6 +54,14 @@
         })
         return expenses
       },
+      reocurringExpenses() {
+        // ^ fetches reocurring expense data from the store and calculates the total amount
+        let expensesRe = 0
+        this.$store.getters.getExpensesReocurring.forEach((expenseObject) => {
+          expensesRe += parseInt(expenseObject.amount)
+        })
+        return expensesRe
+      },
       // Recieves all budgets from the store and filters so that only expenses
       // which are from this month is displayed
       budgets() {
@@ -69,21 +77,25 @@
             sum: budget.sum,
             id: budget.id
           })
-          // looping through all expenses in each budget
-          budget.expenses.forEach((item) => {
-            // Checking which index the budget is in new array
-            const foundIndex = budgets.findIndex(
-              (_budget) => _budget.title === budget.title
-            )
-            // If the expense is in the same month as today, add to created
-            // budget array
-            if (moment(item.date).isSame(new Date(), 'month')) {
-              budgets[foundIndex].amountSpent =
-                parseInt(budgets[foundIndex].amountSpent) +
-                parseInt(item.amount)
-              budgets[foundIndex].items.push(item)
-            }
-          })
+
+          // Checking if budget.expenses exists
+          if (budget.expenses) {
+            // looping through all expenses in each budget
+            budget.expenses.forEach((item) => {
+              // Checking which index the budget is in new array
+              const foundIndex = budgets.findIndex(
+                (_budget) => _budget.title === budget.title
+              )
+              // If the expense is in the same month as today, add to created
+              // budget array
+              if (moment(item.date).isSame(new Date(), 'month')) {
+                budgets[foundIndex].amountSpent =
+                  parseInt(budgets[foundIndex].amountSpent) +
+                  parseInt(item.amount)
+                budgets[foundIndex].items.push(item)
+              }
+            })
+          }
         })
         return budgets
       }
@@ -131,7 +143,11 @@
 
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
-    <StatusItem :key="totalExpenses.name" :status="totalExpenses" />
+    <StatusItem
+      :key="totalExpenses.name"
+      :status="totalExpenses"
+      :expenses="reocurringExpenses"
+    />
   </div>
   <div class="overview-container">
     <h1>Översikt</h1>
