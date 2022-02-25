@@ -46,8 +46,10 @@
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
         if (this.activeBudget.amountSpent) {
+          if (this.activeBudget.amountSpent > this.activeBudget.amount)
+            return 100
           const spent = this.activeBudget.amountSpent
-          const budget = this.activeBudget.sum
+          const budget = this.activeBudget.amount
           const progress = (100 * spent) / budget
           return progress
         } else {
@@ -96,7 +98,7 @@
             title: budget.title,
             items: [],
             amountSpent: 0,
-            sum: budget.amount,
+            amount: budget.amount,
             budgetId: budget.budgetId
           })
 
