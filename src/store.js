@@ -37,7 +37,6 @@ const mutations = {
     }
   },
   state = {
-    counter: 0, //vad gör den här?
     user: {},
     logoutMessage: false,
     loginError: '',
@@ -150,6 +149,8 @@ const mutations = {
         expensesReArr.push(expense.data())
       })
 
+      state.dispatch('fetchBudgetsForUser', userId)
+
       state.commit('setExpenses', expensesArr)
       state.commit('setExpensesReocurring', expensesReArr)
     },
@@ -164,8 +165,8 @@ const mutations = {
       const budgetArr = [
         {
           title: 'Övrigt',
-          sum: 0,
-          budgetId: Math.random(),
+          amount: 0,
+          budgetId: '101010',
           id: userId,
           amountSpent: 0,
           expenses: []
@@ -177,7 +178,7 @@ const mutations = {
         // Storing the data from the snapshot firebase sends
         let budgetItem = budgetSnapshot.data()
         // Adding id to the object
-        budgetItem.bugetId = budgetSnapshot.id
+        budgetItem.budgetId = budgetSnapshot.id
 
         budgetArr.push(budgetItem)
       })

@@ -5,11 +5,13 @@
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
   import WarningComponent from '../components/home/WarningComponent.vue'
+  import AccountOverviewComponent from '../components/home/AccountOverviewComponent.vue'
 
   export default {
     data() {
       return {
-        toggle: true
+        toggle: true,
+        activeBudget: { id: null }
       }
     },
     methods: {
@@ -18,14 +20,36 @@
       },
       closeButton() {
         this.toggle = false
+      },
+      setActiveBudget(budget) {
+        this.activeBudget = budget
+        localStorage.setItem('activeBudget', JSON.stringify(budget.budgetId))
+      },
+      checkLocalStorage() {
+        const localStorageActiveBudget = JSON.parse(
+          localStorage.getItem('activeBudget')
+        )
+        if (localStorageActiveBudget) {
+          let activeBudgetTemp = this.budgets.find(
+            (budget) => budget.budgetId === localStorageActiveBudget
+          )
+          this.activeBudget = activeBudgetTemp
+            ? activeBudgetTemp
+            : this.budgets[0]
+        } else {
+          console.log(this.budgets[0])
+          this.activeBudget = this.budgets[0]
+        }
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 1) {
-          const spent = parseInt(this.budgets[1].amountSpent)
-          const budget = parseInt(this.budgets[1].sum)
+        if (this.activeBudget.amountSpent) {
+          if (this.activeBudget.amountSpent > this.activeBudget.amount)
+            return 100
+          const spent = this.activeBudget.amountSpent
+          const budget = this.activeBudget.amount
           const progress = (100 * spent) / budget
           return progress
         } else {
@@ -74,8 +98,8 @@
             title: budget.title,
             items: [],
             amountSpent: 0,
-            sum: budget.sum,
-            id: budget.id
+            amount: budget.amount,
+            budgetId: budget.budgetId
           })
 
           // Checking if budget.expenses exists
@@ -97,14 +121,25 @@
             })
           }
         })
+
         return budgets
+      }
+    },
+    mounted() {
+      this.checkLocalStorage()
+    },
+    watch: {
+      budgets() {
+        this.checkLocalStorage()
       }
     },
     components: {
       BudgetItem,
       StatusItem,
       NavBar,
-      WarningComponent
+
+      WarningComponent,
+      AccountOverviewComponent
     }
   }
 </script>
@@ -112,32 +147,14 @@
 <template>
   <NavBar />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
+  <AccountOverviewComponent
+    :budget="activeBudget"
+    :expense-progress="calculateExpenseProgress"
+  />
+
   <RouterLink to="/Budget"
     ><input class="buttons" type="button" value="Lägg till budget"
   /></RouterLink>
-
-  <div class="account-overview-container">
-    <div>
-      <p class="account-overview-name">
-        {{ budgets.length > 1 ? budgets[1].title : 'Laddar' }}
-      </p>
-      <p class="account-amount-spent">
-        {{ budgets.length > 1 ? budgets[1].amountSpent : 0 }} kr
-      </p>
-      <div class="account-progress-container">
-        <div
-          class="account-progress-bar"
-          :style="{
-            width: calculateExpenseProgress + '%',
-            maxWidth: 100 + '%'
-          }"
-        />
-      </div>
-      <p class="account-budget">
-        Budget: {{ budgets.length > 1 ? budgets[1].sum : 0 }} kr
-      </p>
-    </div>
-  </div>
 
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
@@ -159,6 +176,8 @@
       v-for="budgetItem in budgets"
       :key="budgetItem.budgetId"
       :budget="budgetItem"
+      :active-budget="activeBudget"
+      @set-active-budget="setActiveBudget"
     />
   </ul>
   <ul class="category-list">
@@ -170,35 +189,6 @@
 </template>
 
 <style scoped>
-  .account-overview-container {
-    padding: 10px;
-  }
-
-  .account-overview-name {
-    font-size: 1rem;
-    margin: 0;
-  }
-  .account-amount-spent {
-    margin: 0;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-  }
-  .account-progress-container {
-    margin-top: 10px;
-    background-color: #c4c4c4;
-    height: 15px;
-    border-radius: 10px;
-  }
-  .account-progress-bar {
-    background-color: #212121;
-    border-radius: 10px;
-    height: 100%;
-    width: 70%;
-  }
-  .account-budget {
-    text-align: end;
-    font-size: 1rem;
-  }
   .status-container {
     padding: 10px;
     display: grid;
