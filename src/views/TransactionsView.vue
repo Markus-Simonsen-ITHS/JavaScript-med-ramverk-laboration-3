@@ -1,13 +1,11 @@
 <script>
   import { db } from '../firebase'
   import { collection, getDocs, query, where } from 'firebase/firestore'
-  import NavBar from '../components/NavBar.vue'
   import ChartComp from '../components/ChartComp.vue'
   import FilterComponent from '../components/history/FilterComponent.vue'
 
   export default {
     components: {
-      NavBar,
       ChartComp,
       FilterComponent
     },
@@ -50,7 +48,8 @@
         expenses: [],
         view: 'list',
         itemStatus: 'reoccurring',
-        timeFilter: 'oneMonth'
+        timeFilter: 'oneMonth',
+        toggle: false
       }
     },
     computed: {
@@ -62,13 +61,14 @@
 </script>
 
 <template>
-  <NavBar />
+  <!--Ska man ta bort denna??-->
   <FilterComponent
     @set-view="setView"
     @change-item-status="setItemStatus"
     @change-time-filter="setTimeFilter"
   />
   <!--Show if there aren't any registered transactions-->
+
   <div class="view-expenses" v-if="expenses === '' || expenses === null">
     <form class="expenses-form">
       <div class="form-inner">
@@ -79,74 +79,114 @@
   </div>
 
   <!--Show if there are any registered transactions-->
+
   <div class="expenses" v-else>
+    <!--Select view option, list by default-->
+    <h1>Lista</h1>
     <h2>Denna månad</h2>
   </div>
-  <ChartComp :data="expenses" />
 
-  <div class="expenses-card-container">
-    <div class="expenses-card">
-      <ol id="category-expenses">
-        <li v-for="expense in expenses" :key="expense">
-          <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
-          {{ expense.category }}
-          <h5
-            v-for="budgetItem in budgets"
-            :key="budgetItem.budgetId"
-            :budget="budgetItem"
-          >
-            Budget:
-            {{ budgetItem.sum }} kr
-          </h5>
-          {{ expense.title }}
-          {{ expense.amount }} kr
-        </li>
-      </ol>
+  <ChartComp :data-b="expenses" v-show="view === 'chart'" />
+
+  <div id="history-list-container" v-if="view === 'list'">
+    <div
+      class="history-list"
+      @click="toggle = !toggle"
+      v-for="budget in budgets"
+      :key="budget"
+    >
+      <img src="../../assets/fox.jpeg" alt="deg logo" />
+      <p class="budget-title">{{ budget.title }}</p>
+      <p class="budget-sum">budget:</p>
+      <p class="budget-sum-self">{{ budget.sum }} kr</p>
+
+      <div v-for="expense in expenses" :key="expense">
+        <p class="expense-title" v-show="toggle">{{ expense.title }}</p>
+        <p class="expense-amount" v-show="toggle">{{ expense.amount }} kr</p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-  .expenses {
-    display: flex;
-    justify-content: flex-end;
-    margin: 10px;
-    padding: auto;
-    font-size: 1rem;
-  }
-  .expenses-card-container {
-    height: 244px;
-    width: 445px;
-    left: 33px;
-    margin: 3%;
-    border-radius: 8px;
-  }
-  #category-expenses li {
+  #history-list-container {
     display: flex;
     flex-direction: column;
-    list-style: none;
-    margin: 2%;
-    padding: 3%;
+    height: 100%;
+    width: 100%;
+    max-width: 547px;
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    text-transform: capitalize;
+    line-height: 0.5;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin: 30px;
+    padding: 10px;
     border-radius: 8px;
     background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
-  #category-expenses {
+  img {
     display: flex;
-    flex-direction: column;
-    justify-content: end;
+    width: 56px;
+    height: 56px;
+    left: 44px;
+    top: 160px;
+    border-radius: 8px;
   }
 
-  .logo-container {
-    display: flex;
-    flex-direction: row;
+  .budget-title {
+    margin: -30px 0 20px 65px;
+    letter-spacing: 0.5px;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
-  .logo {
-    border-radius: 5px;
-    min-width: 50px;
-    max-width: 100%;
-    width: 20%;
-    max-height: 100%;
+
+  .budget-sum {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .budget-sum-self {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: bold;
+    align-self: flex-end;
+    margin: -23px 0 10px 0;
+    text-transform: lowercase;
+  }
+
+  .expense-title {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    padding: 1rem 0 0 0;
+    border-top: 1px solid black;
+  }
+
+  .expense-amount {
+    float: right;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    align-self: flex-end;
+    margin: -23px 0 0 0;
+    text-transform: lowercase;
+  }
+
+  @media screen and (max-width: 500px) {
+    .history-list {
+      margin: 10px;
+      padding: 15px;
+      min-width: 200px;
+    }
+
+    img {
+      width: 45px;
+      height: 45px;
+    }
   }
 </style>
