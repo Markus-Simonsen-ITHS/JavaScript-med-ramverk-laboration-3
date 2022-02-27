@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="main">
     <div class="row">
       <div class="column">
@@ -45,7 +46,9 @@
 </template>
 
 <script>
+  import NavBar from '../components/NavBar.vue'
   export default {
+    components: { NavBar },
     name: 'SparandeView'
   }
 </script>

@@ -13,6 +13,8 @@
 <!--
   felhantering vid utfyllning av formulär (felt ej tomma, måste vara nummer, summa över 0)
 
+Skulder ska renderas som kort (liknande som i home), inte som en lista med borders
+
   https://stackoverflow.com/questions/42992340/javascript-how-to-set-dot-after-three-digits
 
   ränta funktionalitet (modifierar skulden så den visar va skulden kommer vara nästa månad, aktiveras den 1:a varje månad)
@@ -22,5 +24,4 @@
      <li v-if="this.debts="==" []">
       <p class="titleText">Laddar...</p>
     </li>
-  ta bort payOffDebt funktionalitet (måste ändras i addForm komponent)
    -->
