@@ -124,7 +124,9 @@ const mutations = {
 
       // Iterating through all documents and saving the data from them
       allExpenses.forEach((expense) => {
-        expensesArr.push(expense.data())
+        const localExpense = expense.data()
+        localExpense.expenseId = expense.id
+        expensesArr.push(localExpense)
       })
 
       state.commit('setExpenses', expensesArr)

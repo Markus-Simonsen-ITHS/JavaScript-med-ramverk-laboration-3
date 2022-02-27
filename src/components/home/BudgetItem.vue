@@ -1,6 +1,7 @@
 <script>
   import { doc, deleteDoc } from 'firebase/firestore'
   import { db } from '../../firebase'
+  import DeleteComp from '../home/DeleteComp.vue'
   import AutoImage from '../AutoImage.vue'
   export default {
     props: {
@@ -9,13 +10,16 @@
         type: Object
       }
     },
-    methods: {
-      async removeBudget(budget) {
-        console.log(budget.title)
-        await deleteDoc(doc(db, 'budget', budget.title))
-      }
-    },
-    components: { AutoImage }
+    // methods: {
+    //   async removeBudget(budget) {
+    //     console.log(budget.title)
+    //     await deleteDoc(doc(db, 'budget', budget.title))
+    //   }
+    // },
+    components: {
+      AutoImage,
+      DeleteComp
+    }
   }
 </script>
 
@@ -40,6 +44,7 @@
         <div class="close-button-r" />
       </div>
     </div>
+    <DeleteComp :test="budget.title" />
   </li>
 </template>
 
