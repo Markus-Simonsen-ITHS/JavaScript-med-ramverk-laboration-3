@@ -112,7 +112,6 @@
 <template>
   <NavBar />
   <WarningComponent :amount-spent="calculateExpenseProgress" />
-
   <div class="account-overview-container">
     <div>
       <p class="account-overview-name">
