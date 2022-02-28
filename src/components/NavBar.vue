@@ -132,7 +132,7 @@
     background-color: #333;
     transition: 0.1s ease;
   }
-  .logo-container {
+  .logo-and-text {
     display: none;
   }
   /* From here the CSS only applies to desktop (over 980px). */
@@ -157,7 +157,7 @@
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
       height: 80px !important;
-      float: none;
+      float: unset;
       position: unset;
       z-index: 0;
 
