@@ -7,6 +7,7 @@
 
     methods: {
       onChecked(checkbox) {
+        console.log('hejsan')
         this.checkbox = checkbox
       }
     },
@@ -42,7 +43,7 @@
         Återkommande Utgifter
       </p>
       <div v-if="status.name === 'Utgifter'" class="aligner">
-        <SliderComp @checkbox="onChecked" />
+        <SliderComp @checkbox="onChecked" :id="'status'" />
       </div>
     </div>
     <p :style="{ display: display }" class="bold-text">

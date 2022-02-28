@@ -34,10 +34,14 @@ const mutations = {
     },
     setBudget(state, budgetArr) {
       state.budget = budgetArr
+    },
+    setTheme(state, theme) {
+      state.theme = theme
     }
   },
   state = {
     user: {},
+    theme: localStorage.getItem('theme') ? localStorage.getItem('theme') : null,
     logoutMessage: false,
     loginError: '',
     income: [
@@ -111,6 +115,13 @@ const mutations = {
         .catch((error) => {
           state.commit('setLoginError', error)
         })
+    },
+    changeTheme(state, theme) {
+      localStorage.setItem('theme', theme)
+
+      console.log('theme', theme)
+
+      state.commit('setTheme', theme)
     },
     async fetchAllIncomeForUser(state, userId) {
       // Creates a query where the id matches the passed userId
@@ -269,6 +280,9 @@ const mutations = {
     },
     getBudget(state) {
       return state.budget
+    },
+    getTheme(state) {
+      return state.theme
     }
   }
 export default createStore({ mutations, state, actions, getters, strict: true })

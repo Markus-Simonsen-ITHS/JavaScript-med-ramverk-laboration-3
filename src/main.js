@@ -23,7 +23,20 @@ auth.onAuthStateChanged((user) => {
     store.dispatch('fetchUser', user.uid)
     store.dispatch('fetchAllIncomeForUser', user.uid)
     store.dispatch('fetchAllExpensesForUser', user.uid)
-  } else {
-    // No user is signed in.
+
+    // Check user theme
+    if (
+      (window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches &&
+        store.getters.getTheme === 'dark') ||
+      !store.getters.getTheme
+    ) {
+      // dark mode
+      store.dispatch('changeTheme', 'dark')
+    } else {
+      // light mode
+      store.dispatch('changeTheme', 'light')
+      // No user is signed in.
+    }
   }
 })
