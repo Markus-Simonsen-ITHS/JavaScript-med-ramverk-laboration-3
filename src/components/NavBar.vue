@@ -35,9 +35,13 @@
   is true it uses the px-value to the left and vice versa. -->
   <div
     class="navbar"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
     :style="{
       width: collapsed ? '35px' : '200px',
-      height: collapsed ? '35px' : '500px'
+      height: collapsed ? '35px' : '590px'
     }"
   >
     <!-- The icon for the menu, if clicked toggles true/false for "collapsed". -->
@@ -46,40 +50,94 @@
       bars, also gets styled depending on "collapsed" with v-bind (:style). -->
       <div
         class="bar1"
+        :class="{
+          'light-hamburger': $store.getters.getTheme === 'light',
+          'dark-hamburger': $store.getters.getTheme === 'dark'
+        }"
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
       <div
         class="bar2"
+        :class="{
+          'light-hamburger': $store.getters.getTheme === 'light',
+          'dark-hamburger': $store.getters.getTheme === 'dark'
+        }"
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
       <div
         class="bar3"
+        :class="{
+          'light-hamburger': $store.getters.getTheme === 'light',
+          'dark-hamburger': $store.getters.getTheme === 'dark'
+        }"
         :style="collapsed ? 'margin-top: 6px' : 'margin: 20px'"
       />
     </div>
     <!-- The links inside the navbar. -->
     <ul>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/">Hem</RouterLink>
       </li>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/history">Historik</RouterLink>
       </li>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/sparande">Sparande</RouterLink>
       </li>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/Debt">Skulder</RouterLink>
       </li>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/settings">Inställningar</RouterLink>
       </li>
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <SliderComp @checkbox="changeTheme" :id="'theme'" />
       </li>
       <!-- When clicking "Logga ut" it takes you to the landing page and also
       runs a method that logs you out. -->
-      <li>
+      <li
+        class="link"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
       </li>
     </ul>
@@ -90,8 +148,6 @@
   /* CSS for the entire navbar, so that is stays on the top right corner
   of the screen. */
   .navbar {
-    color: white;
-    background-color: #e7e7e7;
     box-shadow: 1px 5px 5px 0px #676767;
 
     float: right;
@@ -117,31 +173,44 @@
     margin-top: 0px;
   }
   /* Styles for the links. */
-  li {
+  .link {
     list-style: none;
     padding-bottom: 40px;
     font-size: 25px;
     padding-left: 3px;
   }
-  li a {
+
+  .link a {
+    text-decoration: none;
+    color: inherit;
     padding: 10px;
   }
-  li a:visited {
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-  }
-  li a:link {
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-  }
+
   /* The "Hamburger icon". As mentioned previously, just three bars.  */
   .bar1,
   .bar2,
   .bar3 {
     width: 35px;
     height: 5px;
-    background-color: #333;
+    background-color: inherit;
     transition: 0.1s ease;
+  }
+
+  .light-hamburger {
+    background-color: #333;
+  }
+
+  .dark-hamburger {
+    background-color: white;
+  }
+
+  .light {
+    color: black;
+    /* background-color: #e7e7e7; */
+  }
+  .dark {
+    /* background-color: #2f3136; */
+    color: #8f9296;
   }
   /* From here the CSS only applies to desktop (over 980px). */
   @media (min-width: 980px) {
