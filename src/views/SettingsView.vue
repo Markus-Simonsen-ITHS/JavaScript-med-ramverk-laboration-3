@@ -77,6 +77,7 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
   .actionItem {
     width: 90%;

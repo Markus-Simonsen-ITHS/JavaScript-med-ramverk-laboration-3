@@ -4,6 +4,10 @@
 
 <template>
   <main>
+    <div class="logo-container">
+      <img class="logo" src="Deg-logo final.svg" alt="" />
+      <h1 class="logo-title">DEG</h1>
+    </div>
     <RouterView />
   </main>
 </template>
@@ -18,10 +22,26 @@
     font-weight: 300;
     margin-bottom: 1rem;
   }
-
   p {
     font-size: 1.5rem;
     font-weight: 300;
     margin-bottom: 1rem;
+  }
+  .logo {
+    width: 100px;
+    height: 90px;
+  }
+  .logo-container {
+    display: flex;
+  }
+  .logo-title {
+    margin: 0;
+    font-size: 4rem;
+    margin-left: 20px;
+  }
+  @media (min-width: 980px) {
+    .logo-container {
+      display: none;
+    }
   }
 </style>
