@@ -157,7 +157,6 @@
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
       height: 80px !important;
-      float: unset;
       position: unset;
       z-index: 0;
 
