@@ -49,12 +49,7 @@
     <p class="smaller-text align-start">Budget</p>
     <p class="smaller-text align-end">{{ budget.amount }} kr</p>
     <!-- <p class="remove-btn" @click="removeBudget(budget)">X</p> -->
-    <div id="close-button" @click="removeBudget(budget)">
-      <div class="close-button">
-        <div class="close-button-r" />
-      </div>
-    </div>
-    <DeleteComp :test="budget.title" />
+    <DeleteComp :collection-item="budget.title" :collection="'budget'" />
   </li>
 </template>
 

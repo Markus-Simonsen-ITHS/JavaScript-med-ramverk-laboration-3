@@ -94,6 +94,10 @@
     <div class="expenses-card">
       <ol id="category-expenses">
         <li v-for="expense in expenses" :key="expense">
+          <DeleteComp
+            :collection-item="expense.expenseId"
+            :collection="'utgift'"
+          />
           <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
           {{ expense.category }}
           <h5
@@ -107,7 +111,6 @@
 
           {{ expense.title }}
           {{ expense.amount }} kr
-          <DeleteComp :test="expense.expenseId" />
           {{ expense.expenseId }}
         </li>
       </ol>
