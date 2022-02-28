@@ -44,28 +44,34 @@
       />
     </div>
     <!-- The links inside the navbar. -->
-    <ul>
-      <li>
-        <RouterLink to="/">Hem</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/history">Historik</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/sparande">Sparande</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/Debt">Skulder</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/settings">Inställningar</RouterLink>
-      </li>
-      <!-- When clicking "Logga ut" it takes you to the landing page and also
+    <div class="logo-container">
+      <div class="logo-and-text">
+        <img class="logo" src="Deg-logo final.svg" alt="" />
+        <h1 class="logo-title">DEG</h1>
+      </div>
+      <ul>
+        <li>
+          <RouterLink to="/">Hem</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/history">Historik</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/sparande">Sparande</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/Debt">Skulder</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/settings">Inställningar</RouterLink>
+        </li>
+        <!-- When clicking "Logga ut" it takes you to the landing page and also
       runs a method that logs you out. -->
-      <li>
-        <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
-      </li>
-    </ul>
+        <li>
+          <RouterLink to="/Landing" @click="signOut">Logga ut</RouterLink>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -126,8 +132,21 @@
     background-color: #333;
     transition: 0.1s ease;
   }
+  .logo-and-text {
+    display: none;
+  }
   /* From here the CSS only applies to desktop (over 980px). */
   @media (min-width: 980px) {
+    .logo-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .logo-title {
+      color: black;
+    }
+    .logo-and-text {
+      display: flex;
+    }
     .container {
       display: none;
     }
@@ -138,7 +157,6 @@
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
       height: 80px !important;
-      float: none;
       position: unset;
       z-index: 0;
 

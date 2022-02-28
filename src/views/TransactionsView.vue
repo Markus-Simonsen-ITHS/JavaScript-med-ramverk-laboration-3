@@ -1,29 +1,32 @@
 <script>
-  import { db } from '../firebase'
-  import { collection, getDocs, query, where } from 'firebase/firestore'
+  // import { db } from '../firebase'
+  // import { collection, getDocs, query, where } from 'firebase/firestore'
   import NavBar from '../components/NavBar.vue'
   import ChartComp from '../components/ChartComp.vue'
   import FilterComponent from '../components/history/FilterComponent.vue'
+  import DeleteComp from '../components/home/DeleteComp.vue'
 
   export default {
     components: {
       NavBar,
       ChartComp,
-      FilterComponent
+      FilterComponent,
+      DeleteComp
     },
     methods: {
       goToAddView() {
         this.$router.push('/add')
       },
+
       async fetchexpense() {
-        const userId = this.$store.getters.getUser.id
-        const q = query(collection(db, 'utgift'), where('id', '==', userId))
-        const userExpenses = []
-        const allExpenses = await getDocs(q)
-        allExpenses.forEach((expense) => {
-          userExpenses.push(expense.data())
-        })
-        this.expenses = userExpenses
+        // const userId = this.$store.getters.getUser.id
+        // const q = query(collection(db, 'utgift'), where('id', '==', userId))
+        // const userExpenses = []
+        // const allExpenses = await getDocs(q)
+        // allExpenses.forEach((expense) => {
+        //   userExpenses.push(expense.data())
+        // })
+        this.expenses = this.$store.getters.getExpenses
       },
       // Defines which view is to be displayed, default is list
       setView(view) {
@@ -47,7 +50,7 @@
     },
     data() {
       return {
-        expenses: [],
+        // expenses: [],
         view: 'list',
         itemStatus: 'reoccurring',
         timeFilter: 'oneMonth'
@@ -56,6 +59,9 @@
     computed: {
       budgets() {
         return this.$store.getters.getBudget
+      },
+      expenses() {
+        return this.$store.getters.getExpenses
       }
     }
   }
@@ -88,6 +94,10 @@
     <div class="expenses-card">
       <ol id="category-expenses">
         <li v-for="expense in expenses" :key="expense">
+          <DeleteComp
+            :collection-item="expense.expenseId"
+            :collection="'utgift'"
+          />
           <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
           {{ expense.category }}
           <h5
@@ -101,6 +111,7 @@
 
           {{ expense.title }}
           {{ expense.amount }} kr
+          {{ expense.expenseId }}
         </li>
       </ol>
     </div>

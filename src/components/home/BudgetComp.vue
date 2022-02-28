@@ -72,9 +72,7 @@
 
 <template>
   <!-- The form to add the budget, also the button to submit the budget -->
-  <RouterLink to="/"
-    ><input class="buttons" type="button" value="Avbryt"
-  /></RouterLink>
+
   <div class="container">
     <h1>Lägg till budget:</h1>
     <form>
@@ -108,6 +106,11 @@
           Lägg till
         </button>
       </div>
+      <div class="cancel">
+        <RouterLink to="/"
+          ><input class="buttons" type="button" value="Avbryt"
+        /></RouterLink>
+      </div>
     </form>
   </div>
 </template>
@@ -127,6 +130,7 @@
     border: none;
     margin-bottom: 10px;
     font-size: 20px;
+    text-align: center;
   }
   .button-container {
     margin-top: 10px;
@@ -149,5 +153,23 @@
     color: red;
     margin-bottom: 10px;
     align-self: center;
+  }
+  .cancel {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  @media (min-width: 980px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+    form {
+      width: 500px;
+    }
+    h1 {
+      display: flex;
+      justify-content: center;
+    }
   }
 </style>

@@ -288,6 +288,10 @@
     border: none;
     margin-bottom: 5px;
   }
+  #budget-button {
+    display: flex;
+    justify-content: center;
+  }
   @media screen and (min-width: 700px) {
     .warning-card {
       width: 50%;
