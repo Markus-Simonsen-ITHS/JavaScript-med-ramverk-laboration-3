@@ -3,16 +3,24 @@
   import { db } from '../../firebase'
   import AutoImage from '../AutoImage.vue'
   export default {
+    emits: ['setActiveBudget'],
     props: {
       budget: {
         required: true,
         type: Object
+      },
+      activeBudget: {
+        type: Object,
+        required: true
       }
     },
     methods: {
       async removeBudget(budget) {
         console.log(budget.title)
         await deleteDoc(doc(db, 'budget', budget.title))
+      },
+      setActiveBudget() {
+        this.$emit('setActiveBudget', this.budget)
       }
     },
     components: { AutoImage }
@@ -20,10 +28,12 @@
 </script>
 
 <template>
-  <li class="expense-category">
+  <li
+    class="expense-category"
+    :class="{ active: budget.budgetId === activeBudget.budgetId }"
+    @click="setActiveBudget"
+  >
     <div class="category-img-container">
-      <!-- Placeholder img -->
-      <!-- <img src="../../../assets/fox.jpeg" alt="Fox" /> -->
       <AutoImage :category-name="budget.title ? budget.title : 'Övrigt'" />
     </div>
     <p class="bold-text align-start">
@@ -33,7 +43,7 @@
       {{ budget.amountSpent ? budget.amountSpent : 0 }} kr
     </p>
     <p class="smaller-text align-start">Budget</p>
-    <p class="smaller-text align-end">{{ budget.sum }} kr</p>
+    <p class="smaller-text align-end">{{ budget.amount }} kr</p>
     <!-- <p class="remove-btn" @click="removeBudget(budget)">X</p> -->
     <div id="close-button" @click="removeBudget(budget)">
       <div class="close-button">
@@ -104,6 +114,13 @@
     padding: 16px;
     align-self: center;
     justify-self: end;
+  }
+
+  .active {
+    /* border: 1px solid black; */
+    color: white;
+    background-color: #404040;
+    box-shadow: 1px 1px 5px 1px #676767;
   }
 
   @media screen and (min-width: 700px) {
