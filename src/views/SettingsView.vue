@@ -1,9 +1,11 @@
 <script>
   import NavBar from '../components/NavBar.vue'
+  import SliderComp from '../components/home/SliderComp.vue'
 
   export default {
     components: {
-      NavBar
+      NavBar,
+      SliderComp
     },
     methods: {
       changePassword() {
@@ -18,6 +20,15 @@
           email: this.$store.getters.getUser.email,
           password: this.password
         })
+      },
+      changeTheme() {
+        let theme
+        if (this.$store.getters.getTheme === 'dark') {
+          theme = 'light'
+        } else {
+          theme = 'dark'
+        }
+        this.$store.dispatch('changeTheme', theme)
       }
     }
   }
@@ -64,6 +75,10 @@
       <button @click="deleteAccount">Delete account</button>
       <br />
       <br />
+    </div>
+    <div class="theme-container">
+      Dark theme:
+      <SliderComp @checkbox="changeTheme" :id="'theme'" />
     </div>
   </div>
 </template>

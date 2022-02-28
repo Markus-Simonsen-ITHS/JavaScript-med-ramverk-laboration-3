@@ -1,6 +1,4 @@
 <script>
-  import SliderComp from './home/SliderComp.vue'
-
   export default {
     data() {
       return {
@@ -13,19 +11,7 @@
       // A method that sign you out when triggered (see "Logga ut" router link).
       signOut() {
         this.$store.dispatch('logOut')
-      },
-      changeTheme() {
-        let theme
-        if (this.$store.getters.getTheme === 'dark') {
-          theme = 'light'
-        } else {
-          theme = 'dark'
-        }
-        this.$store.dispatch('changeTheme', theme)
       }
-    },
-    components: {
-      SliderComp
     }
   }
 </script>
@@ -119,15 +105,6 @@
         }"
       >
         <RouterLink to="/settings">Inställningar</RouterLink>
-      </li>
-      <li
-        class="link"
-        :class="{
-          light: $store.getters.getTheme === 'light',
-          dark: $store.getters.getTheme === 'dark'
-        }"
-      >
-        <SliderComp @checkbox="changeTheme" :id="'theme'" />
       </li>
       <!-- When clicking "Logga ut" it takes you to the landing page and also
       runs a method that logs you out. -->
