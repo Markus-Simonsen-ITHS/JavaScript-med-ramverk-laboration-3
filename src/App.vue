@@ -39,7 +39,7 @@
     font-size: 4rem;
     margin-left: 20px;
   }
-  @media (min-width: 980px) {
+  @media (min-width: 950px) {
     .logo-container {
       display: none;
     }

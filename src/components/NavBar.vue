@@ -136,7 +136,7 @@
     display: none;
   }
   /* From here the CSS only applies to desktop (over 980px). */
-  @media (min-width: 980px) {
+  @media (min-width: 950px) {
     .logo-container {
       display: flex;
       justify-content: space-between;
