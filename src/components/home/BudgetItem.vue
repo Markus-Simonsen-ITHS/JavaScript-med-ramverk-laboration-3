@@ -19,6 +19,7 @@
       async removeBudget(budget) {
         console.log(budget.title)
         await deleteDoc(doc(db, 'budget', budget.title))
+        this.$store.dispatch('fetchBudgetsForUser', this.$store.state.user.id)
       },
       setActiveBudget() {
         this.$emit('setActiveBudget', this.budget)

@@ -30,6 +30,7 @@
         }
         setDoc(doc(db, 'budget', this.title), docData)
         this.$router.push('/')
+        this.$store.dispatch('fetchBudgetsForUser', this.$store.state.user.id)
       },
       isTitleValid() {
         if (!this.title) {
