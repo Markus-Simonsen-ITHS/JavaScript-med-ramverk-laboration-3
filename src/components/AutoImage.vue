@@ -34,7 +34,7 @@
     },
     mounted() {
       console.log('categoryName changed')
-      let canvas = document.querySelector('#canvas')
+      let canvas = this.$refs.canvasRef
       let ctx = canvas.getContext('2d')
 
       ctx.fillStyle = this.getRandomColor(this.categoryName).color
@@ -51,7 +51,7 @@
 </script>
 
 <template>
-  <canvas width="250" height="250" id="canvas" />
+  <canvas ref="canvasRef" width="250" height="250" id="canvas" />
 </template>
 
 <style scoped>
