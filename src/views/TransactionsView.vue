@@ -36,7 +36,7 @@
       <img src="../../assets/fox.jpeg" alt="deg logo" />
       <p class="budget-title">{{ budget.title }}</p>
       <p class="budget-sum">budget:</p>
-      <p class="budget-sum-self">{{ budget.sum }} kr</p>
+      <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
       <div v-for="expense in expenses" :key="expense">
         <DeleteComp
