@@ -156,7 +156,13 @@
     ><input class="buttons" type="button" value="Lägg till budget"
   /></RouterLink>
 
-  <div class="status-container">
+  <div
+    class="status-container"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
     <StatusItem
       :key="totalExpenses.name"
@@ -164,14 +170,26 @@
       :expenses="reocurringExpenses"
     />
   </div>
-  <div class="overview-container">
+  <div
+    class="overview-container"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <h1>Översikt</h1>
     <div class="links">
       <router-link to="/history">Historik</router-link>
       <router-link to="/debt">Skuld</router-link>
     </div>
   </div>
-  <ul class="category-list">
+  <ul
+    class="category-list"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <BudgetItem
       v-for="budgetItem in budgets"
       :key="budgetItem.budgetId"
@@ -180,11 +198,14 @@
       @set-active-budget="setActiveBudget"
     />
   </ul>
-  <ul class="category-list">
-    <li class="add-category-container">
-      <div class="add-category-button" @click="goToAddPage" />
-      <p>Lägg till</p>
-    </li>
+  <ul
+    class="category-list"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
+    <button @click="goToAddPage">Lägg till en utgift</button>
   </ul>
 </template>
 
@@ -209,8 +230,8 @@
 
   .overview-container a {
     text-decoration: none;
-    color: #606060;
-    background-color: #c4c4c4;
+    color: white;
+    background-color: #5969ea;
     border-radius: 20px;
     align-self: center;
     justify-self: end;
@@ -222,57 +243,16 @@
     display: grid;
     gap: 20px;
   }
+  .category-list button {
+    background-color: #5969ea;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
 
-  .add-category-container {
-    background-color: #e7e7e7;
-    border-radius: 5px;
-    list-style: none;
-    display: grid;
-    grid-template-columns: 0.5fr 1fr;
-    padding: 10px 0;
-  }
-  .add-category-container p {
-    align-self: center;
-  }
-  /* Add-button */
-  .add-category-button {
-    background-color: #c4c4c4;
-    border-radius: 10px;
-    width: 70px;
-    height: 70px;
-    align-self: center;
-    justify-self: center;
-    position: relative;
-  }
-  /* The horizontal line */
-  .add-category-button::after {
-    content: ' ';
-    border-radius: 10px;
-    position: absolute;
-    display: block;
-    background-color: #000;
-    height: 2px;
-    top: 50%;
-    left: 20px;
-    right: 20px;
-    z-index: 9;
-  }
-  /* The vertical line */
-  .add-category-button::before {
-    content: ' ';
-    border-radius: 10px;
-    position: absolute;
-    display: block;
-    background-color: #000;
-    width: 2px;
-    left: 50%;
-    top: 20px;
-    bottom: 20px;
-    z-index: 9;
-  }
-  .add-category-container p {
-    font-weight: bold;
-  }
   .links {
     display: flex;
     gap: 15px;
@@ -280,7 +260,7 @@
     align-items: center;
   }
   .buttons {
-    background-color: #292929;
+    background-color: #5969ea;
     color: #fff;
     border-radius: 100px;
     font-size: 16px;

@@ -133,7 +133,7 @@
     justify-items: center;
   }
   .buttons {
-    background-color: #292929;
+    background-color: #5969ea;
     color: #fff;
     border-radius: 100px;
     font-size: 16px;

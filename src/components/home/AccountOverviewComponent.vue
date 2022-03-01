@@ -14,7 +14,13 @@
 </script>
 
 <template>
-  <div class="account-overview-container">
+  <div
+    class="account-overview-container"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <div>
       <p class="account-overview-name">
         {{ budget ? budget.title : 'Laddar' }}
@@ -57,7 +63,7 @@
     border-radius: 10px;
   }
   .account-progress-bar {
-    background-color: #212121;
+    background-color: #5969ea;
     border-radius: 10px;
     height: 100%;
     width: 70%;

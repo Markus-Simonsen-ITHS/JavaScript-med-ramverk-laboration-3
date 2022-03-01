@@ -3,7 +3,13 @@
 </script>
 
 <template>
-  <main>
+  <main
+    class="app-main"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <RouterView />
   </main>
 </template>
@@ -12,6 +18,16 @@
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
   * {
     font-family: 'Roboto', sans-serif;
+  }
+  body {
+    margin: 0;
+    height: 100vh;
+  }
+  #app {
+    height: 100%;
+  }
+  .app-main {
+    height: 100%;
   }
   h1 {
     font-size: 2.5rem;
@@ -27,10 +43,10 @@
 
   .light {
     color: black;
-    background-color: #e7e7e7;
+    background-color: #f2f2f2;
   }
   .dark {
-    background-color: #2f3136;
-    color: #8f9296;
+    background-color: #37393e;
+    color: #fff;
   }
 </style>

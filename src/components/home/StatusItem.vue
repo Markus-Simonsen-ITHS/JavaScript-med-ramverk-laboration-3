@@ -7,7 +7,6 @@
 
     methods: {
       onChecked(checkbox) {
-        console.log('hejsan')
         this.checkbox = checkbox
       }
     },
@@ -32,7 +31,13 @@
 </script>
 
 <template>
-  <div class="status-card">
+  <div
+    class="status-card"
+    :class="{
+      income: status.name === 'Intäkter',
+      expenses: status.name === 'Utgifter'
+    }"
+  >
     <div class="flexer">
       <span :style="{ display: display }">
         <p>
@@ -65,6 +70,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    color: white;
   }
 
   .status-card {
@@ -89,5 +95,11 @@
   }
   .aligner {
     margin-top: 6px;
+  }
+  .income {
+    background: linear-gradient(0.25turn, #5969ea, #6bf098);
+  }
+  .expenses {
+    background: linear-gradient(0.25turn, #ea6a59, #a378ea);
   }
 </style>
