@@ -205,12 +205,6 @@
 </script>
 
 <template>
-  <!-- <div
-    :class="{
-      light: $store.getters.getTheme === 'light',
-      dark: $store.getters.getTheme === 'dark'
-    }"
-  > -->
   <h1>Avbetalning av skuld</h1>
   <div
     :class="{
@@ -331,7 +325,6 @@
       </div>
     </form>
   </div>
-  <!-- </div> -->
 </template>
 
 <style scoped>

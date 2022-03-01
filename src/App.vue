@@ -23,11 +23,12 @@
     margin: 0;
     height: 100vh;
   }
+
   #app {
-    height: 100%;
+    min-height: 100%;
   }
   .app-main {
-    height: 100%;
+    min-height: 100vh;
   }
   h1 {
     font-size: 2.5rem;
