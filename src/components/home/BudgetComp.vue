@@ -159,10 +159,18 @@
     justify-content: center;
     margin-top: 10px;
   }
-  @media (min-width: 980px) {
+  @media (min-width: 950px) {
     .container {
       display: flex;
       flex-direction: column;
+      width: 100%;
+    }
+  }
+  @media (min-width: 700px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
     }
     form {
       width: 500px;
