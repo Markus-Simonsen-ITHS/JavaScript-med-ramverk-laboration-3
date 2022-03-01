@@ -42,11 +42,23 @@
   }
 
   .light {
-    color: black;
+    color: #202225;
+
     background-color: #f2f2f2;
   }
+
+  .light form {
+    color: #202225;
+    background-color: #e5e5e5;
+  }
+
   .dark {
     background-color: #37393e;
-    color: #fff;
+    color: #e5e5e5;
+  }
+
+  .dark form {
+    background-color: #2f3136;
+    color: #e5e5e5;
   }
 </style>

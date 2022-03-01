@@ -205,110 +205,119 @@
 </script>
 
 <template>
-  <h1>Avbetalning av skuld</h1>
-  <div :class="{ modal: true, active: active }">
-    <!-- ^ a modal which covers the screen to allow the user confirm removal of debt or payment of debt -->
-    <div class="modalHeader">
-      <p class="titleText">Varning:</p>
-      <button @click="closePopUp">&times;</button>
-    </div>
-    <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
-    <div class="modalButtons">
-      <input type="button" value="Ja" @click="removeData" />
-      <input type="button" value="Nej" @click="closePopUp" />
-    </div>
-  </div>
-  <div :class="{ overlay: true, active: active }" @click="closePopUp" />
-  <ul>
-    <li><h2>Skulder:</h2></li>
-    <li v-if="this.debts.length === 0">
-      <p class="titleText">Du har inga skulder</p>
-    </li>
-    <li v-else :key="entry.title" v-for="(entry, index) in this.debts">
-      <p class="titleText">
-        <span class="title">{{ entry.title }}</span>
-      </p>
-      <p class="smallText">Initial skuld: {{ entry.amount }}</p>
-      <p class="smallText" v-if="entry.payOffDebt">
-        Resterande skuld: {{ entry.amount - entry.payOffDebt }}
-      </p>
-      <div class="barContainer" :style="{ display: toggle }">
-        <div
-          class="debtBar"
-          :style="{ width: debtBar(entry.amount, entry.payOffDebt) }"
-        />
+  <div
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
+    <h1>Avbetalning av skuld</h1>
+    <div :class="{ modal: true, active: active }">
+      <!-- ^ a modal which covers the screen to allow the user confirm removal of debt or payment of debt -->
+      <div class="modalHeader">
+        <p class="titleText">Varning:</p>
+        <button @click="closePopUp">&times;</button>
       </div>
-      <div class="flexer">
-        <p class="smallText" v-if="entry.payOffDebt">
-          Avbetalning varje månad: {{ entry.payOffDebt }}
+      <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
+      <div class="modalButtons">
+        <input type="button" value="Ja" @click="removeData" />
+        <input type="button" value="Nej" @click="closePopUp" />
+      </div>
+    </div>
+    <div :class="{ overlay: true, active: active }" @click="closePopUp" />
+    <ul>
+      <li><h2>Skulder:</h2></li>
+      <li v-if="this.debts.length === 0">
+        <p class="titleText">Du har inga skulder</p>
+      </li>
+      <li v-else :key="entry.title" v-for="(entry, index) in this.debts">
+        <p class="titleText">
+          <span class="title">{{ entry.title }}</span>
         </p>
-        <div class="listButtons">
-          <input
-            type="button"
-            data-modal-target=".modal"
-            class="button buttonDebt"
-            @click="buttonValue($event, index)"
-            value="Ta bort skuld"
-          />
-          <input
-            v-if="entry.payOffDebt"
-            type="button"
-            data-modal-target=".modal"
-            class="button buttonPayment"
-            @click="buttonValue($event, index)"
-            value="Ta bort avbetalning"
+        <p class="smallText">Initial skuld: {{ entry.amount }}</p>
+        <p class="smallText" v-if="entry.payOffDebt">
+          Resterande skuld: {{ entry.amount - entry.payOffDebt }}
+        </p>
+        <div class="barContainer" :style="{ display: toggle }">
+          <div
+            class="debtBar"
+            :style="{ width: debtBar(entry.amount, entry.payOffDebt) }"
           />
         </div>
-      </div>
-    </li>
-  </ul>
-  <div class="container">
-    <form @submit.prevent="">
-      <p class="titleText">Lägg till skuld:</p>
-      <input type="text" v-model="title" placeholder="Anteckning" />
-      <input type="text" v-model="amount" placeholder="Mängd" />
-      <input type="text" v-model="interest" placeholder="Ränta " />
-      <input type="date" v-model="date" placeholder="Datum" />
-      <div class="button-container">
-        <input
-          type="submit"
-          value="Lägg till"
-          @click="submitDebt"
-          @keyup.enter="submitDebt"
-        />
-        <input type="button" value="Rensa fälten" @click="clearFieldsDebt" />
-      </div>
-    </form>
-    <form @submit.prevent="">
-      <p class="titleText">
-        Vill du börja med avbetalning av en av dina skulder varje månad, eller
-        ändra på nuvarande avbetalning?
-      </p>
-      <select v-if="this.debts[0] === undefined">
-        <option>Du har inga skulder</option>
-      </select>
-      <select v-else @change="onChange($event)">
-        <option>Välj skuld...</option>
-        <option :key="entry" :value="entry.title" v-for="entry in this.debts">
-          {{ entry.title }}
-        </option>
-      </select>
-      <input type="text" v-model="payOffDebt" placeholder="Mängd" />
-      <p class="note">Notera: avbetalningen listas som en återkommand utgift</p>
-      <div class="button-container">
-        <input
-          type="submit"
-          value="Lägg till"
-          @click="submitPayOffDebt"
-          @keyup.enter="submitPayOffDebt"
-        />
-        <input
-          type="button"
-          value="Rensa fälten"
-          @click="clearFieldsPayOffDebt"
-        />
-      </div>
-    </form>
+        <div class="flexer">
+          <p class="smallText" v-if="entry.payOffDebt">
+            Avbetalning varje månad: {{ entry.payOffDebt }}
+          </p>
+          <div class="listButtons">
+            <input
+              type="button"
+              data-modal-target=".modal"
+              class="button buttonDebt"
+              @click="buttonValue($event, index)"
+              value="Ta bort skuld"
+            />
+            <input
+              v-if="entry.payOffDebt"
+              type="button"
+              data-modal-target=".modal"
+              class="button buttonPayment"
+              @click="buttonValue($event, index)"
+              value="Ta bort avbetalning"
+            />
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="container">
+      <form @submit.prevent="">
+        <p class="titleText">Lägg till skuld:</p>
+        <input type="text" v-model="title" placeholder="Anteckning" />
+        <input type="text" v-model="amount" placeholder="Mängd" />
+        <input type="text" v-model="interest" placeholder="Ränta " />
+        <input type="date" v-model="date" placeholder="Datum" />
+        <div class="button-container">
+          <input
+            type="submit"
+            value="Lägg till"
+            @click="submitDebt"
+            @keyup.enter="submitDebt"
+          />
+          <input type="button" value="Rensa fälten" @click="clearFieldsDebt" />
+        </div>
+      </form>
+      <form @submit.prevent="">
+        <p class="titleText">
+          Vill du börja med avbetalning av en av dina skulder varje månad, eller
+          ändra på nuvarande avbetalning?
+        </p>
+        <select v-if="this.debts[0] === undefined">
+          <option>Du har inga skulder</option>
+        </select>
+        <select v-else @change="onChange($event)">
+          <option>Välj skuld...</option>
+          <option :key="entry" :value="entry.title" v-for="entry in this.debts">
+            {{ entry.title }}
+          </option>
+        </select>
+        <input type="text" v-model="payOffDebt" placeholder="Mängd" />
+        <p class="note">
+          Notera: avbetalningen listas som en återkommand utgift
+        </p>
+        <div class="button-container">
+          <input
+            type="submit"
+            value="Lägg till"
+            @click="submitPayOffDebt"
+            @keyup.enter="submitPayOffDebt"
+          />
+          <input
+            type="button"
+            value="Rensa fälten"
+            @click="clearFieldsPayOffDebt"
+          />
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -383,7 +392,6 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #e7e7e7;
     border-radius: 8px;
     width: 70%;
     max-width: 630px;
