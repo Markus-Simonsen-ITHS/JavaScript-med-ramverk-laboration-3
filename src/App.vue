@@ -26,11 +26,22 @@
   }
 
   .light {
-    color: black;
-    background-color: #e7e7e7;
+    color: #202225;
+    background-color: #f2f2f2;
   }
+
+  .light form {
+    color: #202225;
+    background-color: #e5e5e5;
+  }
+
   .dark {
+    background-color: #37393e;
+    color: #e5e5e5;
+  }
+
+  .dark form {
     background-color: #2f3136;
-    color: #8f9296;
+    color: #e5e5e5;
   }
 </style>
