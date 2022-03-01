@@ -34,7 +34,7 @@
         id="list"
         @click="setView"
       >
-        Lista
+        <router-link to="/history/list"> Lista</router-link>
       </div>
       <div
         class="filter-button"
@@ -42,7 +42,7 @@
         id="chart"
         @click="setView"
       >
-        Diagram
+        <router-link to="/history/chart"> Diagram</router-link>
       </div>
       <div
         class="filter-button"
@@ -50,7 +50,7 @@
         id="calendar"
         @click="setView"
       >
-        Kalender
+        <router-link to="/history/calender"> Kalender</router-link>
       </div>
     </div>
     <select v-model="reoccurringSelect" @change="changeItemStatus">
@@ -63,6 +63,7 @@
       <option value="oneYear">1 år</option>
     </select>
   </div>
+  <router-view />
 </template>
 
 <style scoped>
