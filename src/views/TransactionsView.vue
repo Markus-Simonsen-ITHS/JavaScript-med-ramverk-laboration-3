@@ -1,8 +1,12 @@
 <script>
   import { db } from '../firebase'
   import { collection, getDocs, query, where } from 'firebase/firestore'
+  import DeleteComp from '../components/home/DeleteComp.vue'
 
   export default {
+    components: {
+      DeleteComp
+    },
     methods: {
       async fetchexpense() {
         const userId = this.$store.getters.getUser.id
@@ -27,6 +31,9 @@
     computed: {
       budgets() {
         return this.$store.getters.getBudget
+      },
+      expenses() {
+        return this.$store.getters.getExpenses
       }
     }
   }
@@ -50,6 +57,10 @@
       <p class="budget-sum-self">{{ budget.sum }} kr</p>
 
       <div v-for="expense in expenses" :key="expense">
+        <DeleteComp
+          :collection-item="expense.expenseId"
+          :collection="'utgift'"
+        />
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
         </p>

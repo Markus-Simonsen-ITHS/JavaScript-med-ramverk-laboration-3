@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
-import { Chart, registerables } from 'chart.js'
-Chart.register(...registerables)
 import App from './App.vue'
 import { auth } from './firebase'
 import router from './router'
 import store from './store'
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
 
 // Initialize app
 let app
@@ -23,7 +23,6 @@ auth.onAuthStateChanged((user) => {
     store.dispatch('fetchUser', user.uid)
     store.dispatch('fetchAllIncomeForUser', user.uid)
     store.dispatch('fetchAllExpensesForUser', user.uid)
-    store.dispatch('fetchBudgetsForUser', user.uid)
   } else {
     // No user is signed in.
   }

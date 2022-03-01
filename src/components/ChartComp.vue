@@ -17,23 +17,23 @@
       }
     },
     props: {
-      data: {
+      dataB: {
         type: Object,
         required: true
       }
     },
     watch: {
-      data() {
+      dataB() {
         let labelArrayVar = []
         let krArrayVar = []
-        for (let index = 0; index < this.data.length; index++) {
-          const element = this.data[index]
-          const cetegory = element.category
-          if (this.findInArray(labelArrayVar, cetegory) != -1) {
-            krArrayVar[this.findInArray(labelArrayVar, cetegory)] +=
+        for (let index = 0; index < this.dataB.length; index++) {
+          const element = this.dataB[index]
+          const category = element.category
+          if (this.findInArray(labelArrayVar, category) != -1) {
+            krArrayVar[this.findInArray(labelArrayVar, category)] +=
               element.amount
           } else {
-            labelArrayVar.push(cetegory)
+            labelArrayVar.push(category)
             krArrayVar.push(element.amount)
           }
         }

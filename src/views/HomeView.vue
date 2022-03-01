@@ -1,13 +1,17 @@
 <script>
+  import moment from 'moment'
+
   import BudgetItem from '../components/home/BudgetItem.vue'
   import StatusItem from '../components/home/StatusItem.vue'
   import NavBar from '../components/NavBar.vue'
-  import BudgetComp from '../components/home/BudgetComp.vue'
+  import WarningComponent from '../components/home/WarningComponent.vue'
+  import AccountOverviewComponent from '../components/home/AccountOverviewComponent.vue'
 
   export default {
     data() {
       return {
-        toggle: true
+        toggle: true,
+        activeBudget: { id: null }
       }
     },
     methods: {
@@ -16,25 +20,50 @@
       },
       closeButton() {
         this.toggle = false
+      },
+      setActiveBudget(budget) {
+        this.activeBudget = budget
+        localStorage.setItem('activeBudget', JSON.stringify(budget.budgetId))
+      },
+      checkLocalStorage() {
+        const localStorageActiveBudget = JSON.parse(
+          localStorage.getItem('activeBudget')
+        )
+        if (localStorageActiveBudget) {
+          let activeBudgetTemp = this.budgets.find(
+            (budget) => budget.budgetId === localStorageActiveBudget
+          )
+          this.activeBudget = activeBudgetTemp
+            ? activeBudgetTemp
+            : this.budgets[0]
+        } else {
+          console.log(this.budgets[0])
+          this.activeBudget = this.budgets[0]
+        }
       }
     },
     computed: {
       // Calculates percentage of the budget, used in progress-bar as width
       calculateExpenseProgress() {
-        if (this.budgets.length > 2) {
-          const spent = this.budgets[1].amountSpent
-          const budget = this.budgets[1].sum
+        if (this.activeBudget.amountSpent) {
+          if (this.activeBudget.amountSpent > this.activeBudget.amount)
+            return 100
+          const spent = this.activeBudget.amountSpent
+          const budget = this.activeBudget.amount
           const progress = (100 * spent) / budget
-          return progress + '%'
+          return progress
         } else {
-          return '0%'
+          return 0
         }
       },
       // Gets all income from the store and calculates the total amount
       totalIncome() {
         let income = { name: 'Intäkter', amount: 0 }
         this.$store.getters.getIncome.forEach((incomeObject) => {
-          income.amount += parseInt(incomeObject.amount)
+          // Checking if the date of the income is the same month as today
+          if (moment(incomeObject.date).isSame(new Date(), 'month')) {
+            income.amount += parseInt(incomeObject.amount)
+          }
         })
         return income
       },
@@ -42,66 +71,98 @@
       totalExpenses() {
         let expenses = { name: 'Utgifter', amount: 0 }
         this.$store.getters.getExpenses.forEach((expenseObject) => {
-          expenses.amount += parseInt(expenseObject.amount)
+          // Checking if the date of the expense is the same month as today
+          if (moment(expenseObject.date).isSame(new Date(), 'month')) {
+            expenses.amount += parseInt(expenseObject.amount)
+          }
         })
         return expenses
       },
+      reocurringExpenses() {
+        // ^ fetches reocurring expense data from the store and calculates the total amount
+        let expensesRe = 0
+        this.$store.getters.getExpensesReocurring.forEach((expenseObject) => {
+          expensesRe += parseInt(expenseObject.amount)
+        })
+        return expensesRe
+      },
+      // Recieves all budgets from the store and filters so that only expenses
+      // which are from this month is displayed
       budgets() {
-        return this.$store.getters.getBudget
+        // creating new array to store the expenses
+        const budgets = []
+        // looping through all budgets in the store
+        this.$store.getters.getBudget.forEach((budget) => {
+          // Pushing each budget to the new array
+          budgets.push({
+            title: budget.title,
+            items: [],
+            amountSpent: 0,
+            amount: budget.amount,
+            budgetId: budget.budgetId
+          })
+
+          // Checking if budget.expenses exists
+          if (budget.expenses) {
+            // looping through all expenses in each budget
+            budget.expenses.forEach((item) => {
+              // Checking which index the budget is in new array
+              const foundIndex = budgets.findIndex(
+                (_budget) => _budget.title === budget.title
+              )
+              // If the expense is in the same month as today, add to created
+              // budget array
+              if (moment(item.date).isSame(new Date(), 'month')) {
+                budgets[foundIndex].amountSpent =
+                  parseInt(budgets[foundIndex].amountSpent) +
+                  parseInt(item.amount)
+                budgets[foundIndex].items.push(item)
+              }
+            })
+          }
+        })
+
+        return budgets
+      }
+    },
+    mounted() {
+      this.checkLocalStorage()
+    },
+    watch: {
+      budgets() {
+        this.checkLocalStorage()
       }
     },
     components: {
       BudgetItem,
       StatusItem,
       NavBar,
-      BudgetComp
+
+      WarningComponent,
+      AccountOverviewComponent
     }
   }
 </script>
 
 <template>
   <NavBar />
-  <BudgetComp />
-  <div class="warning-container" v-if="this.toggle === true">
-    <div
-      class="warning-card"
-      v-if="
-        this.calculateExpenseProgress === '50%' ||
-        this.calculateExpenseProgress === '25%'
-      "
-    >
-      <p>Varning, Lorem ipsum dolor sit amet!</p>
-      <div id="close-button" @click="closeButton">
-        <div class="close-button">
-          <div class="close-button-r" />
-        </div>
-      </div>
-    </div>
-  </div>
+  <WarningComponent :amount-spent="calculateExpenseProgress" />
+  <AccountOverviewComponent
+    :budget="activeBudget"
+    :expense-progress="calculateExpenseProgress"
+  />
 
-  <div class="account-overview-container">
-    <div>
-      <p class="account-overview-name">
-        {{ budgets.length > 2 ? budgets[1].title : 'Laddar' }}
-      </p>
-      <p class="account-amount-spent">
-        {{ budgets.length > 2 ? budgets[1].amountSpent : 0 }} kr
-      </p>
-      <div class="account-progress-container">
-        <div
-          class="account-progress-bar"
-          :style="{ width: calculateExpenseProgress }"
-        />
-      </div>
-      <p class="account-budget">
-        Budget: {{ budgets.length > 2 ? budgets[1].sum : 0 }} kr
-      </p>
-    </div>
-  </div>
+  <RouterLink to="/Budget"
+    ><input class="buttons" type="button" value="Lägg till budget"
+  /></RouterLink>
 
   <div class="status-container">
     <StatusItem :key="totalIncome.name" :status="totalIncome" />
-    <StatusItem :key="totalExpenses.name" :status="totalExpenses" />
+    <StatusItem
+      :key="totalExpenses.name"
+      :status="totalExpenses"
+      :expenses="reocurringExpenses"
+    />
   </div>
   <div class="overview-container">
     <h1>Översikt</h1>
@@ -115,6 +176,8 @@
       v-for="budgetItem in budgets"
       :key="budgetItem.budgetId"
       :budget="budgetItem"
+      :active-budget="activeBudget"
+      @set-active-budget="setActiveBudget"
     />
   </ul>
   <ul class="category-list">
@@ -126,67 +189,6 @@
 </template>
 
 <style scoped>
-  .close-button {
-    height: 25px;
-    width: 2px;
-    margin-left: 12px;
-    background-color: white;
-    transform: rotate(45deg);
-    margin: 0 16px 0 0;
-  }
-
-  .close-button-r {
-    height: 25px;
-    width: 2px;
-    background-color: white;
-    transform: rotate(90deg);
-  }
-
-  .warning-card {
-    background-color: lightcoral;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 1px 5px 5px 0px #676767;
-    width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .warning-container p {
-    font-size: 16px;
-  }
-
-  .account-overview-container {
-    padding: 10px;
-  }
-
-  .account-overview-name {
-    font-size: 1rem;
-    margin: 0;
-  }
-  .account-amount-spent {
-    margin: 0;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-  }
-  .account-progress-container {
-    margin-top: 10px;
-    background-color: #c4c4c4;
-    height: 15px;
-    border-radius: 10px;
-  }
-  .account-progress-bar {
-    background-color: #212121;
-    border-radius: 10px;
-    height: 100%;
-    width: 70%;
-  }
-  .account-budget {
-    text-align: end;
-    font-size: 1rem;
-  }
   .status-container {
     padding: 10px;
     display: grid;
@@ -276,6 +278,19 @@
     gap: 15px;
     justify-content: right;
     align-items: center;
+  }
+  .buttons {
+    background-color: #292929;
+    color: #fff;
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: none;
+    margin-bottom: 5px;
+  }
+  #budget-button {
+    display: flex;
+    justify-content: center;
   }
   @media screen and (min-width: 700px) {
     .warning-card {

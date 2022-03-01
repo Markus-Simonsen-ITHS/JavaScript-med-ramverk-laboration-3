@@ -15,13 +15,16 @@ const mutations = {
       state.user = user
     },
     displayLogoutMessage(state) {
-      state.logoutMessage = 'block'
+      state.logoutMessage = true
     },
     setIncome(state, incomeArr) {
       state.income = incomeArr
     },
     setExpenses(state, expensesArr) {
       state.expenses = expensesArr
+    },
+    setExpensesReocurring(state, expensesArr) {
+      state.expensesReocurring = expensesArr
     },
     setExpensesCategories(state, categoriesArr) {
       state.expensesCategories = categoriesArr
@@ -34,9 +37,8 @@ const mutations = {
     }
   },
   state = {
-    counter: 0,
     user: {},
-    logoutMessage: 'none',
+    logoutMessage: false,
     loginError: '',
     income: [
       {
@@ -49,6 +51,16 @@ const mutations = {
       }
     ],
     expenses: [
+      {
+        name: '',
+        amount: 0,
+        category: '',
+        date: '',
+        id: '',
+        title: ''
+      }
+    ],
+    expensesReocurring: [
       {
         name: '',
         amount: 0,
@@ -117,17 +129,32 @@ const mutations = {
     async fetchAllExpensesForUser(state, userId) {
       // Creates a query where the id matches the passed userId
       const q = query(collection(db, 'utgift'), where('id', '==', userId))
+      const que = query(
+        collection(db, 'återkommandeUtgift'),
+        where('id', '==', userId)
+      )
       // Fetching all documents that matches query
+
       const allExpenses = await getDocs(q)
+      const allExpensesReocurring = await getDocs(que)
 
       const expensesArr = []
+      const expensesReArr = []
 
       // Iterating through all documents and saving the data from them
       allExpenses.forEach((expense) => {
-        expensesArr.push(expense.data())
+        const localExpense = expense.data()
+        localExpense.expenseId = expense.id
+        expensesArr.push(localExpense)
+      })
+      allExpensesReocurring.forEach((expense) => {
+        expensesReArr.push(expense.data())
       })
 
+      state.dispatch('fetchBudgetsForUser', userId)
+
       state.commit('setExpenses', expensesArr)
+      state.commit('setExpensesReocurring', expensesReArr)
     },
     async fetchBudgetsForUser(state, userId) {
       // Creates a query which specifies that only documents which matches user id is to be fetched
@@ -140,8 +167,8 @@ const mutations = {
       const budgetArr = [
         {
           title: 'Övrigt',
-          sum: 0,
-          budgetId: Math.random(),
+          amount: 0,
+          budgetId: '101010',
           id: userId,
           amountSpent: 0,
           expenses: []
@@ -153,7 +180,7 @@ const mutations = {
         // Storing the data from the snapshot firebase sends
         let budgetItem = budgetSnapshot.data()
         // Adding id to the object
-        budgetItem.bugetId = budgetSnapshot.id
+        budgetItem.budgetId = budgetSnapshot.id
 
         budgetArr.push(budgetItem)
       })
@@ -232,6 +259,9 @@ const mutations = {
     },
     getExpenses(state) {
       return state.expenses
+    },
+    getExpensesReocurring(state) {
+      return state.expensesReocurring
     },
     getExpenseCategories(state) {
       return state.expensesCategories

@@ -11,6 +11,8 @@ import SettingsView from './views/SettingsView.vue'
 import HistoryView from './views/HistoryView.vue'
 import ChartView from './views/ChartView.vue'
 import CalenderView from './views/CalenderView.vue'
+import BudgetView from './views/BudgetView.vue'
+
 
 import { auth } from './firebase'
 
@@ -74,6 +76,7 @@ const router = createRouter({
       path: '/settings',
       meta: { requiresAuth: true }
     },
+    { component: BudgetView, path: '/budget', meta: { requiresAuth: true } },
     {
       path: '/:notFound(.*)',
       redirect: '/'
