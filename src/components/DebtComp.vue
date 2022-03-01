@@ -329,7 +329,8 @@
 
 <style scoped>
   h1 {
-    margin-bottom: 60px;
+    margin: 0 0 60px 0;
+    padding-top: 16px;
     font-size: 200%;
     text-align: center;
   }
