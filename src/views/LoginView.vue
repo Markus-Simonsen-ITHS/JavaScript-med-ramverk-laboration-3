@@ -6,5 +6,16 @@
 </script>
 
 <template>
-  <LoginForm only-register="false" />
+  <div class="loginview-container">
+    <LoginForm only-register="false" />
+  </div>
 </template>
+
+<style scoped>
+  .loginview-container {
+    display: grid;
+    align-items: center;
+    height: 100vh;
+    background-color: #5969ea;
+  }
+</style>
