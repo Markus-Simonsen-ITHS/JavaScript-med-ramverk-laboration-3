@@ -181,14 +181,6 @@
     background-color: white;
   }
 
-  .light {
-    color: black;
-    /* background-color: #e7e7e7; */
-  }
-  .dark {
-    /* background-color: #2f3136; */
-    color: #8f9296;
-  }
   /* From here the CSS only applies to desktop (over 980px). */
   @media (min-width: 980px) {
     .container {

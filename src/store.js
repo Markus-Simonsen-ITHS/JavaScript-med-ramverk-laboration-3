@@ -119,8 +119,6 @@ const mutations = {
     changeTheme(state, theme) {
       localStorage.setItem('theme', theme)
 
-      console.log('theme', theme)
-
       state.commit('setTheme', theme)
     },
     async fetchAllIncomeForUser(state, userId) {

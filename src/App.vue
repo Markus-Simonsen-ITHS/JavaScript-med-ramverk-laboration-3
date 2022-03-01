@@ -24,4 +24,13 @@
     font-weight: 300;
     margin-bottom: 1rem;
   }
+
+  .light {
+    color: black;
+    background-color: #e7e7e7;
+  }
+  .dark {
+    background-color: #2f3136;
+    color: #8f9296;
+  }
 </style>
