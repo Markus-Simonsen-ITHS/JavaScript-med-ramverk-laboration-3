@@ -139,7 +139,9 @@
   }
 
   .active-light {
-    background-color: #676767;
+    background-color: #5969ea;
+    color: white;
+    box-shadow: 1px 1px 1px 1px #add8e6;
   }
 
   @media screen and (min-width: 700px) {

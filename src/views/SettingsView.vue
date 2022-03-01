@@ -36,7 +36,13 @@
 
 <template>
   <NavBar />
-  <div id="main">
+  <div
+    id="main"
+    :class="{
+      light: $store.getters.getTheme === 'light',
+      'dark-form': $store.getters.getTheme === 'dark'
+    }"
+  >
     <div class="actionItem">
       <h1>Change password</h1>
       <label for="oldPassword">Old password</label>
@@ -88,7 +94,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #e7e7e7;
+    /* background-color: #e7e7e7; */
     border-radius: 8px;
     display: flex;
     flex-direction: column;
