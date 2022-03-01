@@ -23,6 +23,10 @@
         } else {
           addDoc(collection(db, 'utgift'), docData)
         }
+        this.$store.dispatch(
+          'fetchAllExpensesForUser',
+          this.$store.state.user.id
+        )
       },
       // Adds income to db, triggered from AddForm-component
       addIncome(payload) {
@@ -38,6 +42,7 @@
         } else {
           addDoc(collection(db, 'inkomst'), docData)
         }
+        this.$store.dispatch('fetchAllIncomeForUser', this.$store.state.user.id)
       }
     },
     components: {

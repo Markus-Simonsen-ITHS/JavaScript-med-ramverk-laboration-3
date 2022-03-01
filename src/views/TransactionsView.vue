@@ -1,153 +1,142 @@
 <script>
-  import { db } from '../firebase'
-  import { collection, getDocs, query, where } from 'firebase/firestore'
-  import NavBar from '../components/NavBar.vue'
-  import ChartComp from '../components/ChartComp.vue'
-  import FilterComponent from '../components/history/FilterComponent.vue'
+  import DeleteComp from '../components/home/DeleteComp.vue'
 
   export default {
     components: {
-      NavBar,
-      ChartComp,
-      FilterComponent
-    },
-    methods: {
-      goToAddView() {
-        this.$router.push('/add')
-      },
-      async fetchexpense() {
-        const userId = this.$store.getters.getUser.id
-        const q = query(collection(db, 'utgift'), where('id', '==', userId))
-        const userExpenses = []
-        const allExpenses = await getDocs(q)
-        allExpenses.forEach((expense) => {
-          userExpenses.push(expense.data())
-        })
-        this.expenses = userExpenses
-      },
-      // Defines which view is to be displayed, default is list
-      setView(view) {
-        this.view = view
-      },
-      // Defines the status of items to be displayed, like reoccurring or all items
-      setItemStatus(status) {
-        this.itemStatus = status
-      },
-      // Defines the time period of which items are to be displayed
-      setTimeFilter(timeFilter) {
-        this.timeFilter = timeFilter
-      },
-      goToChart() {
-        const viewChart = true
-        this.chart = viewChart
-      }
-    },
-    mounted() {
-      this.fetchexpense()
+      DeleteComp
     },
     data() {
       return {
-        expenses: [],
-        view: 'list',
-        itemStatus: 'reoccurring',
-        timeFilter: 'oneMonth'
+        toggle: false
       }
     },
     computed: {
       budgets() {
         return this.$store.getters.getBudget
+      },
+      expenses() {
+        return this.$store.getters.getExpenses
       }
     }
   }
 </script>
 
 <template>
-  <NavBar />
-  <FilterComponent
-    @set-view="setView"
-    @change-item-status="setItemStatus"
-    @change-time-filter="setTimeFilter"
-  />
-  <!--Show if there aren't any registered transactions-->
-  <div class="view-expenses" v-if="expenses === '' || expenses === null">
-    <form class="expenses-form">
-      <div class="form-inner">
-        <h1>Inga utgifter har registrerats</h1>
-        <input type="button" value="Lägg till utgift" @click="goToAddView" />
-      </div>
-    </form>
+  <div class="expenses">
+    <h2 class="chosenView">Lista</h2>
   </div>
 
-  <!--Show if there are any registered transactions-->
-  <div class="expenses" v-else>
-    <h2>Denna månad</h2>
-  </div>
-  <ChartComp :data-b="expenses" v-show="view === 'chart'" />
+  <div id="history-list-container">
+    <div
+      class="history-list"
+      @click="toggle = !toggle"
+      v-for="budget in budgets"
+      :key="budget"
+    >
+      <img src="../../assets/fox.jpeg" alt="deg logo" />
+      <p class="budget-title">{{ budget.title }}</p>
+      <p class="budget-sum">budget:</p>
+      <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-  <div class="expenses-card-container" v-if="view === 'list'">
-    <div class="expenses-card">
-      <ol id="category-expenses">
-        <li v-for="expense in expenses" :key="expense">
-          <img class="logo" src="../../../assets/fox.jpeg" alt="logo" />
-          {{ expense.category }}
-          <h5
-            v-for="budgetItem in budgets"
-            :key="budgetItem.budgetId"
-            :budget="budgetItem"
-          >
-            Budget:
-            {{ budgetItem.sum }} kr
-          </h5>
-
+      <div v-for="expense in expenses" :key="expense">
+        <DeleteComp
+          :collection-item="expense.expenseId"
+          :collection="'utgift'"
+        />
+        <p class="expense-title" v-show="toggle">
           {{ expense.title }}
-          {{ expense.amount }} kr
-        </li>
-      </ol>
+        </p>
+        <p class="expense-amount" v-show="toggle">{{ expense.amount }} kr</p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-  .expenses {
-    display: flex;
-    justify-content: flex-end;
-    margin: 10px;
-    padding: auto;
-    font-size: 1rem;
+  .chosenView {
+    font-size: 1.5rem;
+    margin-left: 20px;
+    font-weight: lighter;
   }
-  .expenses-card-container {
-    height: 244px;
-    width: 445px;
-    left: 33px;
-    margin: 3%;
-    border-radius: 8px;
-  }
-  #category-expenses li {
+
+  #history-list-container {
     display: flex;
     flex-direction: column;
-    list-style: none;
-    margin: 2%;
-    padding: 3%;
+    height: 100%;
+    width: 100%;
+    max-width: 547px;
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    text-transform: capitalize;
+    line-height: 0.5;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin: 30px;
+    padding: 10px;
     border-radius: 8px;
     background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
-  #category-expenses {
+  img {
     display: flex;
-    flex-direction: column;
-    justify-content: end;
+    width: 56px;
+    height: 56px;
+    left: 44px;
+    top: 160px;
+    border-radius: 8px;
   }
 
-  .logo-container {
-    display: flex;
-    flex-direction: row;
+  .budget-title {
+    margin: -30px 0 20px 65px;
+    letter-spacing: 0.5px;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
-  .logo {
-    border-radius: 5px;
-    min-width: 50px;
-    max-width: 100%;
-    width: 20%;
-    max-height: 100%;
+
+  .budget-sum {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .budget-sum-self {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: bold;
+    align-self: flex-end;
+    margin: -23px 0 10px 0;
+    text-transform: lowercase;
+  }
+
+  .expense-title {
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    padding: 1rem 0 0 0;
+    border-top: 1px solid black;
+  }
+
+  .expense-amount {
+    float: right;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    align-self: flex-end;
+    margin: -23px 0 0 0;
+    text-transform: lowercase;
+  }
+
+  @media screen and (max-width: 500px) {
+    .history-list {
+      margin: 10px;
+      padding: 15px;
+      min-width: 200px;
+    }
+
+    img {
+      width: 45px;
+      height: 45px;
+    }
   }
 </style>

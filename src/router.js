@@ -8,6 +8,9 @@ import TransactionsView from './views/TransactionsView.vue'
 import DebtView from './views/DebtView.vue'
 import SparandeView from './views/SparandeView.vue'
 import SettingsView from './views/SettingsView.vue'
+import HistoryView from './views/HistoryView.vue'
+import ChartView from './views/ChartView.vue'
+import CalenderView from './views/CalenderView.vue'
 import BudgetView from './views/BudgetView.vue'
 
 import { auth } from './firebase'
@@ -35,9 +38,23 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      component: TransactionsView,
+      component: HistoryView,
       path: '/history',
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'list',
+          component: TransactionsView
+        },
+        {
+          path: 'chart',
+          component: ChartView
+        },
+        {
+          path: 'calender',
+          component: CalenderView
+        }
+      ]
     },
     {
       component: DebtView,

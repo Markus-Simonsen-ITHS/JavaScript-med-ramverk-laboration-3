@@ -1,6 +1,7 @@
 <script>
   import { doc, deleteDoc } from 'firebase/firestore'
   import { db } from '../../firebase'
+  import DeleteComp from '../home/DeleteComp.vue'
   import AutoImage from '../AutoImage.vue'
   export default {
     emits: ['setActiveBudget'],
@@ -18,6 +19,7 @@
       async removeBudget(budget) {
         console.log(budget.title)
         await deleteDoc(doc(db, 'budget', budget.title))
+        this.$store.dispatch('fetchBudgetsForUser', this.$store.state.user.id)
       },
       setActiveBudget() {
         this.$emit('setActiveBudget', this.budget)
@@ -28,7 +30,10 @@
         return this.budget.budgetId === this.activeBudget.budgetId
       }
     },
-    components: { AutoImage }
+    components: {
+      AutoImage,
+      DeleteComp
+    }
   }
 </script>
 
@@ -55,11 +60,7 @@
     <p class="smaller-text align-start">Budget</p>
     <p class="smaller-text align-end">{{ budget.amount }} kr</p>
     <!-- <p class="remove-btn" @click="removeBudget(budget)">X</p> -->
-    <div id="close-button" @click="removeBudget(budget)">
-      <div class="close-button">
-        <div class="close-button-r" />
-      </div>
-    </div>
+    <DeleteComp :collection-item="budget.title" :collection="'budget'" />
   </li>
 </template>
 

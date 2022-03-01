@@ -242,6 +242,7 @@
     padding: 10px;
     display: grid;
     gap: 20px;
+    margin: 0;
   }
   .category-list button {
     background-color: #5969ea;
@@ -267,6 +268,10 @@
     padding: 10px 16px;
     border: none;
     margin-bottom: 5px;
+  }
+  #budget-button {
+    display: flex;
+    justify-content: center;
   }
   @media screen and (min-width: 700px) {
     .warning-card {

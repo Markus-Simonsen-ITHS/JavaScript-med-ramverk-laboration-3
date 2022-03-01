@@ -30,6 +30,7 @@
         }
         setDoc(doc(db, 'budget', this.title), docData)
         this.$router.push('/')
+        this.$store.dispatch('fetchBudgetsForUser', this.$store.state.user.id)
       },
       isTitleValid() {
         if (!this.title) {
@@ -108,6 +109,11 @@
           ><input class="buttons" type="button" value="Avbryt"
         /></RouterLink>
       </div>
+      <div class="cancel">
+        <RouterLink to="/"
+          ><input class="buttons" type="button" value="Avbryt"
+        /></RouterLink>
+      </div>
     </form>
   </div>
 </template>
@@ -126,6 +132,7 @@
     border: none;
     margin-bottom: 10px;
     font-size: 20px;
+    text-align: center;
   }
   .button-container {
     margin-top: 10px;
@@ -149,5 +156,31 @@
     color: red;
     margin-bottom: 10px;
     align-self: center;
+  }
+  .cancel {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  @media (min-width: 950px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+  @media (min-width: 700px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    form {
+      width: 500px;
+    }
+    h1 {
+      display: flex;
+      justify-content: center;
+    }
   }
 </style>
