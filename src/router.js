@@ -13,7 +13,6 @@ import ChartView from './views/ChartView.vue'
 import CalenderView from './views/CalenderView.vue'
 import BudgetView from './views/BudgetView.vue'
 
-
 import { auth } from './firebase'
 
 const router = createRouter({

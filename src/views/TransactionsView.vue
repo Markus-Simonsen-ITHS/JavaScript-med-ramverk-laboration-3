@@ -1,30 +1,12 @@
 <script>
-  import { db } from '../firebase'
-  import { collection, getDocs, query, where } from 'firebase/firestore'
   import DeleteComp from '../components/home/DeleteComp.vue'
 
   export default {
     components: {
       DeleteComp
     },
-    methods: {
-      async fetchexpense() {
-        const userId = this.$store.getters.getUser.id
-        const q = query(collection(db, 'utgift'), where('id', '==', userId))
-        const userExpenses = []
-        const allExpenses = await getDocs(q)
-        allExpenses.forEach((expense) => {
-          userExpenses.push(expense.data())
-        })
-        this.expenses = userExpenses
-      }
-    },
-    mounted() {
-      this.fetchexpense()
-    },
     data() {
       return {
-        expenses: [],
         toggle: false
       }
     },
