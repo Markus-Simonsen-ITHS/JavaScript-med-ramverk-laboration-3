@@ -77,7 +77,7 @@
     background-color: #e7e7e7;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 1px 5px 5px 0px #676767;
+    box-shadow: 1px 5px 5px 0px #00000030;
   }
 
   .bold-text {
