@@ -1,5 +1,12 @@
 <script>
-  export default {}
+  export default {
+    computed: {
+      // Hides header if route is landing or login
+      displayHeader() {
+        return this.$route.path === '/landing' || this.$route.path === '/login'
+      }
+    }
+  }
 </script>
 
 <template>
@@ -10,7 +17,7 @@
       dark: $store.getters.getTheme === 'dark'
     }"
   >
-    <div class="logo-container">
+    <div class="logo-container" v-if="!displayHeader">
       <img class="logo" src="Deg-logo final.svg" alt="" />
       <h1 class="logo-title">DEG</h1>
     </div>
