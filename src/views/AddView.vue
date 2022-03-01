@@ -50,7 +50,6 @@
 <template>
   <NavBar />
   <div class="addview-body">
-    <p class="add-paragraph">Lägg Till</p>
     <AddForm @add-expense="addExpense" @add-income="addIncome" />
   </div>
 </template>
@@ -60,11 +59,6 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-  }
-  .add-paragraph {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 0;
   }
 
   @media screen and (min-width: 700px) {
