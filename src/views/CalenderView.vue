@@ -1,10 +1,13 @@
 <script></script>
 
 <template>
-  <div class="calender-view">
-    <div class="container">
-      <h1>Kalender</h1>
-      <h2>Denna månad</h2>
-    </div>
-  </div>
+  <h2 class="chosenView">Kalender</h2>
 </template>
+
+<style scoped>
+  .chosenView {
+    font-size: 1.5rem;
+    margin-left: 20px;
+    font-weight: lighter;
+  }
+</style>

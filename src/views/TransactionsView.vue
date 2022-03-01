@@ -1,18 +1,9 @@
 <script>
   import { db } from '../firebase'
   import { collection, getDocs, query, where } from 'firebase/firestore'
-  import ChartComp from '../components/ChartComp.vue'
-  import FilterComponent from '../components/history/FilterComponent.vue'
 
   export default {
-    components: {
-      ChartComp,
-      FilterComponent
-    },
     methods: {
-      goToAddView() {
-        this.$router.push('/add')
-      },
       async fetchexpense() {
         const userId = this.$store.getters.getUser.id
         const q = query(collection(db, 'utgift'), where('id', '==', userId))
@@ -22,22 +13,6 @@
           userExpenses.push(expense.data())
         })
         this.expenses = userExpenses
-      },
-      // Defines which view is to be displayed, default is list
-      setView(view) {
-        this.view = view
-      },
-      // Defines the status of items to be displayed, like reoccurring or all items
-      setItemStatus(status) {
-        this.itemStatus = status
-      },
-      // Defines the time period of which items are to be displayed
-      setTimeFilter(timeFilter) {
-        this.timeFilter = timeFilter
-      },
-      goToChart() {
-        const viewChart = true
-        this.chart = viewChart
       }
     },
     mounted() {
@@ -46,9 +21,6 @@
     data() {
       return {
         expenses: [],
-        view: 'list',
-        itemStatus: 'reoccurring',
-        timeFilter: 'oneMonth',
         toggle: false
       }
     },
@@ -61,34 +33,11 @@
 </script>
 
 <template>
-  <!--Ska man ta bort denna??-->
-  <FilterComponent
-    @set-view="setView"
-    @change-item-status="setItemStatus"
-    @change-time-filter="setTimeFilter"
-  />
-  <!--Show if there aren't any registered transactions-->
-
-  <div class="view-expenses" v-if="expenses === '' || expenses === null">
-    <form class="expenses-form">
-      <div class="form-inner">
-        <h1>Inga utgifter har registrerats</h1>
-        <input type="button" value="Lägg till utgift" @click="goToAddView" />
-      </div>
-    </form>
+  <div class="expenses">
+    <h2 class="chosenView">Lista</h2>
   </div>
 
-  <!--Show if there are any registered transactions-->
-
-  <div class="expenses" v-else>
-    <!--Select view option, list by default-->
-    <h1>Lista</h1>
-    <h2>Denna månad</h2>
-  </div>
-
-  <ChartComp :data-b="expenses" v-show="view === 'chart'" />
-
-  <div id="history-list-container" v-if="view === 'list'">
+  <div id="history-list-container">
     <div
       class="history-list"
       @click="toggle = !toggle"
@@ -101,7 +50,9 @@
       <p class="budget-sum-self">{{ budget.sum }} kr</p>
 
       <div v-for="expense in expenses" :key="expense">
-        <p class="expense-title" v-show="toggle">{{ expense.title }}</p>
+        <p class="expense-title" v-show="toggle">
+          {{ expense.title }}
+        </p>
         <p class="expense-amount" v-show="toggle">{{ expense.amount }} kr</p>
       </div>
     </div>
@@ -109,6 +60,12 @@
 </template>
 
 <style scoped>
+  .chosenView {
+    font-size: 1.5rem;
+    margin-left: 20px;
+    font-weight: lighter;
+  }
+
   #history-list-container {
     display: flex;
     flex-direction: column;
