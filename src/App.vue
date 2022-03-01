@@ -62,6 +62,11 @@
     color: #e5e5e5;
   }
 
+  .light-form {
+    color: #202225;
+    background-color: #e5e5e5;
+  }
+
   .dark form {
     background-color: #2f3136;
     color: #e5e5e5;

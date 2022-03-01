@@ -39,7 +39,7 @@
   <div
     id="main"
     :class="{
-      light: $store.getters.getTheme === 'light',
+      'light-form': $store.getters.getTheme === 'light',
       'dark-form': $store.getters.getTheme === 'dark'
     }"
   >
@@ -94,7 +94,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: #e7e7e7; */
     border-radius: 8px;
     display: flex;
     flex-direction: column;
