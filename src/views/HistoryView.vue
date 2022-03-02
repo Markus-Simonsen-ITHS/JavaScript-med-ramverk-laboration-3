@@ -44,6 +44,7 @@
     @change-item-status="setItemStatus"
     @change-time-filter="setTimeFilter"
   />
+  <router-view />
 </template>
 
 <style scoped></style>

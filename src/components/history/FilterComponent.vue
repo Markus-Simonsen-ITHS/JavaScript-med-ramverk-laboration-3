@@ -3,16 +3,11 @@
     emits: ['setView', 'changeItemStatus', 'changeTimeFilter'],
     data() {
       return {
-        view: 'list',
         reoccurringSelect: 'reoccurring',
         timeSelect: 'oneMonth'
       }
     },
     methods: {
-      setView(ev) {
-        this.view = ev.target.id
-        this.$emit('setView', this.view)
-      },
       changeItemStatus() {
         this.$emit('changeItemStatus', this.reoccurringSelect)
       },
@@ -20,37 +15,47 @@
         console.log(this.timeSelect)
         this.$emit('changeTimeFilter', this.timeSelect)
       }
+    },
+    computed: {
+      view() {
+        let view
+        if (this.$route.path === '/history/list') view = 'list'
+        if (this.$route.path === '/history/chart') view = 'chart'
+        if (this.$route.path === '/history/calender') view = 'calendar'
+        return view
+      }
     }
   }
 </script>
 
 <template>
-  <div class="filter-body">
+  <div
+    class="filter-body"
+    :class="{
+      'dark-form': $store.getters.getTheme === 'dark',
+      'light-form': $store.getters.getTheme === 'light'
+    }"
+  >
     <h1>Historik</h1>
     <div class="button-container">
-      <div
-        class="filter-button"
-        :class="{ active: view === 'list' }"
-        id="list"
-        @click="setView"
-      >
-        <router-link to="/history/list"> Lista</router-link>
+      <div class="filter-button" :class="{ active: view === 'list' }" id="list">
+        <router-link to="/history/list" class="filter-button">
+          Lista
+        </router-link>
       </div>
       <div
         class="filter-button"
         :class="{ active: view === 'chart' }"
         id="chart"
-        @click="setView"
       >
-        <router-link to="/history/chart"> Diagram</router-link>
+        <router-link to="/history/chart" class="filter-button">
+          Diagram
+        </router-link>
       </div>
-      <div
-        class="filter-button"
-        :class="{ active: view === 'calendar' }"
-        id="calendar"
-        @click="setView"
-      >
-        <router-link to="/history/calender"> Kalender</router-link>
+      <div :class="{ active: view === 'calendar' }" id="calendar">
+        <router-link to="/history/calender" class="filter-button">
+          Kalender
+        </router-link>
       </div>
     </div>
     <select v-model="reoccurringSelect" @change="changeItemStatus">
@@ -63,7 +68,6 @@
       <option value="oneYear">1 år</option>
     </select>
   </div>
-  <router-view />
 </template>
 
 <style scoped>
@@ -72,7 +76,6 @@
   }
   .filter-body {
     border-radius: 8px;
-    background: linear-gradient(0.25turn, #e7e7e7, #e7e7e780);
     padding: 20px;
   }
   .button-container {
@@ -83,6 +86,8 @@
   .filter-button {
     margin-left: 10px;
     user-select: none;
+    color: inherit;
+    text-decoration: none;
   }
   .active {
     text-decoration: underline;
