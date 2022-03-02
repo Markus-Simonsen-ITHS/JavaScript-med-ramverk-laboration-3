@@ -2,11 +2,6 @@
   import { doc, deleteDoc } from 'firebase/firestore'
   import { db } from '../../firebase'
   export default {
-    // data() {
-    //   return {
-    //     collection: this.test
-    //   }
-    // },
     props: {
       collectionItem: {
         required: true,

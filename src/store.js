@@ -80,7 +80,8 @@ const mutations = {
         sum: 0,
         id: '',
         amountSpent: 0,
-        expenses: []
+        expenses: [],
+        incomeList: []
       }
     ]
   },
@@ -131,8 +132,11 @@ const mutations = {
 
       // Iterating through all documents and saving the data from them
       allIncome.forEach((income) => {
-        incomeArr.push(income.data())
+        const localIncome = income.data()
+        localIncome.incomeId = income.id
+        incomeArr.push(localIncome)
       })
+
       state.commit('setIncome', incomeArr)
     },
     async fetchAllExpensesForUser(state, userId) {
@@ -180,7 +184,8 @@ const mutations = {
           budgetId: '101010',
           id: userId,
           amountSpent: 0,
-          expenses: []
+          expenses: [],
+          incomeList: []
         }
       ]
 
@@ -221,7 +226,29 @@ const mutations = {
         }
       })
 
+      state.state.income.forEach((income) => {
+        const foundIndex = budgetArr.findIndex(
+          (budget) =>
+            budget.title.toLocaleLowerCase() ===
+            income.category.toLocaleLowerCase()
+        )
+
+        if (foundIndex === -1) {
+          budgetArr[0].incomeList.push(income)
+        } else {
+          if (budgetArr[foundIndex].incomeList) {
+            budgetArr[foundIndex].incomeList.push(income)
+          } else {
+            budgetArr[foundIndex].incomeList = [income]
+          }
+        }
+      })
+
       state.commit('setBudget', budgetArr)
+    },
+    async fetchFlow(state, userId) {
+      state.dispatch('fetchAllIncomeForUser', userId)
+      state.dispatch('fetchAllExpensesForUser', userId)
     },
     // Change password (Seems like firebase has a bug with changing password)
     changePassword(state, payload) {

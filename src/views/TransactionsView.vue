@@ -16,16 +16,15 @@
       },
       expenses() {
         return this.$store.getters.getExpenses
+      },
+      incomeList() {
+        return this.$store.getters.getIncome
       }
     }
   }
 </script>
 
 <template>
-  <div class="expenses">
-    <h2 class="chosenView">Lista</h2>
-  </div>
-
   <div id="history-list-container">
     <div
       class="history-list"
@@ -38,21 +37,40 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-      <div v-for="expense in expenses" :key="expense">
-        <DeleteComp
-          :collection-item="expense.expenseId"
-          :collection="'utgift'"
-        />
+      <div v-for="expense in budget.expenses" :key="expense">
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
         </p>
         <p class="expense-amount" v-show="toggle">{{ expense.amount }} kr</p>
+        <DeleteComp
+          v-show="toggle"
+          :collection-item="expense.expenseId"
+          :collection="'utgift'"
+        />
+      </div>
+      <div
+        class="incomeList"
+        v-for="income in budget.incomeList"
+        :key="income"
+        v-show="toggle"
+      >
+        {{ income.title }}
+        <DeleteComp
+          :collection-item="income.incomeId"
+          :collection="'inkomst'"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+  .incomeList {
+    padding: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   .chosenView {
     font-size: 1.5rem;
     margin-left: 20px;
