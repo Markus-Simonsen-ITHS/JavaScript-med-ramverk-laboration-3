@@ -4,6 +4,7 @@ import { auth } from './firebase'
 import router from './router'
 import store from './store'
 import { Chart, registerables } from 'chart.js'
+import { SetupCalendar, DatePicker } from 'v-calendar'
 Chart.register(...registerables)
 
 // Initialize app
@@ -15,6 +16,8 @@ auth.onAuthStateChanged((user) => {
     app = createApp(App)
     app.use(store)
     app.use(router)
+    app.use(SetupCalendar, {})
+    app.component('DatePicker', DatePicker)
     app.mount('#app')
   }
 
