@@ -1,9 +1,11 @@
 <script>
   import NavBar from '../components/NavBar.vue'
+  import SliderComp from '../components/home/SliderComp.vue'
 
   export default {
     components: {
-      NavBar
+      NavBar,
+      SliderComp
     },
     methods: {
       changePassword() {
@@ -18,6 +20,15 @@
           email: this.$store.getters.getUser.email,
           password: this.password
         })
+      },
+      changeTheme() {
+        let theme
+        if (this.$store.getters.getTheme === 'dark') {
+          theme = 'light'
+        } else {
+          theme = 'dark'
+        }
+        this.$store.dispatch('changeTheme', theme)
       }
     }
   }
@@ -25,7 +36,13 @@
 
 <template>
   <NavBar />
-  <div id="main">
+  <div
+    id="main"
+    :class="{
+      'light-form': $store.getters.getTheme === 'light',
+      'dark-form': $store.getters.getTheme === 'dark'
+    }"
+  >
     <div class="actionItem">
       <h1>Change password</h1>
       <label for="oldPassword">Old password</label>
@@ -65,6 +82,10 @@
       <br />
       <br />
     </div>
+    <div class="theme-container">
+      Dark theme:
+      <SliderComp @checkbox="changeTheme" :id="'theme'" />
+    </div>
   </div>
 </template>
 
@@ -73,7 +94,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #e7e7e7;
     border-radius: 8px;
     display: flex;
     flex-direction: column;

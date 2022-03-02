@@ -132,34 +132,37 @@
 </script>
 
 <template>
-  <div class="input-container" :class="{ 'input-error': errors.amountError }">
-    <input
-      class="amount-input"
-      id="amount-input"
-      type="text"
-      :style="{ width: inputWidth }"
-      v-model="amount"
-    />
-    <label class="amount-input" for="amount-input">kr</label>
-  </div>
-  <label class="error-message" for="amount-input" v-if="errors.amountError">
-    {{ errors.amountError }}
-  </label>
-  <div class="buttons-container">
-    <button
-      @click="setDisplayAddExpense"
-      :class="{ active: displayAddExpense }"
-    >
-      Utgift
-    </button>
-    <button
-      @click="setDisplayAddIncome"
-      :class="{ active: !displayAddExpense }"
-    >
-      Inkomst
-    </button>
-  </div>
   <form @submit.prevent="submit">
+    <p class="add-paragraph">Lägg Till</p>
+    <div class="input-container" :class="{ 'input-error': errors.amountError }">
+      <input
+        class="amount-input"
+        :class="{ 'amount-input-dark': $store.getters.getTheme === 'dark' }"
+        id="amount-input"
+        type="text"
+        :style="{ width: inputWidth }"
+        v-model="amount"
+      />
+      <label class="amount-input" for="amount-input">kr</label>
+    </div>
+    <label class="error-message" for="amount-input" v-if="errors.amountError">
+      {{ errors.amountError }}
+    </label>
+    <div class="buttons-container">
+      <button
+        @click="setDisplayAddExpense"
+        :class="{ active: displayAddExpense }"
+      >
+        Utgift
+      </button>
+      <button
+        @click="setDisplayAddIncome"
+        :class="{ active: !displayAddExpense }"
+      >
+        Inkomst
+      </button>
+    </div>
+
     <select v-model="category">
       <option value="">Kategori</option>
       <option
@@ -191,6 +194,11 @@
 </template>
 
 <style scoped>
+  .add-paragraph {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0;
+  }
   .input-container {
     margin-bottom: 10px;
   }
@@ -199,6 +207,11 @@
     border: none;
     font-size: 48px;
     font-weight: normal;
+  }
+
+  .amount-input-dark {
+    background-color: #2f3136;
+    color: #e5e5e5;
   }
 
   .buttons-container {
@@ -214,7 +227,7 @@
   }
 
   .active {
-    background-color: #292929;
+    background-color: #5969ea;
     color: #ffffff;
   }
 
@@ -222,9 +235,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #e7e7e7;
     border-radius: 8px;
-    align-self: center;
   }
 
   select {
@@ -247,17 +258,26 @@
 
   .button-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 20px;
     justify-items: center;
   }
 
   input[type='button'],
   input[type='submit'] {
-    background-color: #292929;
     color: #fff;
     height: 40px;
     border-radius: 100px;
-    width: 100px;
+    border: none;
+    width: 200px;
+  }
+
+  input[type='submit'] {
+    background-color: #5969ea;
+  }
+
+  input[type='button'] {
+    background-color: #202225;
   }
 
   /* Error-classes on the bottom to have priority over regular classes */

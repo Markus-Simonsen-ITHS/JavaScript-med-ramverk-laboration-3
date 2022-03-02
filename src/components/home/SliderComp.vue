@@ -7,6 +7,7 @@
     },
     watch: {
       checkbox() {
+        console.log('meow')
         this.$emit('checkbox', this.checkbox)
       }
     },
@@ -15,6 +16,10 @@
       label: {
         default: null,
         type: String
+      },
+      id: {
+        default: 'reocurringExpense',
+        type: String
       }
     }
   }
@@ -22,16 +27,16 @@
 
 <template>
   <div class="reocurringExpense-container">
-    <label for="reocurringExpense" class="switch">
+    <label :for="'reocurringExpense' + id" class="switch">
       <input
-        id="reocurringExpense"
+        :id="'reocurringExpense' + id"
         type="checkbox"
         value="reocurringExpense"
         v-model="checkbox"
       />
       <span class="slider" />
     </label>
-    <label for="reocurringExpense"> {{ label }}</label>
+    <label :for="'reocurringExpense' + id"> {{ label }}</label>
     <!-- skicka in label som prop? -->
   </div>
 </template>

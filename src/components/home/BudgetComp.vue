@@ -74,8 +74,8 @@
   <!-- The form to add the budget, also the button to submit the budget -->
 
   <div class="container">
-    <h1>Lägg till budget:</h1>
     <form>
+      <h1>Lägg till budget:</h1>
       <label for="add-title" class="error-message" v-if="errors.titleError"
         >Du måste fylla i ett namn</label
       >
@@ -105,6 +105,9 @@
         >
           Lägg till
         </button>
+        <RouterLink to="/"
+          ><input class="buttons" type="button" value="Avbryt"
+        /></RouterLink>
       </div>
       <div class="cancel">
         <RouterLink to="/"
@@ -120,7 +123,6 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #e7e7e7;
     border-radius: 8px;
     align-self: center;
   }
@@ -136,9 +138,10 @@
     margin-top: 10px;
     display: grid;
     justify-items: center;
+    grid-template-columns: 1fr 1fr;
   }
   .buttons {
-    background-color: #292929;
+    background-color: #5969ea;
     color: #fff;
     border-radius: 100px;
     font-size: 16px;

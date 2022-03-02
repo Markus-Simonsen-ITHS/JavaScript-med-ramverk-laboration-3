@@ -206,11 +206,26 @@
 
 <template>
   <h1>Avbetalning av skuld</h1>
-  <div :class="{ modal: true, active: active }">
+  <div
+    :class="{
+      modal: true,
+      active: active,
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
+  >
     <!-- ^ a modal which covers the screen to allow the user confirm removal of debt or payment of debt -->
     <div class="modalHeader">
       <p class="titleText">Varning:</p>
-      <button @click="closePopUp">&times;</button>
+      <button
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+        @click="closePopUp"
+      >
+        &times;
+      </button>
     </div>
     <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
     <div class="modalButtons">
@@ -314,7 +329,8 @@
 
 <style scoped>
   h1 {
-    margin-bottom: 60px;
+    margin: 0 0 60px 0;
+    padding-top: 16px;
     font-size: 200%;
     text-align: center;
   }
@@ -356,7 +372,7 @@
     margin-bottom: 10px;
   }
   .debtBar {
-    background-color: #212121;
+    background-color: #5969ea;
     border-radius: 10px;
     height: 100%;
     width: 100%;
@@ -383,7 +399,6 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #e7e7e7;
     border-radius: 8px;
     width: 70%;
     max-width: 630px;
@@ -398,12 +413,13 @@
   }
   input[type='button'],
   input[type='submit'] {
-    background-color: #292929;
-    color: #fff;
+    background-color: #5969ea;
+    color: #e5e5e5;
     height: 40px;
     border-radius: 100px;
     width: 100px;
     cursor: pointer;
+    border: none;
   }
   input[type='text'],
   input[type='date'] {
@@ -434,10 +450,10 @@
     border-radius: 10px;
     padding: 20px;
     z-index: 10;
-    background-color: #fff;
     width: 350px;
     max-width: 50%;
   }
+
   .modalHeader {
     display: flex;
     justify-content: space-between;

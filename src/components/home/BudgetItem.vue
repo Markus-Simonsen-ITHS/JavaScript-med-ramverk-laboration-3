@@ -25,6 +25,11 @@
         this.$emit('setActiveBudget', this.budget)
       }
     },
+    computed: {
+      active() {
+        return this.budget.budgetId === this.activeBudget.budgetId
+      }
+    },
     components: {
       AutoImage,
       DeleteComp
@@ -35,7 +40,12 @@
 <template>
   <li
     class="expense-category"
-    :class="{ active: budget.budgetId === activeBudget.budgetId }"
+    :class="{
+      'active-dark': active && $store.getters.getTheme === 'dark',
+      'active-light': active && $store.getters.getTheme === 'light',
+      light: $store.getters.getTheme === 'light',
+      dark: $store.getters.getTheme === 'dark'
+    }"
     @click="setActiveBudget"
   >
     <div class="category-img-container">
@@ -117,11 +127,22 @@
     justify-self: end;
   }
 
-  .active {
-    /* border: 1px solid black; */
+  .dark {
+    background-color: #2f3136;
+  }
+  .light {
+    background-color: #e5e5e5;
+  }
+
+  .active-dark {
     color: white;
-    background-color: #404040;
-    box-shadow: 1px 1px 5px 1px #676767;
+    background-color: #354157;
+  }
+
+  .active-light {
+    background-color: #5969ea;
+    color: white;
+    box-shadow: 1px 1px 1px 1px #add8e6;
   }
 
   @media screen and (min-width: 700px) {
