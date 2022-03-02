@@ -129,7 +129,6 @@
   }
 
   #loginInBox {
-    grid-column: span 2;
     justify-self: center;
     width: 60%;
     display: flex;
@@ -207,5 +206,10 @@
     text-decoration: none;
     text-align: center;
     line-height: 0;
+  }
+  @media screen and (min-width: 700px) {
+    #loginInBox {
+      grid-column: span 2;
+    }
   }
 </style>
