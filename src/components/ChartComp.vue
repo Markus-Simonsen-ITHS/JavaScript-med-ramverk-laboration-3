@@ -1,18 +1,21 @@
 <script>
-  import { DoughnutChart } from 'vue-chart-3'
+  import { Chart } from 'chart.js'
 
   export default {
-    components: { DoughnutChart },
     data() {
       return {
+        chartEl: null,
         chartData: {
-          labels: [],
-          datasets: [
-            {
-              data: [],
-              backgroundColor: ['#faa', '#afa', '#aaf']
-            }
-          ]
+          type: 'doughnut',
+          data: {
+            labels: [],
+            datasets: [
+              {
+                data: [],
+                backgroundColor: ['#faa', '#afa', '#aaf']
+              }
+            ]
+          }
         }
       }
     },
@@ -24,6 +27,12 @@
     },
     watch: {
       dataB() {
+        this.fillChartData()
+        this.renderChart()
+      }
+    },
+    methods: {
+      fillChartData() {
         let labelArrayVar = []
         let krArrayVar = []
         for (let index = 0; index < this.dataB.length; index++) {
@@ -37,11 +46,10 @@
             krArrayVar.push(element.amount)
           }
         }
-        this.chartData.labels = labelArrayVar
-        this.chartData.datasets[0].data = krArrayVar
-      }
-    },
-    methods: {
+
+        this.chartData.data.labels = labelArrayVar
+        this.chartData.data.datasets[0].data = krArrayVar
+      },
       findInArray(array, toFind) {
         for (let index = 0; index < array.length; index++) {
           const element = array[index]
@@ -52,11 +60,23 @@
           }
         }
         return -1
+      },
+      renderChart() {
+        if (this.chartEl) {
+          this.chartEl.destroy()
+        }
+        const chartEl = this.$refs.chartRef
+
+        this.chartEl = new Chart(chartEl, this.chartData)
       }
+    },
+    mounted() {
+      this.fillChartData()
+      this.renderChart()
     }
   }
 </script>
 
 <template>
-  <DoughnutChart :chart-data="chartData" />
+  <canvas ref="chartRef" />
 </template>
