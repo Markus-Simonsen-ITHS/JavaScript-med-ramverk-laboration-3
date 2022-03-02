@@ -63,7 +63,18 @@
 
     <div class="logo-container">
       <div class="logo-and-text">
-        <img class="logo" src="Deg-logo final.svg" alt="" />
+        <img
+          class="logo"
+          src="Deg-logo final.svg"
+          alt="Deg logo black"
+          v-if="$store.getters.getTheme === 'light'"
+        />
+        <img
+          class="logo"
+          src="../../public/Deg-logo-white.svg"
+          alt="Deg logo white"
+          v-if="$store.getters.getTheme === 'dark'"
+        />
         <h1 class="logo-title">DEG</h1>
       </div>
       <ul>
@@ -83,7 +94,7 @@
             dark: $store.getters.getTheme === 'dark'
           }"
         >
-          <RouterLink to="/history">Historik</RouterLink>
+          <RouterLink to="/history/list">Historik</RouterLink>
         </li>
         <li
           class="link"
@@ -198,11 +209,9 @@
       display: flex;
       justify-content: space-between;
     }
-    .logo-title {
-      color: black;
-    }
     .logo-and-text {
       display: flex;
+      margin-left: 10px;
     }
     .container {
       display: none;
@@ -210,7 +219,6 @@
     .navbar {
       /* Removed background color, color, box-shadow, float, position */
       background-color: rgba(255, 0, 0, 0);
-      color: rgba(51, 51, 51, 0);
       box-shadow: 0px 0px 0px 0px #676767;
       width: 100% !important;
       height: 80px !important;

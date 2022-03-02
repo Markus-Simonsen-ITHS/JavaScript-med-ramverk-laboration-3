@@ -18,7 +18,18 @@
     }"
   >
     <div class="logo-container" v-if="!displayHeader">
-      <img class="logo" src="Deg-logo final.svg" alt="" />
+      <img
+        class="logo"
+        src="Deg-logo final.svg"
+        alt="Deg logo black"
+        v-if="$store.getters.getTheme === 'light'"
+      />
+      <img
+        src="../public/Deg-logo-white.svg"
+        alt="Deg logo white"
+        class="logo"
+        v-if="$store.getters.getTheme === 'dark'"
+      />
       <h1 class="logo-title">DEG</h1>
     </div>
     <RouterView />
