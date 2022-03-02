@@ -29,55 +29,74 @@
 </script>
 
 <template>
-  <div
-    class="filter-body"
-    :class="{
-      'dark-form': $store.getters.getTheme === 'dark',
-      'light-form': $store.getters.getTheme === 'light'
-    }"
-  >
-    <h1>Historik</h1>
-    <div class="button-container">
-      <div class="filter-button" :class="{ active: view === 'list' }" id="list">
-        <router-link to="/history/list" class="filter-button">
-          Lista
-        </router-link>
+  <div class="float-filler" />
+  <div class="filter-body">
+    <div
+      class="filter-form"
+      :class="{
+        'dark-form': $store.getters.getTheme === 'dark',
+        'light-form': $store.getters.getTheme === 'light'
+      }"
+    >
+      <h1>Historik</h1>
+      <div class="button-container">
+        <div
+          class="filter-button"
+          :class="{ active: view === 'list' }"
+          id="list"
+        >
+          <router-link to="/history/list" class="filter-button">
+            Lista
+          </router-link>
+        </div>
+        <div
+          class="filter-button"
+          :class="{ active: view === 'chart' }"
+          id="chart"
+        >
+          <router-link to="/history/chart" class="filter-button">
+            Diagram
+          </router-link>
+        </div>
+        <div :class="{ active: view === 'calendar' }" id="calendar">
+          <router-link to="/history/calender" class="filter-button">
+            Kalender
+          </router-link>
+        </div>
       </div>
-      <div
-        class="filter-button"
-        :class="{ active: view === 'chart' }"
-        id="chart"
-      >
-        <router-link to="/history/chart" class="filter-button">
-          Diagram
-        </router-link>
-      </div>
-      <div :class="{ active: view === 'calendar' }" id="calendar">
-        <router-link to="/history/calender" class="filter-button">
-          Kalender
-        </router-link>
-      </div>
+      <select v-model="reoccurringSelect" @change="changeItemStatus">
+        <option value="reoccurring">Återkommande</option>
+        <option value="all">Alla</option>
+      </select>
+      <select v-model="timeSelect" @change="changeTimeFilter">
+        <option value="oneMonth">1 månad</option>
+        <option value="threeMonths">3 månader</option>
+        <option value="oneYear">1 år</option>
+      </select>
     </div>
-    <select v-model="reoccurringSelect" @change="changeItemStatus">
-      <option value="reoccurring">Återkommande</option>
-      <option value="all">Alla</option>
-    </select>
-    <select v-model="timeSelect" @change="changeTimeFilter">
-      <option value="oneMonth">1 månad</option>
-      <option value="threeMonths">3 månader</option>
-      <option value="oneYear">1 år</option>
-    </select>
   </div>
 </template>
 
 <style scoped>
+  .float-filler {
+    display: none;
+    height: 120px;
+  }
   h1 {
     font-size: 1.5rem;
   }
   .filter-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-form {
     border-radius: 8px;
     padding: 20px;
+    width: 80%;
+    align-self: center;
   }
+
   .button-container {
     display: flex;
     justify-content: center;
@@ -100,5 +119,11 @@
     height: 40px;
     padding: 5px;
     margin-right: 10px;
+  }
+
+  @media screen and (min-width: 700px) {
+    .float-filler {
+      display: block;
+    }
   }
 </style>
