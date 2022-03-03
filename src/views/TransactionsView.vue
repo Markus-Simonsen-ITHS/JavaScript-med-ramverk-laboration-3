@@ -37,25 +37,30 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-      <div v-for="expense in budget.expenses" :key="expense">
+      <div class="test" v-for="expense in budget.expenses" :key="expense">
+        <hr v-show="toggle" class="line" />
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
         </p>
-        <p class="expense-amount" v-show="toggle">{{ expense.amount }} kr</p>
+        <p class="expense-amount" v-show="toggle">-{{ expense.amount }} kr</p>
         <DeleteComp
+          class="delete-comp"
           v-show="toggle"
           :collection-item="expense.expenseId"
           :collection="'utgift'"
         />
       </div>
       <div
-        class="incomeList"
+        class="test"
         v-for="income in budget.incomeList"
         :key="income"
         v-show="toggle"
       >
-        {{ income.title }}
+        <hr v-show="toggle" class="line" />
+        <p class="expense-title">{{ income.title }}</p>
+        <p class="expense-amount">+{{ income.amount }} kr</p>
         <DeleteComp
+          class="delete-comp"
           :collection-item="income.incomeId"
           :collection="'inkomst'"
         />
@@ -65,6 +70,23 @@
 </template>
 
 <style scoped>
+  .line {
+    border: 0.5px solid black;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    width: 100%;
+  }
+  .test {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-content: center;
+  }
+  .delete-comp {
+    grid-column-start: 5;
+    grid-row-start: 2;
+  }
   .incomeList {
     padding: 24px;
     display: flex;
@@ -132,17 +154,16 @@
   .expense-title {
     letter-spacing: 0.5px;
     font-size: 1rem;
-    padding: 1rem 0 0 0;
-    border-top: 1px solid black;
+    grid-column-start: 1;
   }
 
   .expense-amount {
-    float: right;
     letter-spacing: 0.5px;
     font-size: 1rem;
     align-self: flex-end;
-    margin: -23px 0 0 0;
     text-transform: lowercase;
+    grid-column-start: 4;
+    grid-row-start: 2;
   }
 
   @media screen and (max-width: 500px) {

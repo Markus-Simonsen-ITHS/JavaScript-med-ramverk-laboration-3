@@ -45,13 +45,4 @@
     background-color: black;
     transform: rotate(90deg);
   }
-
-  #close-button {
-    grid-column: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    border-radius: 10px;
-    align-self: end;
-    justify-self: end;
-  }
 </style>
