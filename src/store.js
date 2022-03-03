@@ -396,6 +396,8 @@ const mutations = {
       state.budget.forEach((budget) => {
         let newBudgetItem = { ...budget }
         newBudgetItem.expenses = []
+        newBudgetItem.incomeList = []
+
         budget.expenses.forEach((expense) => {
           const expenseDate = moment(expense.date)
           const isBetween = expenseDate.isBetween(startDate, endDate)
@@ -416,7 +418,21 @@ const mutations = {
           reoccuringExpensesArr
         )
 
-        if (newBudgetItem.expenses.length > 0) {
+        console.log(budget)
+        if (budget.incomeList) {
+          budget.incomeList.forEach((incomeItem) => {
+            const incomeDate = moment(incomeItem.date)
+            const isBetween = incomeDate.isBetween(startDate, endDate)
+            if (isBetween && !state.displayOnlyReoccuring) {
+              newBudgetItem.incomeList.push(incomeItem)
+            }
+          })
+        }
+
+        if (
+          newBudgetItem.expenses.length > 0 ||
+          newBudgetItem.incomeList.length > 0
+        ) {
           filteredArr.push(newBudgetItem)
         }
       })

@@ -18,13 +18,8 @@
       expenses() {
         return this.$store.getters.getExpenses
       },
-<<<<<<< HEAD
       filteredExpenses() {
         return this.$store.getters.getFilteredExpenses
-=======
-      incomeList() {
-        return this.$store.getters.getIncome
->>>>>>> main
       }
     }
   }
@@ -48,16 +43,8 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-<<<<<<< HEAD
-      <div v-for="expense in budget.expenses" :key="expense" v-show="toggle">
-        <DeleteComp
-          :collection-item="expense.expenseId"
-          :collection="'utgift'"
-        />
-=======
       <div class="test" v-for="expense in budget.expenses" :key="expense">
         <hr v-show="toggle" class="line" />
->>>>>>> main
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
         </p>

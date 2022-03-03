@@ -1,7 +1,7 @@
 <script>
   import CalendarComp from '../components/CalendarComp.vue'
   export default {
-    components: CalendarComp
+    components: { CalendarComp }
   }
 </script>
 
