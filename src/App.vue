@@ -20,7 +20,7 @@
     <div class="logo-container" v-if="!displayHeader">
       <img
         class="logo"
-        src="Deg-logo final.svg"
+        src="../public/Deg-logo-final.svg"
         alt="Deg logo black"
         v-if="$store.getters.getTheme === 'light'"
       />
