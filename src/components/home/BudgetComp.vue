@@ -97,6 +97,9 @@
         :class="{ 'input-error': errors.amountError }"
       />
       <div class="button-container">
+        <RouterLink to="/"
+          ><input class="buttons" type="button" value="Avbryt"
+        /></RouterLink>
         <button
           class="buttons"
           type="submit"
@@ -105,14 +108,6 @@
         >
           Lägg till
         </button>
-        <RouterLink to="/"
-          ><input class="buttons" type="button" value="Avbryt"
-        /></RouterLink>
-      </div>
-      <div class="cancel">
-        <RouterLink to="/"
-          ><input class="buttons" type="button" value="Avbryt"
-        /></RouterLink>
       </div>
     </form>
   </div>

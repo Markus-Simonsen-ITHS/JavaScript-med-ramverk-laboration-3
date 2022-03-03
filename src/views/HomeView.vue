@@ -152,7 +152,7 @@
     :expense-progress="calculateExpenseProgress"
   />
 
-  <RouterLink to="/Budget"
+  <RouterLink class="budget" to="/Budget"
     ><input class="buttons" type="button" value="Lägg till budget"
   /></RouterLink>
 
@@ -273,6 +273,11 @@
     display: flex;
     justify-content: center;
   }
+  .budget {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+  }
   @media screen and (min-width: 700px) {
     .warning-card {
       width: 50%;
@@ -283,10 +288,11 @@
     }
     .account-overview-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
     }
     .status-container {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      display: flex;
+      justify-content: center;
+      justify-content: space-around;
     }
     /* Hide history-link on desktop */
     .overview-container a {
@@ -299,6 +305,9 @@
     .add-category-container {
       padding: 10px;
       grid-template-columns: 0.2fr 1fr;
+    }
+    .status-card {
+      width: 350px;
     }
   }
 </style>
