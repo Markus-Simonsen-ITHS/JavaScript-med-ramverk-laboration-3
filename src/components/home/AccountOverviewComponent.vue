@@ -37,7 +37,9 @@
           }"
         />
       </div>
-      <p class="account-budget">Budget: {{ budget.sum ? budget.sum : 0 }} kr</p>
+      <p class="account-budget">
+        Budget: {{ budget.amount ? budget.amount : 0 }} kr
+      </p>
     </div>
   </div>
 </template>
