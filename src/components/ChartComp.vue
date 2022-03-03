@@ -64,5 +64,14 @@
 </script>
 
 <template>
-  <DoughnutChart :chart-data="chartData" />
+  <div class="container">
+    <DoughnutChart :chart-data="chartData" />
+  </div>
 </template>
+<style scoped>
+  .container {
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+</style>

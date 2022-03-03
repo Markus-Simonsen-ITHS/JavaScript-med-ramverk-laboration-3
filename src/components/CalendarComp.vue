@@ -16,7 +16,9 @@
       ]
       return {
         incId: labels.length,
-        labels
+        labels,
+        year: date.getFullYear(),
+        month: date.getMonth()
       }
     },
     computed: {
@@ -41,12 +43,9 @@
     },
     async created() {
       // ^ fetches back end income and expenses data and pushes in to the labels array
+      console.log(this.year, this.month, this.labels)
       const q = query(
         collection(db, 'inkomst'),
-        where('id', '==', this.$store.state.user.id)
-      )
-      const qq = query(
-        collection(db, 'utgift'),
         where('id', '==', this.$store.state.user.id)
       )
       const allIncome = await getDocs(q)
@@ -57,11 +56,39 @@
           color: 'green'
         })
       })
+      const qq = query(
+        collection(db, 'utgift'),
+        where('id', '==', this.$store.state.user.id)
+      )
       const allExpenses = await getDocs(qq)
       allExpenses.forEach((doc) => {
         this.labels.push({
           description: `${doc.data().title} : ${doc.data().amount}`,
           dates: doc.data().date,
+          color: 'red'
+        })
+      })
+      const qå = query(
+        collection(db, 'återkommandeInkomst'),
+        where('id', '==', this.$store.state.user.id)
+      )
+      const allIncomeRe = await getDocs(qå)
+      allIncomeRe.forEach((doc) => {
+        this.labels.push({
+          description: `${doc.data().title} : ${doc.data().amount}`,
+          dates: new Date(this.year, this.month, 1),
+          color: 'green'
+        })
+      })
+      const qqå = query(
+        collection(db, 'återkommandeUtgift'),
+        where('id', '==', this.$store.state.user.id)
+      )
+      const allExpensesRe = await getDocs(qqå)
+      allExpensesRe.forEach((doc) => {
+        this.labels.push({
+          description: `${doc.data().title} : ${doc.data().amount}`,
+          dates: new Date(this.year, this.month, 1),
           color: 'red'
         })
       })
@@ -87,6 +114,11 @@
 </template>
 <style scoped>
   .container {
-    width: 40%;
+    width: 60%;
+  }
+  @media screen and (min-width: 900px) {
+    .container {
+      width: 30%;
+    }
   }
 </style>

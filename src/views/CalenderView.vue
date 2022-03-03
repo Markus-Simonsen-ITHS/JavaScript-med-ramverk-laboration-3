@@ -6,22 +6,16 @@
 </script>
 
 <template>
-  <h2 class="chosenView">Kalender</h2>
-  <div class="container">
+  <div class="wrapper">
     <CalendarComp />
   </div>
 </template>
 
 <style scoped>
-  .chosenView {
-    font-size: 1.5rem;
-    margin-left: 20px;
-    font-weight: lighter;
-    text-align: center;
-  }
-  .container {
+  .wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 40px;
   }
 </style>

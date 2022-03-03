@@ -25,50 +25,52 @@
 </script>
 
 <template>
-  <div id="history-list-container">
-    <div
-      class="history-list"
-      :class="{
-        'dark-form': $store.getters.getTheme === 'dark',
-        'light-form': $store.getters.getTheme === 'light'
-      }"
-      @click="toggle = !toggle"
-      v-for="budget in budgets"
-      :key="budget"
-    >
-      <img src="../../assets/fox.jpeg" alt="deg logo" />
-      <p class="budget-title">{{ budget.title }}</p>
-      <p class="budget-sum">budget:</p>
-      <p class="budget-sum-self">{{ budget.amount }} kr</p>
-
-      <div class="test" v-for="expense in budget.expenses" :key="expense">
-        <hr v-show="toggle" class="line" />
-        <p class="expense-title" v-show="toggle">
-          {{ expense.title }}
-        </p>
-        <p class="expense-amount" v-show="toggle">-{{ expense.amount }} kr</p>
-
-        <DeleteComp
-          class="delete-comp"
-          v-show="toggle"
-          :collection-item="expense.expenseId"
-          :collection="'utgift'"
-        />
-      </div>
+  <div class="container">
+    <div id="history-list-container">
       <div
-        class="test"
-        v-for="income in budget.incomeList"
-        :key="income"
-        v-show="toggle"
+        class="history-list"
+        :class="{
+          'dark-form': $store.getters.getTheme === 'dark',
+          'light-form': $store.getters.getTheme === 'light'
+        }"
+        @click="toggle = !toggle"
+        v-for="budget in budgets"
+        :key="budget"
       >
-        <hr v-show="toggle" class="line" />
-        <p class="expense-title">{{ income.title }}</p>
-        <p class="expense-amount">+{{ income.amount }} kr</p>
-        <DeleteComp
-          class="delete-comp"
-          :collection-item="income.incomeId"
-          :collection="'inkomst'"
-        />
+        <img src="../../assets/fox.jpeg" alt="deg logo" />
+        <p class="budget-title">{{ budget.title }}</p>
+        <p class="budget-sum">budget:</p>
+        <p class="budget-sum-self">{{ budget.amount }} kr</p>
+
+        <div class="test" v-for="expense in budget.expenses" :key="expense">
+          <hr v-show="toggle" class="line" />
+          <p class="expense-title" v-show="toggle">
+            {{ expense.title }}
+          </p>
+          <p class="expense-amount" v-show="toggle">-{{ expense.amount }} kr</p>
+
+          <DeleteComp
+            class="delete-comp"
+            v-show="toggle"
+            :collection-item="expense.expenseId"
+            :collection="'utgift'"
+          />
+        </div>
+        <div
+          class="test"
+          v-for="income in budget.incomeList"
+          :key="income"
+          v-show="toggle"
+        >
+          <hr v-show="toggle" class="line" />
+          <p class="expense-title">{{ income.title }}</p>
+          <p class="expense-amount">+{{ income.amount }} kr</p>
+          <DeleteComp
+            class="delete-comp"
+            :collection-item="income.incomeId"
+            :collection="'inkomst'"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -103,8 +105,12 @@
     margin-left: 20px;
     font-weight: lighter;
   }
-
+  .container {
+    display: flex;
+    justify-content: center;
+  }
   #history-list-container {
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     height: 100%;

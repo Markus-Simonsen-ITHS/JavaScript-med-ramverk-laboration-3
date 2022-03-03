@@ -80,7 +80,6 @@
 <style scoped>
   .float-filler {
     display: none;
-    height: 120px;
   }
   h1 {
     font-size: 1.5rem;
@@ -121,9 +120,13 @@
     margin-right: 10px;
   }
 
-  @media screen and (min-width: 700px) {
+  @media screen and (min-width: 950px) {
     .float-filler {
       display: block;
+      height: 120px;
+    }
+    .filter-form {
+      width: 50%;
     }
   }
 </style>
