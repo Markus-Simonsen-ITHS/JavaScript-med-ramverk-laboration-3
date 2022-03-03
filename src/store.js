@@ -7,8 +7,7 @@ import moment from 'moment'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut,
-  updatePassword
+  signOut
 } from 'firebase/auth'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -88,7 +87,8 @@ const mutations = {
         sum: 0,
         id: '',
         amountSpent: 0,
-        expenses: []
+        expenses: [],
+        incomeList: []
       }
     ],
     displayOnlyReoccuring: false,
@@ -142,9 +142,11 @@ const mutations = {
       // Iterating through all documents and saving the data from them
       allIncome.forEach((income) => {
         const localIncome = income.data()
-        localIncome.id = income.id
+        localIncome.incomeId = income.id
+
         incomeArr.push(localIncome)
       })
+
       state.commit('setIncome', incomeArr)
     },
     async fetchAllExpensesForUser(state, userId) {
@@ -196,7 +198,8 @@ const mutations = {
           budgetId: '101010',
           id: userId,
           amountSpent: 0,
-          expenses: []
+          expenses: [],
+          incomeList: []
         }
       ]
 
@@ -237,6 +240,24 @@ const mutations = {
         }
       })
 
+      state.state.income.forEach((income) => {
+        const foundIndex = budgetArr.findIndex(
+          (budget) =>
+            budget.title.toLocaleLowerCase() ===
+            income.category.toLocaleLowerCase()
+        )
+
+        if (foundIndex === -1) {
+          budgetArr[0].incomeList.push(income)
+        } else {
+          if (budgetArr[foundIndex].incomeList) {
+            budgetArr[foundIndex].incomeList.push(income)
+          } else {
+            budgetArr[foundIndex].incomeList = [income]
+          }
+        }
+      })
+
       state.commit('setBudget', budgetArr)
     },
     changeDisplayReoccuring(state, payload) {
@@ -251,26 +272,13 @@ const mutations = {
     changeTimeFilter(state, payload) {
       state.commit('setTimeFilter', payload)
     },
-    // Change password (Seems like firebase has a bug with changing password)
-    changePassword(state, payload) {
-      console.log(payload)
-      signInWithEmailAndPassword(auth, payload.email, payload.oldPassword)
-        .then(() => {
-          updatePassword(auth, payload.oldPassword, payload.newPassword)
-            .then(() => {
-              state.commit('setLoginError', '')
-              console.log('Password changed')
-            })
-            .catch((error) => {
-              state.commit('setLoginError', error)
-              console.log(error)
-            })
-        })
-        .catch((error) => {
-          state.commit('setLoginError', error)
-          console.log(error)
-        })
+
+    async fetchFlow(state, userId) {
+      state.dispatch('fetchAllIncomeForUser', userId)
+      state.dispatch('fetchAllExpensesForUser', userId)
     },
+    // Change password (Seems like firebase has a bug with changing password)
+    async changePassword() {},
     // Delete account
     deleteAccount(state, payload) {
       console.log(payload)

@@ -21,7 +21,7 @@
       dark: $store.getters.getTheme === 'dark'
     }"
   >
-    <div>
+    <div class="bar-container">
       <p class="account-overview-name">
         {{ budget ? budget.title : 'Laddar' }}
       </p>
@@ -73,5 +73,14 @@
   .account-budget {
     text-align: end;
     font-size: 1rem;
+  }
+  @media screen and (min-width: 700px) {
+    .bar-container {
+      width: 500px;
+    }
+    .account-overview-container {
+      justify-content: center;
+      grid-template-columns: none;
+    }
   }
 </style>

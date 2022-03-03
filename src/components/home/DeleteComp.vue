@@ -2,11 +2,6 @@
   import { doc, deleteDoc } from 'firebase/firestore'
   import { db } from '../../firebase'
   export default {
-    // data() {
-    //   return {
-    //     collection: this.test
-    //   }
-    // },
     props: {
       collectionItem: {
         required: true,
@@ -49,14 +44,5 @@
     width: 2px;
     background-color: black;
     transform: rotate(90deg);
-  }
-
-  #close-button {
-    grid-column: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    border-radius: 10px;
-    align-self: end;
-    justify-self: end;
   }
 </style>
