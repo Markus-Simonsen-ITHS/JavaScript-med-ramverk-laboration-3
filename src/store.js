@@ -5,8 +5,7 @@ import router from './router'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut,
-  updatePassword
+  signOut
 } from 'firebase/auth'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -253,25 +252,7 @@ const mutations = {
       state.dispatch('fetchAllExpensesForUser', userId)
     },
     // Change password (Seems like firebase has a bug with changing password)
-    changePassword(state, payload) {
-      console.log(payload)
-      signInWithEmailAndPassword(auth, payload.email, payload.oldPassword)
-        .then(() => {
-          updatePassword(auth, payload.oldPassword, payload.newPassword)
-            .then(() => {
-              state.commit('setLoginError', '')
-              console.log('Password changed')
-            })
-            .catch((error) => {
-              state.commit('setLoginError', error)
-              console.log(error)
-            })
-        })
-        .catch((error) => {
-          state.commit('setLoginError', error)
-          console.log(error)
-        })
-    },
+    async changePassword() {},
     // Delete account
     deleteAccount(state, payload) {
       console.log(payload)

@@ -41,7 +41,6 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-
       <div class="test" v-for="expense in budget.expenses" :key="expense">
         <hr v-show="toggle" class="line" />
         <p class="expense-title" v-show="toggle">
@@ -55,7 +54,6 @@
           :collection-item="expense.expenseId"
           :collection="'utgift'"
         />
-
       </div>
       <div
         class="test"
@@ -71,7 +69,6 @@
           :collection-item="income.incomeId"
           :collection="'inkomst'"
         />
-
       </div>
     </div>
   </div>
