@@ -12,10 +12,14 @@
     },
     computed: {
       budgets() {
-        return this.$store.getters.getBudget
+        // return this.$store.getters.getBudget
+        return this.$store.getters.getFilteredBudgets
       },
       expenses() {
         return this.$store.getters.getExpenses
+      },
+      filteredExpenses() {
+        return this.$store.getters.getFilteredExpenses
       }
     }
   }
@@ -23,6 +27,7 @@
 
 <template>
   <div id="history-list-container">
+    <!-- {{ filteredExpenses }} -->
     <div
       class="history-list"
       :class="{
@@ -31,14 +36,14 @@
       }"
       @click="toggle = !toggle"
       v-for="budget in budgets"
-      :key="budget"
+      :key="budget.budgetId"
     >
       <img src="../../assets/fox.jpeg" alt="deg logo" />
       <p class="budget-title">{{ budget.title }}</p>
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-      <div v-for="expense in expenses" :key="expense" v-show="toggle">
+      <div v-for="expense in budget.expenses" :key="expense" v-show="toggle">
         <DeleteComp
           :collection-item="expense.expenseId"
           :collection="'utgift'"
