@@ -24,8 +24,7 @@ auth.onAuthStateChanged((user) => {
   // If user exists, fetch data from db
   if (user) {
     store.dispatch('fetchUser', user.uid)
-    store.dispatch('fetchAllIncomeForUser', user.uid)
-    store.dispatch('fetchAllExpensesForUser', user.uid)
+    store.dispatch('fetchFlow', user.uid)
 
     // Check user theme
     if (

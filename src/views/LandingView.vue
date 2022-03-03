@@ -128,11 +128,13 @@
     font-size: 1.5rem;
     margin: 0;
     font-weight: 700;
+    color: #e5e5e5;
   }
 
   p {
     font-size: 1rem;
     font-weight: 400;
+    color: #e5e5e5;
   }
 
   button {
