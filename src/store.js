@@ -131,7 +131,9 @@ const mutations = {
 
       // Iterating through all documents and saving the data from them
       allIncome.forEach((income) => {
-        incomeArr.push(income.data())
+        const localIncome = income.data()
+        localIncome.id = income.id
+        incomeArr.push(localIncome)
       })
       state.commit('setIncome', incomeArr)
     },
@@ -154,6 +156,7 @@ const mutations = {
       allExpenses.forEach((expense) => {
         const localExpense = expense.data()
         localExpense.expenseId = expense.id
+        localExpense.amount = parseInt(localExpense.amount)
         expensesArr.push(localExpense)
       })
       allExpensesReocurring.forEach((expense) => {
