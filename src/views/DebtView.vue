@@ -1,7 +1,6 @@
 <script>
   import DebtComp from '../components/DebtComp.vue'
   import NavBar from '../components/NavBar.vue'
-
   export default {
     components: { DebtComp, NavBar }
   }
