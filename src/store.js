@@ -134,6 +134,7 @@ const mutations = {
       allIncome.forEach((income) => {
         const localIncome = income.data()
         localIncome.incomeId = income.id
+
         incomeArr.push(localIncome)
       })
 
@@ -158,6 +159,7 @@ const mutations = {
       allExpenses.forEach((expense) => {
         const localExpense = expense.data()
         localExpense.expenseId = expense.id
+        localExpense.amount = parseInt(localExpense.amount)
         expensesArr.push(localExpense)
       })
       allExpensesReocurring.forEach((expense) => {

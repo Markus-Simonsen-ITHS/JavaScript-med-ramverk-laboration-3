@@ -28,6 +28,10 @@
   <div id="history-list-container">
     <div
       class="history-list"
+      :class="{
+        'dark-form': $store.getters.getTheme === 'dark',
+        'light-form': $store.getters.getTheme === 'light'
+      }"
       @click="toggle = !toggle"
       v-for="budget in budgets"
       :key="budget"
@@ -37,18 +41,21 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
+
       <div class="test" v-for="expense in budget.expenses" :key="expense">
         <hr v-show="toggle" class="line" />
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
         </p>
         <p class="expense-amount" v-show="toggle">-{{ expense.amount }} kr</p>
+
         <DeleteComp
           class="delete-comp"
           v-show="toggle"
           :collection-item="expense.expenseId"
           :collection="'utgift'"
         />
+
       </div>
       <div
         class="test"
@@ -64,6 +71,7 @@
           :collection-item="income.incomeId"
           :collection="'inkomst'"
         />
+
       </div>
     </div>
   </div>
@@ -117,7 +125,6 @@
     margin: 30px;
     padding: 10px;
     border-radius: 8px;
-    background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
