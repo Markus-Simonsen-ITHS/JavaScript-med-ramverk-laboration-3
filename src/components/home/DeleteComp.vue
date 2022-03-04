@@ -15,7 +15,7 @@
     methods: {
       async removeBudget(collection, collectionItem) {
         await deleteDoc(doc(db, collection, collectionItem))
-        confirm(`är du säker på att du vill radera ${collectionItem}`)
+        this.$store.dispatch('fetchFlow', this.$store.state.user.id)
       }
     }
   }
