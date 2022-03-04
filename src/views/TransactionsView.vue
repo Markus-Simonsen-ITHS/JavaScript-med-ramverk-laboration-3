@@ -178,6 +178,20 @@
     grid-row-start: 2;
   }
 
+  .income-amount {
+    background-color: lightseagreen;
+    padding: 8px;
+    border-radius: 8px;
+    width: fit-content;
+  }
+
+  .expense-amount {
+    background-color: lightcoral;
+    padding: 8px;
+    border-radius: 8px;
+    width: fit-content;
+  }
+
   @media screen and (max-width: 500px) {
     .history-list {
       margin: 10px;
