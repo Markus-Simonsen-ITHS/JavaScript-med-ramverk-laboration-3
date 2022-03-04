@@ -37,7 +37,15 @@
       <p class="budget-sum">budget:</p>
       <p class="budget-sum-self">{{ budget.amount }} kr</p>
 
-      <div class="test" v-for="expense in budget.expenses" :key="expense">
+      <div
+        class="test"
+        v-for="expense in budget.expenses"
+        :key="expense"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      >
         <hr v-show="toggle" class="line" />
         <p class="expense-title" v-show="toggle">
           {{ expense.title }}
@@ -71,7 +79,7 @@
 
 <style scoped>
   .line {
-    border: 0.5px solid black;
+    border: 0.5px solid;
     grid-column-start: 1;
     grid-column-end: 6;
     width: 100%;
@@ -117,7 +125,6 @@
     margin: 30px;
     padding: 10px;
     border-radius: 8px;
-    background-color: #e7e7e7;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
