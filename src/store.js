@@ -172,12 +172,14 @@ const mutations = {
         const localExpense = expense.data()
         localExpense.expenseId = expense.id
         localExpense.amount = parseInt(localExpense.amount)
+        localExpense.collection = 'utgift'
         expensesArr.push(localExpense)
       })
       allExpensesReocurring.forEach((expense) => {
         const localReoccuringExpense = expense.data()
-        localReoccuringExpense.id = expense.id
+        localReoccuringExpense.expenseId = expense.id
         localReoccuringExpense.amount = parseInt(localReoccuringExpense.amount)
+        localReoccuringExpense.collection = 'återkommandeUtgift'
         expensesReArr.push(localReoccuringExpense)
       })
 
@@ -291,7 +293,6 @@ const mutations = {
       reauthenticateWithCredential(user, cred)
         .then(() => {
           // User re-authenticated.
-          console.log(payload.newPassword)
           updatePassword(user, payload.newPassword)
             .then(() => {
               // Update successful.
@@ -311,7 +312,6 @@ const mutations = {
     },
     // Delete account
     deleteAccount(state, payload) {
-      console.log(payload)
       signInWithEmailAndPassword(auth, payload.email, payload.password)
         .then(() => {
           auth.currentUser.delete().then(() => {
@@ -448,7 +448,6 @@ const mutations = {
           reoccuringExpensesArr
         )
 
-        console.log(budget)
         if (budget.incomeList) {
           budget.incomeList.forEach((incomeItem) => {
             const incomeDate = moment(incomeItem.date)
