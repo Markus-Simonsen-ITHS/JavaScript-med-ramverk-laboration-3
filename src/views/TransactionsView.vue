@@ -68,7 +68,7 @@
         >
           <hr v-show="toggle" class="line" />
           <p class="expense-title">{{ income.title }}</p>
-          <p class="expense-amount">+{{ income.amount }} kr</p>
+          <p class="income-amount">+{{ income.amount }} kr</p>
           <DeleteComp
             class="delete-comp"
             :collection-item="income.incomeId"
@@ -82,21 +82,21 @@
 
 <style scoped>
   .line {
-    border: 0.5px solid black;
+    border: 0.5px solid;
     grid-column-start: 1;
     grid-column-end: 6;
     width: 100%;
   }
   .test {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 0.2fr;
     grid-template-rows: 1fr;
     align-items: center;
     justify-content: center;
   }
   .delete-comp {
     grid-column-start: 5;
-    grid-row-start: 2;
+    grid-row: 1;
   }
   .incomeList {
     padding: 24px;
@@ -176,16 +176,32 @@
     letter-spacing: 0.5px;
     font-size: 1rem;
     grid-column-start: 1;
-    width: 180px;
+    grid-row: 1;
   }
 
-  .expense-amount {
+  .expense-amount,
+  .income-amount {
     letter-spacing: 0.5px;
     font-size: 1rem;
     align-self: flex-end;
     text-transform: lowercase;
-    grid-column-start: 4;
-    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .income-amount {
+    background-color: lightseagreen;
+    padding: 8px;
+    border-radius: 8px;
+    width: fit-content;
+  }
+
+  .expense-amount {
+    background-color: lightcoral;
+    padding: 8px;
+    border-radius: 8px;
+    width: fit-content;
   }
 
   @media screen and (max-width: 500px) {

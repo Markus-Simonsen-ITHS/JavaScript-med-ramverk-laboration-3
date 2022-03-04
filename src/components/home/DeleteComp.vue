@@ -23,8 +23,20 @@
 
 <template>
   <div id="close-button" @click="removeBudget(collection, collectionItem)">
-    <div class="close-button">
-      <div class="close-button-r" />
+    <div
+      class="close-button"
+      :class="{
+        light: $store.getters.getTheme === 'light',
+        dark: $store.getters.getTheme === 'dark'
+      }"
+    >
+      <div
+        class="close-button-r"
+        :class="{
+          light: $store.getters.getTheme === 'light',
+          dark: $store.getters.getTheme === 'dark'
+        }"
+      />
     </div>
   </div>
 </template>
@@ -34,7 +46,6 @@
     height: 25px;
     width: 2px;
     margin-left: 12px;
-    background-color: black;
     transform: rotate(45deg);
     margin: 0 16px 0 0;
   }
@@ -42,7 +53,14 @@
   .close-button-r {
     height: 25px;
     width: 2px;
-    background-color: black;
     transform: rotate(90deg);
+  }
+
+  .light {
+    background-color: #202225;
+  }
+
+  .dark {
+    background-color: #e5e5e5;
   }
 </style>
