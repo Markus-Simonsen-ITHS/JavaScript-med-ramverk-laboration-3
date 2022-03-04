@@ -5,20 +5,9 @@
     components: {
       BudgetListItem
     },
-    data() {
-      return {
-        toggle: false
-      }
-    },
     computed: {
       budgets() {
         return this.$store.getters.getFilteredBudgets
-      },
-      expenses() {
-        return this.$store.getters.getExpenses
-      },
-      filteredExpenses() {
-        return this.$store.getters.getFilteredExpenses
       }
     }
   }
