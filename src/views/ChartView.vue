@@ -4,7 +4,7 @@
   export default {
     computed: {
       expenses() {
-        return this.$store.getters.getExpenses
+        return this.$store.getters.getFilteredExpenses
       }
     },
     components: {

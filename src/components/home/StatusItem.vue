@@ -44,7 +44,10 @@
           {{ status.name }}
         </p>
       </span>
-      <p v-if="this.checkbox === true && status.name === 'Utgifter'">
+      <p
+        class="text"
+        v-if="this.checkbox === true && status.name === 'Utgifter'"
+      >
         Återkommande Utgifter
       </p>
       <div v-if="status.name === 'Utgifter'" class="aligner">
@@ -64,7 +67,10 @@
   </div>
 </template>
 
-<style>
+<style scoped>
+  .text {
+    font-size: 1rem;
+  }
   .status-container {
     padding: 10px;
     display: grid;

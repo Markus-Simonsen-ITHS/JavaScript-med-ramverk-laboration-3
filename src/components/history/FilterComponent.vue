@@ -3,17 +3,16 @@
     emits: ['setView', 'changeItemStatus', 'changeTimeFilter'],
     data() {
       return {
-        reoccurringSelect: 'reoccurring',
+        reoccurringSelect: 'all',
         timeSelect: 'oneMonth'
       }
     },
     methods: {
       changeItemStatus() {
-        this.$emit('changeItemStatus', this.reoccurringSelect)
+        this.$store.dispatch('changeDisplayReoccuring', this.reoccurringSelect)
       },
       changeTimeFilter() {
-        console.log(this.timeSelect)
-        this.$emit('changeTimeFilter', this.timeSelect)
+        this.$store.dispatch('changeTimeFilter', this.timeSelect)
       }
     },
     computed: {
@@ -40,33 +39,25 @@
     >
       <h1>Historik</h1>
       <div class="button-container">
-        <div
-          class="filter-button"
-          :class="{ active: view === 'list' }"
-          id="list"
-        >
+        <div :class="{ active: view === 'list' }">
           <router-link to="/history/list" class="filter-button">
             Lista
           </router-link>
         </div>
-        <div
-          class="filter-button"
-          :class="{ active: view === 'chart' }"
-          id="chart"
-        >
+        <div :class="{ active: view === 'chart' }">
           <router-link to="/history/chart" class="filter-button">
             Diagram
           </router-link>
         </div>
-        <div :class="{ active: view === 'calendar' }" id="calendar">
+        <div :class="{ active: view === 'calendar' }">
           <router-link to="/history/calender" class="filter-button">
             Kalender
           </router-link>
         </div>
       </div>
       <select v-model="reoccurringSelect" @change="changeItemStatus">
-        <option value="reoccurring">Återkommande</option>
         <option value="all">Alla</option>
+        <option value="reoccurring">Återkommande</option>
       </select>
       <select v-model="timeSelect" @change="changeTimeFilter">
         <option value="oneMonth">1 månad</option>

@@ -12,13 +12,14 @@
     },
     computed: {
       budgets() {
-        return this.$store.getters.getBudget
+        // return this.$store.getters.getBudget
+        return this.$store.getters.getFilteredBudgets
       },
       expenses() {
         return this.$store.getters.getExpenses
       },
-      incomeList() {
-        return this.$store.getters.getIncome
+      filteredExpenses() {
+        return this.$store.getters.getFilteredExpenses
       }
     }
   }
@@ -27,6 +28,7 @@
 <template>
   <div class="container">
     <div id="history-list-container">
+      <!-- {{ filteredExpenses }} -->
       <div
         class="history-list"
         :class="{
@@ -35,7 +37,7 @@
         }"
         @click="toggle = !toggle"
         v-for="budget in budgets"
-        :key="budget"
+        :key="budget.budgetId"
       >
         <img src="../../assets/fox.jpeg" alt="deg logo" />
         <p class="budget-title">{{ budget.title }}</p>
