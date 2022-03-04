@@ -205,7 +205,7 @@
       dark: $store.getters.getTheme === 'dark'
     }"
   >
-    <button @click="goToAddPage">Lägg till en utgift</button>
+    <button @click="goToAddPage">Lägg till en utgift eller inkomst</button>
   </ul>
 </template>
 
@@ -275,8 +275,10 @@
   }
   .budget {
     display: flex;
-    justify-content: center;
     text-decoration: none;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
   }
   @media screen and (min-width: 700px) {
     .warning-card {
