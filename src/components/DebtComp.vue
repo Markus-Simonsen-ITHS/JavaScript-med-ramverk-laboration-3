@@ -16,6 +16,7 @@
     data() {
       return {
         title: null,
+        bool: true,
         amount: null,
         date: null,
         interest: null,
@@ -65,6 +66,7 @@
             this.debts.push(docData)
           }
         })
+        this.bool = false
       },
       async fetchPaymentData() {
         // ^ fetches debt payment data back-end ID's
@@ -227,25 +229,39 @@
         &times;
       </button>
     </div>
-    <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
+    <p class="modalText">
+      Är du säker att du vill ta bort din {{ modalWord }}?
+    </p>
     <div class="modalButtons">
-      <input type="button" value="Ja" @click="removeData" />
-      <input type="button" value="Nej" @click="closePopUp" />
+      <input class="modalButton" type="button" value="Ja" @click="removeData" />
+      <input
+        class="modalButton"
+        type="button"
+        value="Nej"
+        @click="closePopUp"
+      />
     </div>
   </div>
   <div :class="{ overlay: true, active: active }" @click="closePopUp" />
   <ul>
     <li><h2>Skulder:</h2></li>
-    <li v-if="this.debts.length === 0">
+    <li v-if="bool">
+      <p class="titleText">Laddar...</p>
+    </li>
+    <li v-if="bool === false && this.debts.length === 0">
       <p class="titleText">Du har inga skulder</p>
     </li>
     <li v-else :key="entry.title" v-for="(entry, index) in this.debts">
       <p class="titleText">
         <span class="title">{{ entry.title }}</span>
       </p>
-      <p class="smallText">Initial skuld: {{ entry.amount }}</p>
+      <p class="smallText">
+        Initial skuld:
+        {{ Intl.NumberFormat('de-DE').format(entry.amount) }}
+      </p>
       <p class="smallText" v-if="entry.payOffDebt">
-        Resterande skuld: {{ entry.amount - entry.payOffDebt }}
+        Resterande skuld:
+        {{ Intl.NumberFormat('de-DE').format(entry.amount - entry.payOffDebt) }}
       </p>
       <div class="barContainer" :style="{ display: toggle }">
         <div
@@ -255,7 +271,8 @@
       </div>
       <div class="flexer">
         <p class="smallText" v-if="entry.payOffDebt">
-          Avbetalning varje månad: {{ entry.payOffDebt }}
+          Avbetalning varje månad:
+          {{ Intl.NumberFormat('de-DE').format(entry.payOffDebt) }}
         </p>
         <div class="listButtons">
           <input
@@ -282,7 +299,7 @@
       <p class="titleText">Lägg till skuld:</p>
       <input type="text" v-model="title" placeholder="Anteckning" />
       <input type="text" v-model="amount" placeholder="Mängd" />
-      <input type="text" v-model="interest" placeholder="Ränta " />
+      <!-- <input type="text" v-model="interest" placeholder="Ränta " /> -->
       <input type="date" v-model="date" placeholder="Datum" />
       <div class="button-container">
         <input
@@ -496,13 +513,21 @@
       margin-bottom: 20px;
     }
     .smallText {
-      font-size: 140%;
+      font-size: 120%;
+      line-height: 1.1;
     }
     .titleText {
-      font-size: 160%;
+      font-size: 110%;
     }
     .listButtons {
       margin-top: 15px;
+    }
+    .modalButton {
+      width: 70px !important;
+    }
+
+    .modalText {
+      font-size: 120%;
     }
   }
 </style>
