@@ -86,14 +86,14 @@
   }
   .test {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 0.2fr;
     grid-template-rows: 1fr;
     align-items: center;
     justify-content: center;
   }
   .delete-comp {
     grid-column-start: 5;
-    grid-row-start: 2;
+    grid-row: 1;
   }
   .incomeList {
     padding: 24px;
@@ -166,7 +166,7 @@
     letter-spacing: 0.5px;
     font-size: 1rem;
     grid-column-start: 1;
-    width: 180px;
+    grid-row: 1;
   }
 
   .expense-amount,
@@ -175,8 +175,9 @@
     font-size: 1rem;
     align-self: flex-end;
     text-transform: lowercase;
-    grid-column-start: 4;
-    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .income-amount {
