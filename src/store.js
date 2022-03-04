@@ -150,6 +150,8 @@ const mutations = {
         incomeArr.push(localIncome)
       })
 
+      state.dispatch('fetchBudgetsForUser', userId)
+
       state.commit('setIncome', incomeArr)
     },
     async fetchAllExpensesForUser(state, userId) {
