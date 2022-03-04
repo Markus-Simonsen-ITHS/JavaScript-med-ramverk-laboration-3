@@ -439,14 +439,25 @@ const mutations = {
           })
         }
 
-        let reoccuringExpensesArr = [...state.expensesReocurring]
-        reoccuringExpensesArr = reoccuringExpensesArr.filter(
-          (reoccuringExpense) =>
+        const reoccuringExpensesArr = []
+
+        state.expensesReocurring.forEach((reoccuringExpense) => {
+          if (
             reoccuringExpense.category.toLocaleLowerCase() ===
               newBudgetItem.title.toLocaleLowerCase() &&
             moment(reoccuringExpense.date).isBetween(startDate, endDate)
-        )
+          ) {
+            reoccuringExpensesArr.push(reoccuringExpense)
+          } else if (
+            newBudgetItem.title.toLocaleLowerCase() === 'övrigt' &&
+            !reoccuringExpense.category &&
+            moment(reoccuringExpense.date).isBetween(startDate, endDate)
+          ) {
+            reoccuringExpensesArr.push(reoccuringExpense)
+          }
+        })
 
+        console.log('reoccuringExpensesArr', reoccuringExpensesArr)
         newBudgetItem.expenses = newBudgetItem.expenses.concat(
           reoccuringExpensesArr
         )
