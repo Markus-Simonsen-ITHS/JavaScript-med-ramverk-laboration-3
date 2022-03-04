@@ -229,10 +229,17 @@
         &times;
       </button>
     </div>
-    <p>Är du säker att du vill ta bort din {{ modalWord }}?</p>
+    <p class="modalText">
+      Är du säker att du vill ta bort din {{ modalWord }}?
+    </p>
     <div class="modalButtons">
-      <input type="button" value="Ja" @click="removeData" />
-      <input type="button" value="Nej" @click="closePopUp" />
+      <input class="modalButton" type="button" value="Ja" @click="removeData" />
+      <input
+        class="modalButton"
+        type="button"
+        value="Nej"
+        @click="closePopUp"
+      />
     </div>
   </div>
   <div :class="{ overlay: true, active: active }" @click="closePopUp" />
@@ -506,13 +513,21 @@
       margin-bottom: 20px;
     }
     .smallText {
-      font-size: 140%;
+      font-size: 120%;
+      line-height: 1.1;
     }
     .titleText {
-      font-size: 160%;
+      font-size: 110%;
     }
     .listButtons {
       margin-top: 15px;
+    }
+    .modalButton {
+      width: 70px !important;
+    }
+
+    .modalText {
+      font-size: 120%;
     }
   }
 </style>
