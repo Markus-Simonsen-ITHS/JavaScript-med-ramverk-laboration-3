@@ -427,14 +427,15 @@ const mutations = {
         let newBudgetItem = { ...budget }
         newBudgetItem.expenses = []
         newBudgetItem.incomeList = []
-
-        budget.expenses.forEach((expense) => {
-          const expenseDate = moment(expense.date)
-          const isBetween = expenseDate.isBetween(startDate, endDate)
-          if (isBetween && !state.displayOnlyReoccuring) {
-            newBudgetItem.expenses.push(expense)
-          }
-        })
+        if (budget.expenses) {
+          budget.expenses.forEach((expense) => {
+            const expenseDate = moment(expense.date)
+            const isBetween = expenseDate.isBetween(startDate, endDate)
+            if (isBetween && !state.displayOnlyReoccuring) {
+              newBudgetItem.expenses.push(expense)
+            }
+          })
+        }
 
         let reoccuringExpensesArr = [...state.expensesReocurring]
         reoccuringExpensesArr = reoccuringExpensesArr.filter(
