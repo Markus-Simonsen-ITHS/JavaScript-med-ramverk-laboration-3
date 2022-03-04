@@ -20,7 +20,6 @@
       }
     },
     mounted() {
-      console.log(this.checked)
       if (this.checked) this.checkbox = true
     },
     emits: ['checkbox'],
