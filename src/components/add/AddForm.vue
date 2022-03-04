@@ -137,7 +137,10 @@
     <div class="input-container" :class="{ 'input-error': errors.amountError }">
       <input
         class="amount-input"
-        :class="{ 'amount-input-dark': $store.getters.getTheme === 'dark' }"
+        :class="{
+          'amount-input-dark': $store.getters.getTheme === 'dark',
+          'amount-input-light': $store.getters.getTheme === 'light'
+        }"
         id="amount-input"
         type="text"
         :style="{ width: inputWidth }"
@@ -212,6 +215,10 @@
   .amount-input-dark {
     background-color: #2f3136;
     color: #e5e5e5;
+  }
+
+  .amount-input-light {
+    background-color: #e5e5e5;
   }
 
   .buttons-container {
