@@ -33,7 +33,6 @@
       categoryName() {}
     },
     mounted() {
-      console.log('categoryName changed')
       let canvas = this.$refs.canvasRef
       let ctx = canvas.getContext('2d')
 
