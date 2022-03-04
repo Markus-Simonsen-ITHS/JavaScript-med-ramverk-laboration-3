@@ -166,6 +166,7 @@
     letter-spacing: 0.5px;
     font-size: 1rem;
     grid-column-start: 1;
+    width: 180px;
   }
 
   .expense-amount {
