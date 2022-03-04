@@ -65,7 +65,7 @@
         >
           <hr v-show="toggle" class="line" />
           <p class="expense-title">{{ income.title }}</p>
-          <p class="expense-amount">+{{ income.amount }} kr</p>
+          <p class="income-amount">+{{ income.amount }} kr</p>
           <DeleteComp
             class="delete-comp"
             :collection-item="income.incomeId"
@@ -168,7 +168,8 @@
     grid-column-start: 1;
   }
 
-  .expense-amount {
+  .expense-amount,
+  .income-amount {
     letter-spacing: 0.5px;
     font-size: 1rem;
     align-self: flex-end;
