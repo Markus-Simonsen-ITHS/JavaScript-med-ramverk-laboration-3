@@ -15,7 +15,7 @@
     methods: {
       async removeBudget(collection, collectionItem) {
         await deleteDoc(doc(db, collection, collectionItem))
-        alert()
+        this.$store.dispatch('fetchFlow', this.$store.state.user.id)
       }
     }
   }
