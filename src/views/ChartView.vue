@@ -2,6 +2,11 @@
   import ChartComp from '../components/ChartComp.vue'
 
   export default {
+    computed: {
+      expenses() {
+        return this.$store.getters.getFilteredExpenses
+      }
+    },
     components: {
       ChartComp
     }
@@ -9,9 +14,7 @@
 </script>
 
 <template>
-  <h2 class="chosenView">Diagram</h2>
-
-  <ChartComp :data-b="expenses" v-show="view === 'chart'" />
+  <ChartComp :data-b="expenses" />
 </template>
 
 <style scoped>

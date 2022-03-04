@@ -1,3 +1,27 @@
+<script>
+  import NavBar from '../components/NavBar.vue'
+
+  export default {
+    name: 'SparandeView',
+    data() {
+      return {
+        amount: 100,
+        year: 1
+      }
+    },
+    computed: {
+      results() {
+        let beforeInterest = this.amount * (this.year * 12)
+        let totalInterest = beforeInterest * 0.08
+        return beforeInterest + totalInterest
+      }
+    },
+    components: {
+      NavBar
+    }
+  }
+</script>
+
 <template>
   <NavBar />
   <div class="main">
@@ -25,46 +49,37 @@
       <div class="column">
         <h1>Sparkalkylator</h1>
         <div class="loan-col">
-          <h4>Ange månadssparande<span>1000 kr</span></h4>
-          <input type="range" min="100" max="10000" />
+          <h4>
+            Ange månadssparande<span>{{ amount }} kr</span>
+          </h4>
+          <input type="range" min="100" max="10000" v-model="amount" />
         </div>
         <div class="loan-col">
-          <h4>Hur länge vill du spara?<span class="ar">5 år</span></h4>
-          <input type="range" min="1" max="20" />
+          <h4>
+            Hur länge vill du spara?<span class="ar">{{ year }} år</span>
+          </h4>
+          <input type="range" min="1" max="20" v-model="year" />
         </div>
-        <!-- <div class="loan-col">
-          <h4>Hur mycket vill du spara ihop?<span class="kr">0 kr</span></h4>
-          <input type="range" min="100" max="10000" />
-        </div> -->
         <div class="result">
           <span>Din summering</span>
-          <p>60 000 kr</p>
+          <p>{{ results }} kr</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-  import NavBar from '../components/NavBar.vue'
-  export default {
-    components: { NavBar },
-    name: 'SparandeView'
-  }
-</script>
 <style scoped>
   * {
     border: 1px;
   }
   .main {
     width: 100%;
-    height: 100vh;
   }
   .row {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 100vh;
     justify-content: center;
   }
 
@@ -78,7 +93,6 @@
     font-weight: 500;
     font-size: 24px;
     line-height: 28px;
-    color: #000000;
   }
 
   .details {
@@ -86,8 +100,6 @@
     font-weight: normal;
     font-size: 12px;
     line-height: 14px;
-
-    color: #000000;
   }
 
   progress {
@@ -132,7 +144,6 @@
     font-weight: normal;
     font-size: 12px;
     line-height: 14px;
-    color: #000000;
     padding-top: 1em;
   }
   .loan-col h4 span {
@@ -170,7 +181,6 @@
     font-weight: bold;
     font-size: 20px;
     line-height: 23px;
-    color: #000000;
   }
 
   .result p {
@@ -178,7 +188,6 @@
     font-weight: normal;
     font-size: 23px;
     line-height: 27px;
-    color: #000000;
   }
 
   @media (max-width: 980px) {

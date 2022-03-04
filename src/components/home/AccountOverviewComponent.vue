@@ -21,7 +21,7 @@
       dark: $store.getters.getTheme === 'dark'
     }"
   >
-    <div>
+    <div class="bar-container">
       <p class="account-overview-name">
         {{ budget ? budget.title : 'Laddar' }}
       </p>
@@ -37,7 +37,9 @@
           }"
         />
       </div>
-      <p class="account-budget">Budget: {{ budget.sum ? budget.sum : 0 }} kr</p>
+      <p class="account-budget">
+        Budget: {{ budget.amount ? budget.amount : 0 }} kr
+      </p>
     </div>
   </div>
 </template>
@@ -71,5 +73,14 @@
   .account-budget {
     text-align: end;
     font-size: 1rem;
+  }
+  @media screen and (min-width: 700px) {
+    .bar-container {
+      width: 500px;
+    }
+    .account-overview-container {
+      justify-content: center;
+      grid-template-columns: none;
+    }
   }
 </style>

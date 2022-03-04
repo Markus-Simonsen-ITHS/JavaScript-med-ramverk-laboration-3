@@ -2,11 +2,12 @@ import { createStore } from 'vuex'
 import { auth, db } from './firebase'
 import router from './router'
 
+import moment from 'moment'
+
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut,
-  updatePassword
+  signOut
 } from 'firebase/auth'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -37,6 +38,12 @@ const mutations = {
     },
     setTheme(state, theme) {
       state.theme = theme
+    },
+    setDisplayOnlyReoccuring(state, payload) {
+      state.displayOnlyReoccuring = payload
+    },
+    setTimeFilter(state, payload) {
+      state.timeFilter = payload
     }
   },
   state = {
@@ -83,7 +90,9 @@ const mutations = {
         expenses: [],
         incomeList: []
       }
-    ]
+    ],
+    displayOnlyReoccuring: false,
+    timeFilter: 'oneMonth'
   },
   actions = {
     signIn(state, payload) {
@@ -134,6 +143,7 @@ const mutations = {
       allIncome.forEach((income) => {
         const localIncome = income.data()
         localIncome.incomeId = income.id
+
         incomeArr.push(localIncome)
       })
 
@@ -158,10 +168,14 @@ const mutations = {
       allExpenses.forEach((expense) => {
         const localExpense = expense.data()
         localExpense.expenseId = expense.id
+        localExpense.amount = parseInt(localExpense.amount)
         expensesArr.push(localExpense)
       })
       allExpensesReocurring.forEach((expense) => {
-        expensesReArr.push(expense.data())
+        const localReoccuringExpense = expense.data()
+        localReoccuringExpense.id = expense.id
+        localReoccuringExpense.amount = parseInt(localReoccuringExpense.amount)
+        expensesReArr.push(localReoccuringExpense)
       })
 
       state.dispatch('fetchBudgetsForUser', userId)
@@ -246,30 +260,25 @@ const mutations = {
 
       state.commit('setBudget', budgetArr)
     },
+    changeDisplayReoccuring(state, payload) {
+      if (payload === 'all') {
+        payload = false
+      } else {
+        payload = true
+      }
+
+      state.commit('setDisplayOnlyReoccuring', payload)
+    },
+    changeTimeFilter(state, payload) {
+      state.commit('setTimeFilter', payload)
+    },
+
     async fetchFlow(state, userId) {
       state.dispatch('fetchAllIncomeForUser', userId)
       state.dispatch('fetchAllExpensesForUser', userId)
     },
     // Change password (Seems like firebase has a bug with changing password)
-    changePassword(state, payload) {
-      console.log(payload)
-      signInWithEmailAndPassword(auth, payload.email, payload.oldPassword)
-        .then(() => {
-          updatePassword(auth, payload.oldPassword, payload.newPassword)
-            .then(() => {
-              state.commit('setLoginError', '')
-              console.log('Password changed')
-            })
-            .catch((error) => {
-              state.commit('setLoginError', error)
-              console.log(error)
-            })
-        })
-        .catch((error) => {
-          state.commit('setLoginError', error)
-          console.log(error)
-        })
-    },
+    async changePassword() {},
     // Delete account
     deleteAccount(state, payload) {
       console.log(payload)
@@ -310,6 +319,125 @@ const mutations = {
     },
     getTheme(state) {
       return state.theme
+    },
+    getFilteredExpenses(state) {
+      const expenses = state.expenses
+      const reocurringExpenses = state.expensesReocurring
+
+      const endDate = moment().add(1, 'day').format('YYYY-MM-DD')
+      let startDate
+
+      if (state.timeFilter === 'oneMonth') {
+        startDate = moment().subtract(1, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'threeMonths') {
+        startDate = moment().subtract(3, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'oneYear') {
+        startDate = moment().subtract(12, 'months').format('YYYY-MM-DD')
+      }
+
+      const filteredArr = []
+
+      expenses.forEach((expense) => {
+        const expenseDate = moment(expense.date)
+        const isBetween = expenseDate.isBetween(startDate, endDate)
+        if (isBetween && !state.displayOnlyReoccuring) {
+          filteredArr.push(expense)
+        }
+      })
+      reocurringExpenses.forEach((reoccuringExpense) => {
+        const expenseDate = moment(reoccuringExpense.date)
+        const isBetween = expenseDate.isBetween(startDate, endDate)
+        if (isBetween) {
+          filteredArr.push(reoccuringExpense)
+        }
+      })
+      return filteredArr
+    },
+    getFilteredIncome(state) {
+      const income = state.income
+
+      const endDate = moment().add(1, 'day').format('YYYY-MM-DD')
+      let startDate
+
+      if (state.timeFilter === 'oneMonth') {
+        startDate = moment().subtract(1, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'threeMonths') {
+        startDate = moment().subtract(3, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'oneYear') {
+        startDate = moment().subtract(12, 'months').format('YYYY-MM-DD')
+      }
+
+      const filteredArr = []
+
+      income.forEach((incomeObject) => {
+        const incomeDate = moment(incomeObject.date)
+        const isBetween = incomeDate.isBetween(startDate, endDate)
+        if (isBetween && !state.displayOnlyReoccuring) {
+          filteredArr.push(incomeObject)
+        }
+      })
+
+      return filteredArr
+    },
+    getFilteredBudgets(state) {
+      const endDate = moment().add(1, 'day').format('YYYY-MM-DD')
+      let startDate
+
+      if (state.timeFilter === 'oneMonth') {
+        startDate = moment().subtract(1, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'threeMonths') {
+        startDate = moment().subtract(3, 'months').format('YYYY-MM-DD')
+      } else if (state.timeFilter === 'oneYear') {
+        startDate = moment().subtract(12, 'months').format('YYYY-MM-DD')
+      }
+
+      const filteredArr = []
+
+      state.budget.forEach((budget) => {
+        let newBudgetItem = { ...budget }
+        newBudgetItem.expenses = []
+        newBudgetItem.incomeList = []
+
+        budget.expenses.forEach((expense) => {
+          const expenseDate = moment(expense.date)
+          const isBetween = expenseDate.isBetween(startDate, endDate)
+          if (isBetween && !state.displayOnlyReoccuring) {
+            newBudgetItem.expenses.push(expense)
+          }
+        })
+
+        let reoccuringExpensesArr = [...state.expensesReocurring]
+        reoccuringExpensesArr = reoccuringExpensesArr.filter(
+          (reoccuringExpense) =>
+            reoccuringExpense.category.toLocaleLowerCase() ===
+              newBudgetItem.title.toLocaleLowerCase() &&
+            moment(reoccuringExpense.date).isBetween(startDate, endDate)
+        )
+
+        newBudgetItem.expenses = newBudgetItem.expenses.concat(
+          reoccuringExpensesArr
+        )
+
+        console.log(budget)
+        if (budget.incomeList) {
+          budget.incomeList.forEach((incomeItem) => {
+            const incomeDate = moment(incomeItem.date)
+            const isBetween = incomeDate.isBetween(startDate, endDate)
+            if (isBetween && !state.displayOnlyReoccuring) {
+              newBudgetItem.incomeList.push(incomeItem)
+            }
+          })
+        }
+
+        if (
+          newBudgetItem.expenses.length > 0 ||
+          newBudgetItem.incomeList.length > 0
+        ) {
+          filteredArr.push(newBudgetItem)
+        }
+      })
+
+      return filteredArr
     }
   }
 export default createStore({ mutations, state, actions, getters, strict: true })
