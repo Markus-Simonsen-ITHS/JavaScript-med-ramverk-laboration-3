@@ -1,9 +1,11 @@
 <script>
   import DeleteComp from '../components/home/DeleteComp.vue'
+  import AutoImage from '../components/AutoImage.vue'
 
   export default {
     components: {
-      DeleteComp
+      DeleteComp,
+      AutoImage
     },
     data() {
       return {
@@ -27,7 +29,6 @@
 <template>
   <div class="container">
     <div id="history-list-container">
-      <!-- {{ filteredExpenses }} -->
       <div
         class="history-list"
         :class="{
@@ -38,7 +39,9 @@
         v-for="budget in budgets"
         :key="budget.budgetId"
       >
-        <img src="../../assets/fox.jpeg" alt="deg logo" />
+        <div class="image-container">
+          <AutoImage :category-name="budget.title" />
+        </div>
         <p class="budget-title">{{ budget.title }}</p>
         <p class="budget-sum">budget:</p>
         <p class="budget-sum-self">{{ budget.amount }} kr</p>
@@ -134,6 +137,13 @@
 
   img {
     display: flex;
+    width: 56px;
+    height: 56px;
+    left: 44px;
+    top: 160px;
+    border-radius: 8px;
+  }
+  .image-container {
     width: 56px;
     height: 56px;
     left: 44px;

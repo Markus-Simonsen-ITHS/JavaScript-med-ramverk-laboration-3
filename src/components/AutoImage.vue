@@ -57,5 +57,6 @@
 <style scoped>
   #canvas {
     height: 100px;
+    max-height: 100%;
   }
 </style>
