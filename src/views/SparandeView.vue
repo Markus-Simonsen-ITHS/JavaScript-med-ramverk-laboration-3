@@ -27,26 +27,6 @@
   <div class="main">
     <div class="row">
       <div class="column">
-        <h1>Mål</h1>
-        <div class="details">
-          <h4>Ny telefon</h4>
-          <span>800 kr/ 8000 kr</span>
-        </div>
-        <progress id="file" value="50" max="100" />
-        <div class="details">
-          <h4>Resa</h4>
-          <span>800 kr/ 8000 kr</span>
-        </div>
-        <progress id="file" value="50" max="100" />
-        <div class="details">
-          <h4>Playstation</h4>
-          <span>800 kr/ 8000 kr</span>
-        </div>
-        <progress id="file" value="50" max="100" /><br />
-        <button>Lägg till sparmål</button>
-      </div>
-      <div class="divider" />
-      <div class="column">
         <h1>Sparkalkylator</h1>
         <div class="loan-col">
           <h4>

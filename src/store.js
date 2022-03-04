@@ -7,7 +7,10 @@ import moment from 'moment'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut
+  signOut,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from 'firebase/auth'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -169,12 +172,14 @@ const mutations = {
         const localExpense = expense.data()
         localExpense.expenseId = expense.id
         localExpense.amount = parseInt(localExpense.amount)
+        localExpense.collection = 'utgift'
         expensesArr.push(localExpense)
       })
       allExpensesReocurring.forEach((expense) => {
         const localReoccuringExpense = expense.data()
-        localReoccuringExpense.id = expense.id
+        localReoccuringExpense.expenseId = expense.id
         localReoccuringExpense.amount = parseInt(localReoccuringExpense.amount)
+        localReoccuringExpense.collection = 'återkommandeUtgift'
         expensesReArr.push(localReoccuringExpense)
       })
 
@@ -278,10 +283,35 @@ const mutations = {
       state.dispatch('fetchAllExpensesForUser', userId)
     },
     // Change password (Seems like firebase has a bug with changing password)
-    async changePassword() {},
+    async changePassword(state, payload) {
+      const user = auth.currentUser
+      let cred = EmailAuthProvider.credential(
+        payload.email,
+        payload.oldPassword
+      )
+
+      reauthenticateWithCredential(user, cred)
+        .then(() => {
+          // User re-authenticated.
+          updatePassword(user, payload.newPassword)
+            .then(() => {
+              // Update successful.
+              console.log('Succeed')
+            })
+            .catch((error) => {
+              console.log('Failed', error)
+              // An error ocurred
+              // ...
+            })
+        })
+        .catch((error) => {
+          // An error ocurred
+          // ...
+          console.log(error)
+        })
+    },
     // Delete account
     deleteAccount(state, payload) {
-      console.log(payload)
       signInWithEmailAndPassword(auth, payload.email, payload.password)
         .then(() => {
           auth.currentUser.delete().then(() => {
@@ -397,14 +427,15 @@ const mutations = {
         let newBudgetItem = { ...budget }
         newBudgetItem.expenses = []
         newBudgetItem.incomeList = []
-
-        budget.expenses.forEach((expense) => {
-          const expenseDate = moment(expense.date)
-          const isBetween = expenseDate.isBetween(startDate, endDate)
-          if (isBetween && !state.displayOnlyReoccuring) {
-            newBudgetItem.expenses.push(expense)
-          }
-        })
+        if (budget.expenses) {
+          budget.expenses.forEach((expense) => {
+            const expenseDate = moment(expense.date)
+            const isBetween = expenseDate.isBetween(startDate, endDate)
+            if (isBetween && !state.displayOnlyReoccuring) {
+              newBudgetItem.expenses.push(expense)
+            }
+          })
+        }
 
         let reoccuringExpensesArr = [...state.expensesReocurring]
         reoccuringExpensesArr = reoccuringExpensesArr.filter(
@@ -418,7 +449,6 @@ const mutations = {
           reoccuringExpensesArr
         )
 
-        console.log(budget)
         if (budget.incomeList) {
           budget.incomeList.forEach((incomeItem) => {
             const incomeDate = moment(incomeItem.date)

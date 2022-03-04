@@ -74,4 +74,12 @@
   .warning-container p {
     font-size: 16px;
   }
+  .warning-container {
+    padding-left: 15px;
+  }
+  @media screen and (min-width: 700px) {
+    .warning-container {
+      width: 600px;
+    }
+  }
 </style>
