@@ -457,7 +457,6 @@ const mutations = {
           }
         })
 
-        console.log('reoccuringExpensesArr', reoccuringExpensesArr)
         newBudgetItem.expenses = newBudgetItem.expenses.concat(
           reoccuringExpensesArr
         )
