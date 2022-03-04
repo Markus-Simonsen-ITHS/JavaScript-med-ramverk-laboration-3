@@ -12,7 +12,6 @@
     },
     computed: {
       budgets() {
-        // return this.$store.getters.getBudget
         return this.$store.getters.getFilteredBudgets
       },
       expenses() {
@@ -54,7 +53,7 @@
           class="delete-comp"
           v-show="toggle"
           :collection-item="expense.expenseId"
-          :collection="'utgift'"
+          :collection="expense.collection"
         />
       </div>
       <div
