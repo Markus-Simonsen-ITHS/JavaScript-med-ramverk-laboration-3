@@ -5,11 +5,23 @@
         checkbox: false //is sent to AddForm and StatusItem
       }
     },
-    watch: {
-      checkbox() {
-        console.log('meow')
+    methods: {
+      checkboxChange() {
         this.$emit('checkbox', this.checkbox)
       }
+    },
+    watch: {
+      checked() {
+        if (this.checked) {
+          this.checkbox = true
+        } else {
+          this.checkbox = false
+        }
+      }
+    },
+    mounted() {
+      console.log(this.checked)
+      if (this.checked) this.checkbox = true
     },
     emits: ['checkbox'],
     props: {
@@ -20,6 +32,10 @@
       id: {
         default: 'reocurringExpense',
         type: String
+      },
+      checked: {
+        type: Boolean,
+        default: false
       }
     }
   }
@@ -29,10 +45,12 @@
   <div class="reocurringExpense-container">
     <label :for="'reocurringExpense' + id" class="switch">
       <input
+        @change="checkboxChange"
         :id="'reocurringExpense' + id"
         type="checkbox"
         value="reocurringExpense"
         v-model="checkbox"
+        :checked="checkbox"
       />
       <span class="slider" />
     </label>

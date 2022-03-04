@@ -7,7 +7,10 @@ import moment from 'moment'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut
+  signOut,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from 'firebase/auth'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -278,7 +281,34 @@ const mutations = {
       state.dispatch('fetchAllExpensesForUser', userId)
     },
     // Change password (Seems like firebase has a bug with changing password)
-    async changePassword() {},
+    async changePassword(state, payload) {
+      const user = auth.currentUser
+      let cred = EmailAuthProvider.credential(
+        payload.email,
+        payload.oldPassword
+      )
+
+      reauthenticateWithCredential(user, cred)
+        .then(() => {
+          // User re-authenticated.
+          console.log(payload.newPassword)
+          updatePassword(user, payload.newPassword)
+            .then(() => {
+              // Update successful.
+              console.log('Succeed')
+            })
+            .catch((error) => {
+              console.log('Failed', error)
+              // An error ocurred
+              // ...
+            })
+        })
+        .catch((error) => {
+          // An error ocurred
+          // ...
+          console.log(error)
+        })
+    },
     // Delete account
     deleteAccount(state, payload) {
       console.log(payload)

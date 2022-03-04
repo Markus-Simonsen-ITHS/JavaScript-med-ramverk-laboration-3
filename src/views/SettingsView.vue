@@ -3,6 +3,11 @@
   import SliderComp from '../components/home/SliderComp.vue'
 
   export default {
+    data() {
+      return {
+        darkTheme: false
+      }
+    },
     components: {
       NavBar,
       SliderComp
@@ -30,6 +35,10 @@
         }
         this.$store.dispatch('changeTheme', theme)
       }
+    },
+    mounted() {
+      const theme = this.$store.getters.getTheme
+      this.darkTheme = theme === 'dark' ? true : false
     }
   }
 </script>
@@ -44,8 +53,8 @@
     }"
   >
     <div class="actionItem">
-      <h1>Change password</h1>
-      <label for="oldPassword">Old password</label>
+      <h1>Ändra lösenord</h1>
+      <label for="oldPassword">Gamla lösenord</label>
       <br />
       <input
         class="textInput"
@@ -54,7 +63,7 @@
         type="password"
       />
       <br />
-      <label class="textInput" for="newPassword">New password</label>
+      <label class="textInput" for="newPassword">Nytt lösenord</label>
       <br />
       <input
         class="textInput"
@@ -65,11 +74,11 @@
       <br />
       <br />
       <button id="changePassword" @click="changePassword">
-        Change Password
+        Ändra lösenord
       </button>
     </div>
     <div class="actionItem">
-      <h1>Delete account</h1>
+      <h1>Radera konto</h1>
       <input
         class="textInput"
         v-model="password"
@@ -78,13 +87,13 @@
       />
       <br />
       <br />
-      <button @click="deleteAccount">Delete account</button>
+      <button @click="deleteAccount">Radera konto</button>
       <br />
       <br />
     </div>
     <div class="theme-container">
-      Dark theme:
-      <SliderComp @checkbox="changeTheme" :id="'theme'" />
+      Mörkt tema:
+      <SliderComp :checked="darkTheme" :id="'theme'" @checkbox="changeTheme" />
     </div>
   </div>
 </template>
