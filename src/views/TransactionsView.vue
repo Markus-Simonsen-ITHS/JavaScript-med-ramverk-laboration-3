@@ -54,7 +54,7 @@
             class="delete-comp"
             v-show="toggle"
             :collection-item="expense.expenseId"
-            :collection="'utgift'"
+            :collection="expense.collection"
           />
         </div>
         <div
@@ -62,24 +62,16 @@
           v-for="income in budget.incomeList"
           :key="income"
           v-show="toggle"
-          :collection-item="expense.expenseId"
-          :collection="expense.collection"
-        />
-      </div>
-      <div
-        class="test"
-        v-for="income in budget.incomeList"
-        :key="income"
-        v-show="toggle"
-      >
-        <hr v-show="toggle" class="line" />
-        <p class="expense-title">{{ income.title }}</p>
-        <p class="expense-amount">+{{ income.amount }} kr</p>
-        <DeleteComp
-          class="delete-comp"
-          :collection-item="income.incomeId"
-          :collection="'inkomst'"
-        />
+        >
+          <hr v-show="toggle" class="line" />
+          <p class="expense-title">{{ income.title }}</p>
+          <p class="expense-amount">+{{ income.amount }} kr</p>
+          <DeleteComp
+            class="delete-comp"
+            :collection-item="income.incomeId"
+            :collection="'inkomst'"
+          />
+        </div>
       </div>
     </div>
   </div>
