@@ -179,7 +179,7 @@
   >
     <h1>Översikt</h1>
     <div class="links">
-      <router-link to="/history">Historik</router-link>
+      <router-link to="/history/list">Historik</router-link>
       <router-link to="/debt">Skuld</router-link>
     </div>
   </div>
