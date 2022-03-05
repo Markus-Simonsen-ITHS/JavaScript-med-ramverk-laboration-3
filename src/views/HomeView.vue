@@ -308,7 +308,7 @@
       grid-template-columns: 0.2fr 1fr;
     }
     .status-card {
-      width: 350px;
+      width: 650px;
     }
   }
 </style>

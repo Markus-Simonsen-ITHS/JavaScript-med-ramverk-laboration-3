@@ -76,7 +76,7 @@
   }
   @media screen and (min-width: 700px) {
     .bar-container {
-      width: 500px;
+      width: 750px;
     }
     .account-overview-container {
       justify-content: center;
