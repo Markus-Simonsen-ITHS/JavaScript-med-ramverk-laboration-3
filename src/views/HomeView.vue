@@ -302,14 +302,13 @@
     }
     .category-list {
       grid-template-columns: 1fr 1fr;
-      grid-auto-rows: 100px;
     }
     .add-category-container {
       padding: 10px;
       grid-template-columns: 0.2fr 1fr;
     }
     .status-card {
-      width: 350px;
+      width: 650px;
     }
   }
 </style>
