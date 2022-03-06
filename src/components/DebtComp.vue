@@ -326,7 +326,9 @@
         </option>
       </select>
       <input type="text" v-model="payOffDebt" placeholder="Mängd" />
-      <p class="note">Notera: avbetalningen listas som en återkommand utgift</p>
+      <p class="note">
+        Notera: avbetalningen listas som en återkommande utgift
+      </p>
       <div class="button-container">
         <input
           type="submit"
